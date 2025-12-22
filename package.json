@@ -1,15 +1,28 @@
 {
-  "name": "bun-server-demo",
-  "version": "1.0.50",
+  "name": "elysia-user-api",
+  "version": "1.0.0",
+  "module": "src/index.ts",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "build": "bun build --compile --minify-whitespace --minify-syntax --outfile server src/index.ts",
+    "prettier:fix": "prettier --write .",
+    "eslint:fix": "eslint ./src --fix"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/cors": "^1.4.0",
+    "@elysiajs/openapi": "latest",
+    "elysia": "latest",
+    "zod": "latest"
   },
   "devDependencies": {
-    "bun-types": "latest"
-  },
-  "module": "src/index.js"
+    "@eslint/js": "^9.39.2",
+    "@types/bun": "latest",
+    "bun-types": "latest",
+    "eslint": "^9.39.2",
+    "globals": "^16.5.0",
+    "prettier": "^3.7.4",
+    "typescript-eslint": "^8.50.1"
+  }
 }
