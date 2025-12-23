@@ -1,0 +1,65 @@
+name: Lint, test & build Server app
+on:
+  pull_request:
+    branches-ignore: [main, prod]
+
+jobs:
+  Editorconfig-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: editorconfig-checker/action-editorconfig-checker@main
+      - run: editorconfig-checker
+
+  Markdown-linter:
+    runs-on: ubuntu-latest
+    container: oven/bun:alpine
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint .md files
+        run: bunx --yes markdownlint-cli@latest "**/*.md" --ignore "node_modules" --ignore "dist"
+
+  Prettier-check:
+    runs-on: ubuntu-latest
+    container: oven/bun:alpine
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prettier check
+        run: bun run prettier:check
+
+  ESLint-check:
+    runs-on: ubuntu-latest
+    container: oven/bun:alpine
+    steps:
+      - uses: actions/checkout@v4
+      - name: ESLint check
+        run: bun run eslint:check
+
+  Unit-tests:
+    runs-on: ubuntu-latest
+    container: oven/bun:alpine
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run unit tests
+        run: bun run test
+
+  Build:
+    runs-on: ubuntu-latest
+    container: oven/bun:alpine
+    needs:
+      [
+        Editorconfig-checker,
+        Markdown-linter,
+        Prettier-check,
+        ESLint-check,
+        Unit-tests,
+      ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bun run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: ./dist/
