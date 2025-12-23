@@ -16,6 +16,8 @@ jobs:
     container: oven/bun:alpine
     steps:
       - uses: actions/checkout@v4
+      - name: Setup dev dependencies
+        run: bun install
       - name: Lint .md files
         run: bunx --yes markdownlint-cli@latest "**/*.md" --ignore "node_modules" --ignore "dist"
 
@@ -24,6 +26,8 @@ jobs:
     container: oven/bun:alpine
     steps:
       - uses: actions/checkout@v4
+      - name: Setup dev dependencies
+        run: bun install
       - name: Prettier check
         run: bun run prettier:check
 
@@ -32,6 +36,8 @@ jobs:
     container: oven/bun:alpine
     steps:
       - uses: actions/checkout@v4
+      - name: Setup dev dependencies
+        run: bun install
       - name: ESLint check
         run: bun run eslint:check
 
