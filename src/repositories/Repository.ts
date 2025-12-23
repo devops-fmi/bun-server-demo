@@ -6,25 +6,28 @@ export interface Repository<T> {
   /**
    * Create a new entity
    */
-  create(entity: Omit<T, 'id' | 'createdAt'>): Promise<T>
+  create(entity: Omit<T, "id" | "createdAt">): Promise<T>;
 
   /**
    * Find an entity by ID
    */
-  findById(id: string): Promise<T | undefined>
+  findById(id: string): Promise<T | undefined>;
 
   /**
    * Find all entities
    */
-  findAll(): Promise<T[]>
+  findAll(): Promise<T[]>;
 
   /**
    * Update an entity
    */
-  update(id: string, entity: Partial<Omit<T, 'id' | 'createdAt'>>): Promise<T | undefined>
+  update(
+    id: string,
+    entity: Partial<Omit<T, "id" | "createdAt">>,
+  ): Promise<T | undefined>;
 
   /**
    * Delete an entity
    */
-  delete(id: string): Promise<boolean>
+  delete(id: string): Promise<boolean>;
 }

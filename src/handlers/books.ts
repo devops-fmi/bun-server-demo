@@ -38,7 +38,7 @@ export const booksHandler = new Elysia({
         summary: "Get all books",
         description: "Retrieves all books or filters by genre",
       },
-    }
+    },
   )
   .get(
     "/:id",
@@ -56,7 +56,7 @@ export const booksHandler = new Elysia({
         summary: "Get book by ID",
         description: "Retrieves a specific book by its ID",
       },
-    }
+    },
   )
   .patch(
     "/:id",
@@ -75,7 +75,7 @@ export const booksHandler = new Elysia({
         summary: "Update book",
         description: "Updates a book in the catalog",
       },
-    }
+    },
   )
   .delete(
     "/:id",
@@ -93,5 +93,5 @@ export const booksHandler = new Elysia({
         summary: "Delete book",
         description: "Removes a book from the catalog",
       },
-    }
+    },
   );

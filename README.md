@@ -19,6 +19,7 @@ bun run dev
 ## Testing
 
 To run unit tests locally run:
+
 ```bash
 bun test
 ```
