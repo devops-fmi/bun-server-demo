@@ -62,7 +62,9 @@ jobs:
       ]
     steps:
       - uses: actions/checkout@v4
-      - name: Build
+      - name: Setup dev dependencies
+        run: bun install
+      - name: Build single executable file
         run: bun run build
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
