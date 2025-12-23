@@ -1,92 +1,88 @@
 import { Elysia, t } from "elysia";
-import { createUserSchema, patchUserSchema, userSchema } from "../models/user";
-import { UserService } from "../services/user.service";
+import { createUserSchema, userSchema } from "../models/index";
+import { UserService } from "../services/UserService";
+
+// Initialize services with repositories
+import { UserRepository } from "../repositories/UserRepository";
+import { patchUserSchema } from "../models/user";
+
+const userRepository = new UserRepository();
+const userService = new UserService(userRepository);
 
 export const usersHandler = new Elysia({
   prefix: "/users",
   detail: {
     tags: ["Users"],
-    description: "User management endpoints",
+    description: "User management endpoints for the e-library",
   },
 })
-  .post("/", ({ body }) => UserService.create(body), {
+  .post("/", async ({ body }) => userService.createUser(body), {
     body: createUserSchema,
-    response: {
-      201: userSchema,
-    },
+    response: userSchema,
     detail: {
       summary: "Create a new user",
-      description: "Creates a new user with the provided details",
+      description: "Creates a new user account for the e-library",
     },
   })
-  .get("/", () => UserService.getAll(), {
+  .get("/", async () => userService.getAllUsers(), {
     response: t.Array(userSchema),
     detail: {
       summary: "Get all users",
-      description: "Retrieves a list of all users",
+      description: "Retrieves a list of all registered users",
     },
   })
   .get(
     "/:id",
-    ({ params: { id } }) => {
-      const user = UserService.getById(id);
+    async ({ params: { id } }) => {
+      const user = await userService.getUserById(id);
       if (!user) {
-        return new Response("User not found", { status: 404 });
+        throw new Error("User not found");
       }
       return user;
     },
     {
       params: t.Object({ id: t.String({ format: "uuid" }) }),
-      response: {
-        200: userSchema,
-        404: t.Object({ message: t.String() }),
-      },
+      response: userSchema,
       detail: {
         summary: "Get user by ID",
         description: "Retrieves a specific user by their ID",
       },
-    },
+    }
   )
   .patch(
     "/:id",
-    ({ params: { id }, body }) => {
-      const user = UserService.update(id, body);
+    async ({ params: { id }, body }) => {
+      const user = await userService.updateUser(id, body);
       if (!user) {
-        return new Response("User not found", { status: 404 });
+        throw new Error("User not found");
       }
       return user;
     },
     {
       params: t.Object({ id: t.String({ format: "uuid" }) }),
       body: patchUserSchema,
-      response: {
-        200: userSchema,
-        404: t.Object({ message: t.String() }),
-      },
+      response: userSchema,
       detail: {
         summary: "Update user",
         description: "Updates an existing user with partial data",
       },
-    },
+    }
   )
   .delete(
     "/:id",
-    ({ params: { id } }) => {
-      const deleted = UserService.delete(id);
+    async ({ params: { id } }) => {
+      const deleted = await userService.deleteUser(id);
       if (!deleted) {
-        return new Response("User not found", { status: 404 });
+        throw new Error("User not found");
       }
-      return { success: true, id };
+      return { success: true };
     },
     {
       params: t.Object({ id: t.String({ format: "uuid" }) }),
-      response: {
-        200: t.Object({ success: t.Boolean(), id: t.String() }),
-        404: t.Object({ message: t.String() }),
-      },
+      response: t.Object({ success: t.Boolean() }),
       detail: {
         summary: "Delete user",
-        description: "Deletes a user by their ID",
+        description: "Deletes a user account",
       },
-    },
+    }
   );
