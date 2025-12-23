@@ -1,6 +1,6 @@
 name: Lint, test & build Server app
 on:
-  pull_request:
+  push:
     branches-ignore: [main, prod]
 
 jobs:
