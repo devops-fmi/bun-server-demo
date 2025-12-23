@@ -13,7 +13,8 @@
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "eslint:check": "eslint ./src",
-    "eslint:fix": "eslint ./src --fix"
+    "eslint:fix": "eslint ./src --fix",
+    "markdown-lint": "bunx markdownlint-cli '**/*.md' --ignore 'node_modules' --ignore 'dist'"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.0",
@@ -27,6 +28,7 @@
     "bun-types": "latest",
     "eslint": "^9.39.2",
     "globals": "^16.5.0",
+    "markdown-cli": "^1.6.0",
     "prettier": "^3.7.4",
     "typescript-eslint": "^8.50.1"
   }

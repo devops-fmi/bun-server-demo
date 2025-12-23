@@ -19,7 +19,7 @@ jobs:
       - name: Setup dev dependencies
         run: bun install
       - name: Lint .md files
-        run: bunx --yes markdownlint-cli@latest "**/*.md" --ignore "node_modules" --ignore "dist"
+        run: bun run markdown-lint
 
   Prettier-check:
     runs-on: ubuntu-latest
