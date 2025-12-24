@@ -80,8 +80,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_ORG_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=bun-server-demo
-            -Dsonar.organization=devops-fmi-1
+            -Dsonar.projectKey=${{ vars.SONARQUBE_ORG_PROJECT_KEY }}_bun-server-demo
+            -Dsonar.organization=${{ vars.SONARQUBE_ORG_PROJECT_KEY }}
             -Dsonar.sources=.
             -Dsonar.sourceEncoding=UTF-8
 
