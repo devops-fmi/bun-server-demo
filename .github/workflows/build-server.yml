@@ -4,14 +4,14 @@ on:
     branches-ignore: [main, prod]
 
 jobs:
-  Editorconfig-checker:
+  editorconfig:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: editorconfig-checker/action-editorconfig-checker@main
       - run: editorconfig-checker
 
-  Markdown-linter:
+  markdown-lint:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
     steps:
@@ -21,7 +21,7 @@ jobs:
       - name: Lint .md files
         run: bun run markdown-lint
 
-  Prettier-check:
+  prettier:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
     steps:
@@ -31,7 +31,7 @@ jobs:
       - name: Prettier check
         run: bun run prettier:check
 
-  ESLint-check:
+  eslint:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
     steps:
@@ -43,7 +43,7 @@ jobs:
 
   # Snyk-security:
   #   runs-on: ubuntu-latest
-  #   needs: [ESLint-check]
+  #   needs: [eslint]
   #   container: oven/bun:alpine
   #   steps:
   #     - uses: actions/checkout@v4
@@ -62,9 +62,9 @@ jobs:
   #         sarif_file: snyk.sarif
   #       continue-on-error: true
 
-  Sonarqube-scan:
+  sonarqube:
     runs-on: ubuntu-latest
-    needs: [ESLint-check]
+    needs: [eslint]
     container: oven/bun:alpine
     steps:
       - uses: actions/checkout@v4
@@ -84,7 +84,7 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.sourceEncoding=UTF-8
 
-  Unit-tests:
+  unit-test:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
     steps:
@@ -95,15 +95,14 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
-    needs:
-      [
-        Editorconfig-checker,
-        Markdown-linter,
-        Prettier-check,
-        ESLint-check,
+    needs: [
+        editorconfig,
+        markdown-lint,
+        prettier,
+        eslint,
         # Snyk-security,
-        Sonarqube-scan,
-        Unit-tests,
+        sonarqube,
+        unit-test,
       ]
     steps:
       - uses: actions/checkout@v4

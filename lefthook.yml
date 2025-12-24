@@ -1,0 +1,29 @@
+# EXAMPLE USAGE:
+#
+#   Refer for explanation to following link:
+#   https://lefthook.dev/configuration/
+#
+# pre-push:
+#   jobs:
+#     - name: packages audit
+#       tags:
+#         - frontend
+#         - security
+#       run: yarn audit
+#
+#     - name: gems audit
+#       tags:
+#         - backend
+#         - security
+#       run: bundle audit
+#
+pre-commit:
+  parallel: true
+  jobs:
+    - run: bunx eslint --fix {staged_files}
+      stage_fixed: true
+      glob: "*.{js,ts,jsx,tsx}"
+
+    - run: bunx prettier {staged_files} --write
+      stage_fixed: true
+      glob: "*.{js,ts,jsx,tsx,json,css,md, yaml,yml}"

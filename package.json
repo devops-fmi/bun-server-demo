@@ -28,6 +28,7 @@
     "bun-types": "latest",
     "eslint": "^9.39.2",
     "globals": "^16.5.0",
+    "lefthook": "^2.0.12",
     "markdown-cli": "^1.6.0",
     "prettier": "^3.7.4",
     "typescript-eslint": "^8.50.1"
