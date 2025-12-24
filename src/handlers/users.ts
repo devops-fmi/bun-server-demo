@@ -47,7 +47,7 @@ export const usersHandler = new Elysia({
         summary: "Get user by ID",
         description: "Retrieves a specific user by their ID",
       },
-    }
+    },
   )
   .patch(
     "/:id",
@@ -66,7 +66,7 @@ export const usersHandler = new Elysia({
         summary: "Update user",
         description: "Updates an existing user with partial data",
       },
-    }
+    },
   )
   .delete(
     "/:id",
@@ -84,5 +84,5 @@ export const usersHandler = new Elysia({
         summary: "Delete user",
         description: "Deletes a user account",
       },
-    }
+    },
   );

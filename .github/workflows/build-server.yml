@@ -1,41 +1,51 @@
 name: Lint, test & build Server app
 on:
-  pull_request:
+  workflow_dispatch: # Manual trigger
+  push:
     branches-ignore: [main, prod]
 
+permissions:
+  contents: read
+
 jobs:
-  Editorconfig-checker:
+  editorconfig:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: editorconfig-checker/action-editorconfig-checker@main
       - run: editorconfig-checker
 
-  Markdown-linter:
+  markdown-lint:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
     steps:
       - uses: actions/checkout@v4
+      - name: Setup dev dependencies
+        run: bun install
       - name: Lint .md files
-        run: bunx --yes markdownlint-cli@latest "**/*.md" --ignore "node_modules" --ignore "dist"
+        run: bun run markdown-lint
 
-  Prettier-check:
+  prettier:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
     steps:
       - uses: actions/checkout@v4
+      - name: Setup dev dependencies
+        run: bun install
       - name: Prettier check
         run: bun run prettier:check
 
-  ESLint-check:
+  eslint:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
     steps:
       - uses: actions/checkout@v4
+      - name: Setup dev dependencies
+        run: bun install
       - name: ESLint check
         run: bun run eslint:check
 
-  Unit-tests:
+  unit-test:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
     steps:
@@ -43,20 +53,15 @@ jobs:
       - name: Run unit tests
         run: bun run test
 
-  Build:
+  build:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
-    needs:
-      [
-        Editorconfig-checker,
-        Markdown-linter,
-        Prettier-check,
-        ESLint-check,
-        Unit-tests,
-      ]
+    needs: [editorconfig, markdown-lint, prettier, eslint, unit-test]
     steps:
       - uses: actions/checkout@v4
-      - name: Build
+      - name: Setup dev dependencies
+        run: bun install
+      - name: Build single executable file
         run: bun run build
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

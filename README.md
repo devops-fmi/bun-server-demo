@@ -16,4 +16,13 @@ To start the development server run:
 bun run dev
 ```
 
-Open http://localhost:3000/ with your browser to see the result.
+## Testing
+
+To run unit tests locally run:
+
+```bash
+bun test
+```
+
+Open [http://localhost:3000/](http://localhost:3000/) with your
+browser to see the result.
