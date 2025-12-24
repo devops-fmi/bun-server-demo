@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  security-events: write
+  contents: read
+
 jobs:
   sonarqube:
     runs-on: ubuntu-latest
@@ -29,3 +33,25 @@ jobs:
             -Dsonar.tests=./tests
             -Dsonar.test.inclusions=**/*.test.ts
             -Dsonar.sourceEncoding=UTF-8
+
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup bun runtime
+        uses: oven-sh/setup-bun@v2.0.2
+      - name: Setup dev dependencies
+        run: bun install
+      - name: Run Snyk scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: --sarif-file-output=snyk.sarif
+        continue-on-error: true # To make sure that SARIF upload gets called
+      - name: Upload Snyk results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4.31.9
+        with:
+          sarif_file: snyk.sarif
