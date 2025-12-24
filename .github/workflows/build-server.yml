@@ -41,6 +41,49 @@ jobs:
       - name: ESLint check
         run: bun run eslint:check
 
+  # Snyk-security:
+  #   runs-on: ubuntu-latest
+  #   needs: [ESLint-check]
+  #   container: oven/bun:alpine
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Setup dev dependencies
+  #       run: bun install
+  #     - name: Run Snyk scan
+  #       uses: snyk/actions/node@master
+  #       env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  #       with:
+  #         args: --severity-threshold=high
+  #     - name: Upload Snyk results
+  #       if: always()
+  #       uses: github/codeql-action/upload-sarif@v2
+  #       with:
+  #         sarif_file: snyk.sarif
+  #       continue-on-error: true
+
+  Sonarqube-scan:
+    runs-on: ubuntu-latest
+    needs: [ESLint-check]
+    container: oven/bun:alpine
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup dev dependencies
+        run: bun install
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_ORG_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=bun-server-demo
+            -Dsonar.organization=devops-fmi-1
+            -Dsonar.sources=.
+            -Dsonar.sourceEncoding=UTF-8
+
   Unit-tests:
     runs-on: ubuntu-latest
     container: oven/bun:alpine
@@ -58,6 +101,8 @@ jobs:
         Markdown-linter,
         Prettier-check,
         ESLint-check,
+        # Snyk-security,
+        Sonarqube-scan,
         Unit-tests,
       ]
     steps:
