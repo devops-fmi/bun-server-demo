@@ -1,0 +1,31 @@
+name: SonarQube and Snyk Analysis
+on:
+  workflow_dispatch: # Manual trigger
+  push:
+    branches:
+      - main
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup bun runtime
+        uses: oven-sh/setup-bun@v2.0.2
+      - name: Install dependencies
+        run: bun install
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v7.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_ORG_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ vars.SONARQUBE_PROJECT_KEY }}
+            -Dsonar.organization=${{ vars.SONARQUBE_ORGANIZATION_KEY }}
+            -Dsonar.sources=./src
+            -Dsonar.tests=./tests
+            -Dsonar.test.inclusions=**/*.test.ts
+            -Dsonar.sourceEncoding=UTF-8
