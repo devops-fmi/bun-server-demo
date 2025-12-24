@@ -1,5 +1,6 @@
 name: Lint, test & build Server app
 on:
+  workflow_dispatch:
   push:
     branches-ignore: [main, prod]
 
@@ -80,9 +81,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_ORG_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=bun-server-demo
-            -Dsonar.organization=${{ vars.SONARQUBE_ORGANIZATION }}
-            -Dsonar.sources=.
+            -Dsonar.projectKey=${{ vars.SONARQUBE_PROJECT_KEY }}
+            -Dsonar.organization=${{ vars.SONARQUBE_ORGANIZATION_KEY }}
+            -Dsonar.sources=./src
+            -Dsonar.tests=./tests
+            -Dsonar.test.inclusions=**/*.test.ts
             -Dsonar.sourceEncoding=UTF-8
 
   unit-test:
