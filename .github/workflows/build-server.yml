@@ -70,7 +70,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup bun runtime
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@v2.0.2
       - name: Install dependencies
         run: bun install
       - name: SonarCloud Scan
@@ -80,8 +80,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_ORG_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=${{ vars.SONARQUBE_ORG_PROJECT_KEY }}_bun-server-demo
-            -Dsonar.organization=${{ vars.SONARQUBE_ORG_PROJECT_KEY }}
+            -Dsonar.projectKey=bun-server-demo
+            -Dsonar.organization=${{ vars.SONARQUBE_ORGANIZATION }}
             -Dsonar.sources=.
             -Dsonar.sourceEncoding=UTF-8
 
