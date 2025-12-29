@@ -25,5 +25,5 @@ replicas:
     count: 3
 
 images:
-  - name: 607402046977.dkr.ecr.eu-central-1.amazonaws.com/elibrary-fmi-ecr-image-repo:latest
+  - name: 607402046977.dkr.ecr.eu-central-1.amazonaws.com/elibrary-fmi-ecr-image-repo:library-server:latest
     newTag: latest
