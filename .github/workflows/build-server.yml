@@ -61,10 +61,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup dev dependencies
         run: bun install
-      - name: Build single executable file
+      - name: Build server project
         run: bun run build
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: ./dist/
