@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-org/your-repo
+    repoURL: https://github.com/devops-fmi/bun-server-demo.git
     targetRevision: main
     path: k8s
   destination:

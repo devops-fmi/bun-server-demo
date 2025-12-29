@@ -14,7 +14,7 @@ metadata:
     alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
 spec:
   rules:
-    - host: elibrary.example.com
+    - host: library.app.fmi.genadikolev.eu
       http:
         paths:
           - path: /
