@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: elibrary-server-pdb
+  namespace: elibrary
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: elibrary-server

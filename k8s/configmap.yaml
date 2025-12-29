@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elibrary-config
+  namespace: elibrary
+data:
+  NODE_ENV: "production"
+  PORT: "3000"

@@ -1,10 +1,12 @@
 pre-commit:
   parallel: true
   jobs:
-    - run: bunx eslint --fix {staged_files}
+    - name: Lint staged files
+      run: bunx eslint --fix {staged_files}
       stage_fixed: true
       glob: "*.{js,ts,jsx,tsx}"
 
-    - run: bunx prettier {staged_files} --write
+    - name: Format staged files
+      run: bunx prettier {staged_files} --write
       stage_fixed: true
-      glob: "*.{js,ts,jsx,tsx,json,css,md, yaml,yml}"
+      glob: "*.{js,ts,jsx,tsx,json,css,md,yaml,yml}"
