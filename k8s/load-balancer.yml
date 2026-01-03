@@ -14,3 +14,21 @@ spec:
     - port: 80
       targetPort: 3000
       protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-load-balancer
+  namespace: argocd
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: argocd-server
+  ports:
+    - port: 443
+      targetPort: 8080
+      protocol: TCP
