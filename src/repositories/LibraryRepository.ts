@@ -1,12 +1,15 @@
+import { mockLibraries } from "../mocks";
+import { CreateLibraryInput, Library } from "../models/index";
 import { Repository } from "./Repository";
-import { Library, CreateLibraryInput } from "../models/index";
 
 /**
  * In-memory implementation of Library repository
  * Will be replaced with actual database implementation later
  */
 export class LibraryRepository implements Repository<Library> {
-  private libraries: Map<string, Library> = new Map();
+  private libraries: Map<string, Library> = new Map(
+    mockLibraries.map((library) => [library.id, library]),
+  );
 
   async create(input: CreateLibraryInput): Promise<Library> {
     const id = crypto.randomUUID();
