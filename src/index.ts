@@ -1,9 +1,11 @@
-import { Elysia } from "elysia";
+import cors from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
-import { healthHandler } from "./handlers/health";
-import { usersHandler } from "./handlers/users";
+import { Elysia } from "elysia";
+
 import { booksHandler } from "./handlers/books";
+import { healthHandler } from "./handlers/health";
 import { librariesHandler } from "./handlers/libraries";
+import { usersHandler } from "./handlers/users";
 
 const app = new Elysia()
   .use(
@@ -18,6 +20,7 @@ const app = new Elysia()
       },
     }),
   )
+  .use(cors())
   .use(healthHandler)
   .use(usersHandler)
   .use(booksHandler)

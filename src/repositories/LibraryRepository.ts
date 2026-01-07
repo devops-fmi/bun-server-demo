@@ -1,5 +1,9 @@
 import { mockLibraries } from "../mocks";
-import { CreateLibraryInput, Library } from "../models/index";
+import {
+  CreateLibraryInput,
+  Library,
+  LibraryQueryInput,
+} from "../models/index";
 import { Repository } from "./Repository";
 
 /**
@@ -50,5 +54,27 @@ export class LibraryRepository implements Repository<Library> {
 
   async delete(id: string): Promise<boolean> {
     return this.libraries.delete(id);
+  }
+
+  async findByFilters(filters: LibraryQueryInput): Promise<Library[]> {
+    return Array.from(this.libraries.values()).filter((library) => {
+      if (
+        filters.name &&
+        !library.name.toLowerCase().includes(filters.name.toLowerCase())
+      )
+        return false;
+      if (
+        filters.location &&
+        !library.location.toLowerCase().includes(filters.location.toLowerCase())
+      )
+        return false;
+      if (filters.manager && library.manager !== filters.manager) return false;
+      if (
+        filters.totalBooks !== undefined &&
+        library.totalBooks !== filters.totalBooks
+      )
+        return false;
+      return true;
+    });
   }
 }

@@ -1,5 +1,9 @@
 import { LibraryRepository } from "../repositories/LibraryRepository";
-import { Library, CreateLibraryInput } from "../models/index";
+import {
+  Library,
+  CreateLibraryInput,
+  LibraryQueryInput,
+} from "../models/index";
 
 /**
  * Library service layer
@@ -18,6 +22,10 @@ export class LibraryService {
 
   async getAllLibraries(): Promise<Library[]> {
     return this.libraryRepository.findAll();
+  }
+
+  async getLibrariesByFilters(filters: LibraryQueryInput): Promise<Library[]> {
+    return this.libraryRepository.findByFilters(filters);
   }
 
   async updateLibrary(
