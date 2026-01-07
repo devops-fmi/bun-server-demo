@@ -11,6 +11,11 @@ export class UserRepository implements Repository<User> {
     mockUsers.map((user) => [user.id, user]),
   );
 
+  // Method for testing purposes
+  clearAll(): void {
+    this.users.clear();
+  }
+
   async create(input: CreateUserInput): Promise<User> {
     const id = crypto.randomUUID();
     const user: User = {

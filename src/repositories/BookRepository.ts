@@ -11,6 +11,11 @@ export class BookRepository implements Repository<Book> {
     mockBooks.map((book) => [book.id, book]),
   );
 
+  // Method for testing purposes
+  clearAll(): void {
+    this.books.clear();
+  }
+
   async create(input: CreateBookInput): Promise<Book> {
     const id = crypto.randomUUID();
     const book: Book = {
