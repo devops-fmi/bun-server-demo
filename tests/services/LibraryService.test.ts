@@ -9,6 +9,7 @@ describe("LibraryService", () => {
 
   beforeEach(() => {
     libraryRepository = new LibraryRepository();
+    libraryRepository.clearAll();
     libraryService = new LibraryService(libraryRepository);
   });
 
@@ -133,6 +134,140 @@ describe("LibraryService", () => {
     test("should return false when deleting non-existent library", async () => {
       const deleted = await libraryService.deleteLibrary("non-existent-id");
       expect(deleted).toBe(false);
+    });
+  });
+
+  describe("getLibrariesByFilters", () => {
+    test("should filter libraries by name", async () => {
+      const managerId1 = crypto.randomUUID();
+      const managerId2 = crypto.randomUUID();
+
+      await libraryService.createLibrary({
+        name: "Central Library",
+        location: "Downtown",
+        manager: managerId1,
+      });
+      await libraryService.createLibrary({
+        name: "North Branch Library",
+        location: "North",
+        manager: managerId2,
+      });
+      await libraryService.createLibrary({
+        name: "Main Hall",
+        location: "City Center",
+        manager: managerId1,
+      });
+
+      const results = await libraryService.getLibrariesByFilters({
+        name: "Library",
+      });
+
+      expect(results).toHaveLength(2);
+      expect(results.map((l) => l.name)).toEqual(
+        expect.arrayContaining(["Central Library", "North Branch Library"]),
+      );
+    });
+
+    test("should filter libraries by location", async () => {
+      const managerId1 = crypto.randomUUID();
+      const managerId2 = crypto.randomUUID();
+
+      await libraryService.createLibrary({
+        name: "Downtown Library",
+        location: "Downtown District",
+        manager: managerId1,
+      });
+      await libraryService.createLibrary({
+        name: "Uptown Library",
+        location: "Uptown Area",
+        manager: managerId2,
+      });
+
+      const results = await libraryService.getLibrariesByFilters({
+        location: "Downtown",
+      });
+
+      expect(results).toHaveLength(1);
+      expect(results[0].name).toBe("Downtown Library");
+    });
+
+    test("should filter libraries by manager", async () => {
+      const managerId1 = crypto.randomUUID();
+      const managerId2 = crypto.randomUUID();
+
+      await libraryService.createLibrary({
+        name: "Library A",
+        location: "Location A",
+        manager: managerId1,
+      });
+      await libraryService.createLibrary({
+        name: "Library B",
+        location: "Location B",
+        manager: managerId2,
+      });
+      await libraryService.createLibrary({
+        name: "Library C",
+        location: "Location C",
+        manager: managerId1,
+      });
+
+      const results = await libraryService.getLibrariesByFilters({
+        manager: managerId1,
+      });
+
+      expect(results).toHaveLength(2);
+      expect(results.map((l) => l.name)).toEqual(
+        expect.arrayContaining(["Library A", "Library C"]),
+      );
+    });
+
+    test("should combine multiple filters", async () => {
+      const managerId1 = crypto.randomUUID();
+      const managerId2 = crypto.randomUUID();
+
+      const lib1 = await libraryService.createLibrary({
+        name: "Central Library",
+        location: "Downtown",
+        manager: managerId1,
+      });
+      const lib2 = await libraryService.createLibrary({
+        name: "Branch Library",
+        location: "Downtown",
+        manager: managerId2,
+      });
+      const lib3 = await libraryService.createLibrary({
+        name: "Central Hub",
+        location: "Uptown",
+        manager: managerId1,
+      });
+
+      await libraryService.updateLibrary(lib1.id, { totalBooks: 5000 });
+      await libraryService.updateLibrary(lib2.id, { totalBooks: 3000 });
+      await libraryService.updateLibrary(lib3.id, { totalBooks: 2000 });
+
+      const results = await libraryService.getLibrariesByFilters({
+        name: "Central",
+        location: "Downtown",
+        manager: managerId1,
+      });
+
+      expect(results).toHaveLength(1);
+      expect(results[0].id).toBe(lib1.id);
+    });
+
+    test("should return empty array when no libraries match filters", async () => {
+      const managerId = crypto.randomUUID();
+      await libraryService.createLibrary({
+        name: "Test Library",
+        location: "Test Location",
+        manager: managerId,
+      });
+
+      const results = await libraryService.getLibrariesByFilters({
+        name: "NonExistent",
+      });
+
+      expect(results).toHaveLength(0);
     });
   });
 });

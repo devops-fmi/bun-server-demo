@@ -7,6 +7,7 @@ describe("LibraryRepository", () => {
 
   beforeEach(() => {
     libraryRepository = new LibraryRepository();
+    libraryRepository.clearAll();
   });
 
   describe("create", () => {
@@ -134,6 +135,131 @@ describe("LibraryRepository", () => {
     test("should return false when deleting non-existent library", async () => {
       const deleted = await libraryRepository.delete("non-existent-id");
       expect(deleted).toBe(false);
+    });
+  });
+
+  describe("findByFilters", () => {
+    test("should filter libraries by name (partial match)", async () => {
+      const managerId1 = crypto.randomUUID();
+      const managerId2 = crypto.randomUUID();
+
+      await libraryRepository.create({
+        name: "Central Library",
+        location: "Downtown",
+        manager: managerId1,
+      });
+      await libraryRepository.create({
+        name: "North Branch Library",
+        location: "North",
+        manager: managerId2,
+      });
+      await libraryRepository.create({
+        name: "Main Hall",
+        location: "City Center",
+        manager: managerId1,
+      });
+
+      const results = await libraryRepository.findByFilters({
+        name: "Library",
+      });
+
+      expect(results).toHaveLength(2);
+      expect(results.map((l) => l.name)).toEqual(
+        expect.arrayContaining(["Central Library", "North Branch Library"]),
+      );
+    });
+
+    test("should filter libraries by name (case insensitive)", async () => {
+      const managerId = crypto.randomUUID();
+      await libraryRepository.create({
+        name: "Test Library",
+        location: "Test",
+        manager: managerId,
+      });
+
+      const results = await libraryRepository.findByFilters({ name: "test" });
+
+      expect(results).toHaveLength(1);
+      expect(results[0].name).toBe("Test Library");
+    });
+
+    test("should filter libraries by manager", async () => {
+      const managerId1 = crypto.randomUUID();
+      const managerId2 = crypto.randomUUID();
+
+      await libraryRepository.create({
+        name: "Library A",
+        location: "Location A",
+        manager: managerId1,
+      });
+      await libraryRepository.create({
+        name: "Library B",
+        location: "Location B",
+        manager: managerId2,
+      });
+      await libraryRepository.create({
+        name: "Library C",
+        location: "Location C",
+        manager: managerId1,
+      });
+
+      const results = await libraryRepository.findByFilters({
+        manager: managerId1,
+      });
+
+      expect(results).toHaveLength(2);
+      expect(results.map((l) => l.name)).toEqual(
+        expect.arrayContaining(["Library A", "Library C"]),
+      );
+    });
+
+    test("should combine multiple filters", async () => {
+      const managerId1 = crypto.randomUUID();
+      const managerId2 = crypto.randomUUID();
+
+      const lib1 = await libraryRepository.create({
+        name: "Central Library",
+        location: "Downtown",
+        manager: managerId1,
+      });
+      const lib2 = await libraryRepository.create({
+        name: "Branch Library",
+        location: "Downtown",
+        manager: managerId2,
+      });
+      const lib3 = await libraryRepository.create({
+        name: "Central Hub",
+        location: "Uptown",
+        manager: managerId1,
+      });
+
+      await libraryRepository.update(lib1.id, { totalBooks: 5000 });
+      await libraryRepository.update(lib2.id, { totalBooks: 3000 });
+      await libraryRepository.update(lib3.id, { totalBooks: 2000 });
+
+      const results = await libraryRepository.findByFilters({
+        name: "Central",
+        location: "Downtown",
+        manager: managerId1,
+      });
+
+      expect(results).toHaveLength(1);
+      expect(results[0].id).toBe(lib1.id);
+    });
+
+    test("should return empty array when no filters match", async () => {
+      const managerId = crypto.randomUUID();
+      await libraryRepository.create({
+        name: "Test Library",
+        location: "Test Location",
+        manager: managerId,
+      });
+
+      const results = await libraryRepository.findByFilters({
+        name: "NonExistent",
+      });
+
+      expect(results).toHaveLength(0);
     });
   });
 });

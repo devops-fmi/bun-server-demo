@@ -9,6 +9,7 @@ describe("UserService", () => {
 
   beforeEach(() => {
     userRepository = new UserRepository();
+    userRepository.clearAll();
     userService = new UserService(userRepository);
   });
 

@@ -7,6 +7,7 @@ describe("BookRepository", () => {
 
   beforeEach(() => {
     bookRepository = new BookRepository();
+    bookRepository.clearAll();
   });
 
   describe("create", () => {
@@ -92,17 +93,17 @@ describe("BookRepository", () => {
   describe("findByGenre", () => {
     test("should find books by genre", async () => {
       const fictionBook: CreateBookInput = {
-        title: "Fiction Book",
+        title: "Fiction Book Test",
         author: "Author",
-        isbn: "ISBN1",
+        isbn: "ISBN-Fiction-Test",
         genre: "fiction",
         publishedYear: 2020,
         quantity: 1,
       };
       const nonfictionBook: CreateBookInput = {
-        title: "Non-Fiction Book",
+        title: "Non-Fiction Book Test",
         author: "Author",
-        isbn: "ISBN2",
+        isbn: "ISBN-NonFiction-Test",
         genre: "non-fiction",
         publishedYear: 2021,
         quantity: 1,
@@ -114,7 +115,7 @@ describe("BookRepository", () => {
       const fictionBooks = await bookRepository.findByGenre("fiction");
 
       expect(fictionBooks).toHaveLength(1);
-      expect(fictionBooks[0].title).toBe("Fiction Book");
+      expect(fictionBooks[0].title).toBe("Fiction Book Test");
     });
 
     test("should return empty array when no books match genre", async () => {

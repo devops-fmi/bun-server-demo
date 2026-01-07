@@ -1,12 +1,24 @@
+import { mockLibraries } from "../mocks";
+import {
+  CreateLibraryInput,
+  Library,
+  LibraryQueryInput,
+} from "../models/index";
 import { Repository } from "./Repository";
-import { Library, CreateLibraryInput } from "../models/index";
 
 /**
  * In-memory implementation of Library repository
  * Will be replaced with actual database implementation later
  */
 export class LibraryRepository implements Repository<Library> {
-  private libraries: Map<string, Library> = new Map();
+  private libraries: Map<string, Library> = new Map(
+    mockLibraries.map((library) => [library.id, library]),
+  );
+
+  // Method for testing purposes
+  clearAll(): void {
+    this.libraries.clear();
+  }
 
   async create(input: CreateLibraryInput): Promise<Library> {
     const id = crypto.randomUUID();
@@ -47,5 +59,27 @@ export class LibraryRepository implements Repository<Library> {
 
   async delete(id: string): Promise<boolean> {
     return this.libraries.delete(id);
+  }
+
+  async findByFilters(filters: LibraryQueryInput): Promise<Library[]> {
+    return Array.from(this.libraries.values()).filter((library) => {
+      if (
+        filters.name &&
+        !library.name.toLowerCase().includes(filters.name.toLowerCase())
+      )
+        return false;
+      if (
+        filters.location &&
+        !library.location.toLowerCase().includes(filters.location.toLowerCase())
+      )
+        return false;
+      if (filters.manager && library.manager !== filters.manager) return false;
+      if (
+        filters.totalBooks !== undefined &&
+        library.totalBooks !== filters.totalBooks
+      )
+        return false;
+      return true;
+    });
   }
 }

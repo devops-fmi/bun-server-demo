@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 import {
   createLibrarySchema,
+  libraryQuerySchema,
   librarySchema,
   patchLibrarySchema,
 } from "../models/index";
@@ -27,13 +28,24 @@ export const librariesHandler = new Elysia({
       description: "Creates a new library branch in the system",
     },
   })
-  .get("/", async () => libraryService.getAllLibraries(), {
-    response: t.Array(librarySchema),
-    detail: {
-      summary: "Get all libraries",
-      description: "Retrieves a list of all libraries in the system",
+  .get(
+    "/",
+    async ({ query }) => {
+      // If any query parameters are provided, use the filter endpoint
+      return Object.keys(query).length > 0
+        ? libraryService.getLibrariesByFilters(query)
+        : libraryService.getAllLibraries();
     },
-  })
+    {
+      query: libraryQuerySchema,
+      response: t.Array(librarySchema),
+      detail: {
+        summary: "Get all libraries",
+        description:
+          "Retrieves a list of all libraries in the system. Supports optional filtering by any library field.",
+      },
+    },
+  )
   .get(
     "/:id",
     async ({ params: { id } }) => {

@@ -9,6 +9,7 @@ describe("BookService", () => {
 
   beforeEach(() => {
     bookRepository = new BookRepository();
+    bookRepository.clearAll();
     bookService = new BookService(bookRepository);
   });
 
@@ -87,17 +88,17 @@ describe("BookService", () => {
   describe("getBooksByGenre", () => {
     test("should filter books by genre", async () => {
       const fictionBook: CreateBookInput = {
-        title: "Fiction Book",
+        title: "Fiction Book Service Test",
         author: "Author",
-        isbn: "ISBN1",
+        isbn: "ISBN-Fiction-Service",
         genre: "fiction",
         publishedYear: 2020,
         quantity: 1,
       };
       const romanceBook: CreateBookInput = {
-        title: "Romance Book",
+        title: "Romance Book Service Test",
         author: "Author",
-        isbn: "ISBN2",
+        isbn: "ISBN-Romance-Service",
         genre: "romance",
         publishedYear: 2021,
         quantity: 1,
@@ -109,7 +110,7 @@ describe("BookService", () => {
       const fictionBooks = await bookService.getBooksByGenre("fiction");
 
       expect(fictionBooks).toHaveLength(1);
-      expect(fictionBooks[0].title).toBe("Fiction Book");
+      expect(fictionBooks[0].title).toBe("Fiction Book Service Test");
     });
 
     test("should return empty array when no books match genre", async () => {

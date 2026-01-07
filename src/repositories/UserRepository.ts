@@ -1,12 +1,20 @@
+import { mockUsers } from "../mocks";
+import { CreateUserInput, User } from "../models/index";
 import { Repository } from "./Repository";
-import { User, CreateUserInput } from "../models/index";
 
 /**
  * In-memory implementation of User repository
  * Will be replaced with actual database implementation later
  */
 export class UserRepository implements Repository<User> {
-  private users: Map<string, User> = new Map();
+  private users: Map<string, User> = new Map(
+    mockUsers.map((user) => [user.id, user]),
+  );
+
+  // Method for testing purposes
+  clearAll(): void {
+    this.users.clear();
+  }
 
   async create(input: CreateUserInput): Promise<User> {
     const id = crypto.randomUUID();

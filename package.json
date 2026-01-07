@@ -17,7 +17,7 @@
     "markdown-lint": "bunx markdownlint-cli '**/*.md' --ignore 'node_modules' --ignore 'dist'"
   },
   "dependencies": {
-    "@elysiajs/cors": "^1.4.0",
+    "@elysiajs/cors": "^1.4.1",
     "@elysiajs/openapi": "latest",
     "elysia": "latest",
     "zod": "latest"
@@ -28,9 +28,10 @@
     "bun-types": "latest",
     "eslint": "^9.39.2",
     "globals": "^16.5.0",
-    "lefthook": "^2.0.12",
+    "jiti": "^2.6.1",
+    "lefthook": "^2.0.13",
     "markdown-cli": "^1.6.0",
     "prettier": "^3.7.4",
-    "typescript-eslint": "^8.50.1"
+    "typescript-eslint": "^8.52.0"
   }
 }

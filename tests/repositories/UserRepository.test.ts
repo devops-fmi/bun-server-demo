@@ -7,6 +7,7 @@ describe("UserRepository", () => {
 
   beforeEach(() => {
     userRepository = new UserRepository();
+    userRepository.clearAll();
   });
 
   describe("create", () => {

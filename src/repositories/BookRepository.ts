@@ -1,12 +1,20 @@
-import { Repository } from "./Repository";
+import { mockBooks } from "../mocks";
 import { Book, CreateBookInput } from "../models/index";
+import { Repository } from "./Repository";
 
 /**
  * In-memory implementation of Book repository
  * Will be replaced with actual database implementation later
  */
 export class BookRepository implements Repository<Book> {
-  private books: Map<string, Book> = new Map();
+  private books: Map<string, Book> = new Map(
+    mockBooks.map((book) => [book.id, book]),
+  );
+
+  // Method for testing purposes
+  clearAll(): void {
+    this.books.clear();
+  }
 
   async create(input: CreateBookInput): Promise<Book> {
     const id = crypto.randomUUID();

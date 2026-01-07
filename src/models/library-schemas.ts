@@ -22,6 +22,15 @@ export const librarySchema = t.Object({
   createdAt: t.Date(),
 });
 
+export const libraryQuerySchema = t.Object({
+  name: t.Optional(t.String()),
+  location: t.Optional(t.String()),
+  manager: t.Optional(t.String({ format: "uuid" })),
+  totalBooks: t.Optional(t.Number({ minimum: 0 })),
+});
+
 export type CreateLibraryInput = typeof createLibrarySchema.static;
 export type PatchLibraryInput = typeof patchLibrarySchema.static;
+export type LibraryQueryInput = typeof libraryQuerySchema.static;
+
 export type Library = typeof librarySchema.static;
