@@ -25,7 +25,7 @@ const app = new Elysia()
   .use(usersHandler)
   .use(booksHandler)
   .use(librariesHandler)
-  .listen(3000);
+  .listen(3000, () => {});
 
 console.log(
   `🦊 Server running at http://${app.server?.hostname}:${app.server?.port}`,

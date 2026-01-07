@@ -15,6 +15,11 @@ export class LibraryRepository implements Repository<Library> {
     mockLibraries.map((library) => [library.id, library]),
   );
 
+  // Method for testing purposes
+  clearAll(): void {
+    this.libraries.clear();
+  }
+
   async create(input: CreateLibraryInput): Promise<Library> {
     const id = crypto.randomUUID();
     const library: Library = {
