@@ -1,5 +1,5 @@
 ---
-url: 'https://elysiajs.com/plugins/graphql-apollo.md'
+url: "https://elysiajs.com/plugins/graphql-apollo.md"
 ---
 
 # GraphQL Apollo Plugin
@@ -15,37 +15,37 @@ bun add graphql @elysiajs/apollo @apollo/server
 Then use it:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { apollo, gql } from '@elysiajs/apollo'
+import { Elysia } from "elysia";
+import { apollo, gql } from "@elysiajs/apollo";
 
 const app = new Elysia()
-	.use(
-		apollo({
-			typeDefs: gql`
-				type Book {
-					title: String
-					author: String
-				}
+  .use(
+    apollo({
+      typeDefs: gql`
+        type Book {
+          title: String
+          author: String
+        }
 
-				type Query {
-					books: [Book]
-				}
-			`,
-			resolvers: {
-				Query: {
-					books: () => {
-						return [
-							{
-								title: 'Elysia',
-								author: 'saltyAom'
-							}
-						]
-					}
-				}
-			}
-		})
-	)
-	.listen(3000)
+        type Query {
+          books: [Book]
+        }
+      `,
+      resolvers: {
+        Query: {
+          books: () => {
+            return [
+              {
+                title: "Elysia",
+                author: "saltyAom",
+              },
+            ];
+          },
+        },
+      },
+    }),
+  )
+  .listen(3000);
 ```
 
 Accessing `/graphql` should show Apollo GraphQL playground work with.
@@ -58,20 +58,20 @@ Because of this, Elysia replaces both with `context` like route parameters.
 
 ```typescript
 const app = new Elysia()
-	.use(
-		apollo({
-			typeDefs,
-			resolvers,
-			context: async ({ request }) => {
-				const authorization = request.headers.get('Authorization')
+  .use(
+    apollo({
+      typeDefs,
+      resolvers,
+      context: async ({ request }) => {
+        const authorization = request.headers.get("Authorization");
 
-				return {
-					authorization
-				}
-			}
-		})
-	)
-	.listen(3000)
+        return {
+          authorization,
+        };
+      },
+    }),
+  )
+  .listen(3000);
 ```
 
 ## Config
@@ -95,8 +95,8 @@ Determine whether should Apollo should provide Apollo Playground.
 ---
 
 ---
-url: 'https://elysiajs.com/at-glance.md'
----
+
+## url: 'https://elysiajs.com/at-glance.md'
 
 # At a glance
 
@@ -107,13 +107,13 @@ Designed with simplicity and type-safety in mind, Elysia offers a familiar API w
 Here's a simple hello world in Elysia.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/', 'Hello Elysia')
-    .get('/user/:id', ({ params: { id }}) => id)
-    .post('/form', ({ body }) => body)
-    .listen(3000)
+  .get("/", "Hello Elysia")
+  .get("/user/:id", ({ params: { id } }) => id)
+  .post("/form", ({ body }) => body)
+  .listen(3000);
 ```
 
 Navigate to [localhost:3000](http://localhost:3000/) and you should see 'Hello Elysia' as the result.
@@ -155,12 +155,12 @@ Elysia's Type System is fine-tuned to infer types from your code automatically, 
 Take a look at this example:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/user/:id', ({ params: { id } }) => id)
-                        // ^?
-    .listen(3000)
+  .get("/user/:id", ({ params: { id } }) => id)
+  // ^?
+  .listen(3000);
 ```
 
 The above code creates a path parameter **"id"**. The value that replaces `:id` will be passed to `params.id` both at runtime and in types, without manual type declaration.
@@ -176,16 +176,16 @@ To take it a step further, Elysia provides **Elysia.t**, a schema builder to val
 Let's modify the previous code to accept only a number value instead of a string.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .get('/user/:id', ({ params: { id } }) => id, {
-                                // ^?
-        params: t.Object({
-            id: t.Number()
-        })
-    })
-    .listen(3000)
+  .get("/user/:id", ({ params: { id } }) => id, {
+    // ^?
+    params: t.Object({
+      id: t.Number(),
+    }),
+  })
+  .listen(3000);
 ```
 
 This code ensures that our path parameter **id** will always be a number at both runtime and compile time (type-level).
@@ -200,30 +200,30 @@ With Elysia's schema builder, we can ensure type safety like a strongly typed la
 
 Elysia supports [Standard Schema](https://github.com/standard-schema/standard-schema), allowing you to use your favorite validation library:
 
-* Zod
-* Valibot
-* ArkType
-* Effect Schema
-* Yup
-* Joi
-* [and more](https://github.com/standard-schema/standard-schema)
+- Zod
+- Valibot
+- ArkType
+- Effect Schema
+- Yup
+- Joi
+- [and more](https://github.com/standard-schema/standard-schema)
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { z } from 'zod'
-import * as v from 'valibot'
+import { Elysia } from "elysia";
+import { z } from "zod";
+import * as v from "valibot";
 
 new Elysia()
-	.get('/id/:id', ({ params: { id }, query: { name } }) => id, {
-	//                           ^?
-		params: z.object({
-			id: z.coerce.number()
-		}),
-		query: v.object({
-			name: v.literal('Lilith')
-		})
-	})
-	.listen(3000)
+  .get("/id/:id", ({ params: { id }, query: { name } }) => id, {
+    //                           ^?
+    params: z.object({
+      id: z.coerce.number(),
+    }),
+    query: v.object({
+      name: v.literal("Lilith"),
+    }),
+  })
+  .listen(3000);
 ```
 
 Elysia will infer the types from the schema automatically, allowing you to use your favorite validation library while still maintaining type safety.
@@ -235,17 +235,17 @@ Elysia adopts many standards by default, like OpenAPI, WinterTC compliance, and 
 For instance, because Elysia adopts OpenAPI by default, generating API documentation is as easy as adding a one-liner:
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
 new Elysia()
-    .use(openapi()) // [!code ++]
-    .get('/user/:id', ({ params: { id } }) => id, {
-        params: t.Object({
-            id: t.Number()
-        })
-    })
-    .listen(3000)
+  .use(openapi()) // [!code ++]
+  .get("/user/:id", ({ params: { id } }) => id, {
+    params: t.Object({
+      id: t.Number(),
+    }),
+  })
+  .listen(3000);
 ```
 
 With the OpenAPI plugin, you can seamlessly generate an API documentation page without additional code or specific configuration and share it with your team effortlessly.
@@ -257,19 +257,21 @@ Elysia has excellent support for OpenAPI with schemas that can be used for data 
 Elysia also supports OpenAPI schema generation with **1 line directly from types**, allowing you to have complete and accurate API documentation without any manual annotation.
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi, fromTypes } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi, fromTypes } from "@elysiajs/openapi";
 
 export const app = new Elysia()
-    .use(openapi({
-    	references: fromTypes() // [!code ++]
-    }))
-    .get('/user/:id', ({ params: { id } }) => id, {
-        params: t.Object({
-            id: t.Number()
-        })
-    })
-    .listen(3000)
+  .use(
+    openapi({
+      references: fromTypes(), // [!code ++]
+    }),
+  )
+  .get("/user/:id", ({ params: { id } }) => id, {
+    params: t.Object({
+      id: t.Number(),
+    }),
+  })
+  .listen(3000);
 ```
 
 ## End-to-end Type Safety
@@ -279,52 +281,54 @@ With Elysia, type safety is not limited to server-side.
 With Elysia, you can synchronize your types with your frontend team automatically, similar to tRPC, using Elysia's client library, "Eden".
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
-import { openapi, fromTypes } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi, fromTypes } from "@elysiajs/openapi";
 
 export const app = new Elysia()
-    .use(openapi({
-    	references: fromTypes()
-    }))
-    .get('/user/:id', ({ params: { id } }) => id, {
-        params: t.Object({
-            id: t.Number()
-        })
-    })
-    .listen(3000)
+  .use(
+    openapi({
+      references: fromTypes(),
+    }),
+  )
+  .get("/user/:id", ({ params: { id } }) => id, {
+    params: t.Object({
+      id: t.Number(),
+    }),
+  })
+  .listen(3000);
 
-export type App = typeof app
+export type App = typeof app;
 ```
 
 And on your client-side:
 
 ```typescript twoslash
 // @filename: server.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .get('/user/:id', ({ params: { id } }) => id, {
-        params: t.Object({
-            id: t.Number()
-        })
-    })
-    .listen(3000)
+  .get("/user/:id", ({ params: { id } }) => id, {
+    params: t.Object({
+      id: t.Number(),
+    }),
+  })
+  .listen(3000);
 
-export type App = typeof app
+export type App = typeof app;
 
 // @filename: client.ts
 // ---cut---
 // client.ts
-import { treaty } from '@elysiajs/eden'
-import type { App } from './server'
+import { treaty } from "@elysiajs/eden";
+import type { App } from "./server";
 
-const app = treaty<App>('localhost:3000')
+const app = treaty<App>("localhost:3000");
 
 // Get data from /user/617
-const { data } = await app.user({ id: 617 }).get()
-      // ^?
+const { data } = await app.user({ id: 617 }).get();
+// ^?
 
-console.log(data)
+console.log(data);
 ```
 
 With Eden, you can use the existing Elysia types to query an Elysia server **without code generation** and synchronize types for both frontend and backend automatically.
@@ -339,17 +343,17 @@ Elysia was designed for Bun, but is **not limited to Bun**. Being [WinterTC comp
 
 If you have questions or get stuck with Elysia, feel free to ask our community on GitHub Discussions, Discord, or Twitter.
 
-***
+---
 
 1\. Measured in requests/second. The benchmark for parsing query, path parameter and set response header on Debian 11, Intel i7-13700K tested on Bun 0.7.2 on 6 Aug 2023. See the benchmark condition [here](https://github.com/SaltyAom/bun-http-framework-benchmark/tree/c7e26fe3f1bfee7ffbd721dbade10ad72a0a14ab#results).
 
-2\. Based on [TechEmpower Benchmark round 22](https://www.techempower.com/benchmarks/#section=data-r22\&hw=ph\&test=composite).
+2\. Based on [TechEmpower Benchmark round 22](https://www.techempower.com/benchmarks/#section=data-r22&hw=ph&test=composite).
 
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/bearer.md'
----
+
+## url: 'https://elysiajs.com/plugins/bearer.md'
 
 # Bearer Plugin
 
@@ -364,23 +368,22 @@ bun add @elysiajs/bearer
 Then use it:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { bearer } from '@elysiajs/bearer'
+import { Elysia } from "elysia";
+import { bearer } from "@elysiajs/bearer";
 
 const app = new Elysia()
-    .use(bearer())
-    .get('/sign', ({ bearer }) => bearer, {
-        beforeHandle({ bearer, set, status }) {
-            if (!bearer) {
-                set.headers[
-                    'WWW-Authenticate'
-                ] = `Bearer realm='sign', error="invalid_request"`
+  .use(bearer())
+  .get("/sign", ({ bearer }) => bearer, {
+    beforeHandle({ bearer, set, status }) {
+      if (!bearer) {
+        set.headers["WWW-Authenticate"] =
+          `Bearer realm='sign', error="invalid_request"`;
 
-                return status(400, 'Unauthorized')
-            }
-        }
-    })
-    .listen(3000)
+        return status(400, "Unauthorized");
+      }
+    },
+  })
+  .listen(3000);
 ```
 
 This plugin is for retrieving a Bearer token specified in [RFC6750](https://www.rfc-editor.org/rfc/rfc6750#section-2).
@@ -390,8 +393,8 @@ This plugin DOES NOT handle authentication validation for your server. Instead, 
 ---
 
 ---
-url: 'https://elysiajs.com/essential/best-practice.md'
----
+
+## url: 'https://elysiajs.com/essential/best-practice.md'
 
 # Best Practice
 
@@ -433,86 +436,86 @@ Here's an example code of how to distribute your code into a feature-based folde
 
 ```typescript [auth/index.ts]
 // Controller handle HTTP related eg. routing, request validation
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-import { Auth } from './service'
-import { AuthModel } from './model'
+import { Auth } from "./service";
+import { AuthModel } from "./model";
 
-export const auth = new Elysia({ prefix: '/auth' })
-	.get(
-		'/sign-in',
-		async ({ body, cookie: { session } }) => {
-			const response = await Auth.signIn(body)
+export const auth = new Elysia({ prefix: "/auth" }).get(
+  "/sign-in",
+  async ({ body, cookie: { session } }) => {
+    const response = await Auth.signIn(body);
 
-			// Set session cookie
-			session.value = response.token
+    // Set session cookie
+    session.value = response.token;
 
-			return response
-		}, {
-			body: AuthModel.signInBody,
-			response: {
-				200: AuthModel.signInResponse,
-				400: AuthModel.signInInvalid
-			}
-		}
-	)
+    return response;
+  },
+  {
+    body: AuthModel.signInBody,
+    response: {
+      200: AuthModel.signInResponse,
+      400: AuthModel.signInInvalid,
+    },
+  },
+);
 ```
 
 ```typescript [auth/service.ts]
 // Service handle business logic, decoupled from Elysia controller
-import { status } from 'elysia'
+import { status } from "elysia";
 
-import type { AuthModel } from './model'
+import type { AuthModel } from "./model";
 
 // If the class doesn't need to store a property,
 // you may use `abstract class` to avoid class allocation
 export abstract class Auth {
-	static async signIn({ username, password }: AuthModel.signInBody) {
-		const user = await sql`
+  static async signIn({ username, password }: AuthModel.signInBody) {
+    const user = await sql`
 			SELECT password
 			FROM users
 			WHERE username = ${username}
-			LIMIT 1`
+			LIMIT 1`;
 
-		if (await Bun.password.verify(password, user.password))
-			// You can throw an HTTP error directly
-			throw status(
-				400,
-				'Invalid username or password' satisfies AuthModel.signInInvalid
-			)
+    if (await Bun.password.verify(password, user.password))
+      // You can throw an HTTP error directly
+      throw status(
+        400,
+        "Invalid username or password" satisfies AuthModel.signInInvalid,
+      );
 
-		return {
-			username,
-			token: await generateAndSaveTokenToDB(user.id)
-		}
-	}
+    return {
+      username,
+      token: await generateAndSaveTokenToDB(user.id),
+    };
+  }
 }
 ```
 
 ```typescript [auth/model.ts]
 // Model define the data structure and validation for the request and response
-import { t } from 'elysia'
+import { t } from "elysia";
 
 export namespace AuthModel {
-	// Define a DTO for Elysia validation
-	export const signInBody = t.Object({
-		username: t.String(),
-		password: t.String(),
-	})
+  // Define a DTO for Elysia validation
+  export const signInBody = t.Object({
+    username: t.String(),
+    password: t.String(),
+  });
 
-	// Define it as TypeScript type
-	export type signInBody = typeof signInBody.static
+  // Define it as TypeScript type
+  export type signInBody = typeof signInBody.static;
 
-	// Repeat for other models
-	export const signInResponse = t.Object({
-		username: t.String(),
-		token: t.String(),
-	})
+  // Repeat for other models
+  export const signInResponse = t.Object({
+    username: t.String(),
+    token: t.String(),
+  });
 
-	export type signInResponse = typeof signInResponse.static
+  export type signInResponse = typeof signInResponse.static;
 
-	export const signInInvalid = t.Literal('Invalid username or password')
-	export type signInInvalid = typeof signInInvalid.static
+  export const signInInvalid = t.Literal("Invalid username or password");
+  export type signInInvalid = typeof signInInvalid.static;
 }
 ```
 
@@ -520,9 +523,9 @@ export namespace AuthModel {
 
 Each file has its own responsibility as follows:
 
-* **Controller**: Handle HTTP routing, request validation, and cookie.
-* **Service**: Handle business logic, decoupled from Elysia controller if possible.
-* **Model**: Define the data structure and validation for the request and response.
+- **Controller**: Handle HTTP routing, request validation, and cookie.
+- **Service**: Handle business logic, decoupled from Elysia controller if possible.
+- **Model**: Define the data structure and validation for the request and response.
 
 Feel free to adapt this structure to your needs and use any coding pattern you prefer.
 
@@ -539,7 +542,7 @@ We recommended one of the following approach to implement a controller in Elysia
 1. Use Elysia instance as a controller itself
 2. Create a controller that is not tied with HTTP request or Elysia.
 
-***
+---
 
 ### 1. Elysia instance as a controller
 
@@ -549,29 +552,27 @@ Treat an Elysia instance as a controller, and define your routes directly on the
 
 ```typescript
 // ✅ Do
-import { Elysia } from 'elysia'
-import { Service } from './service'
+import { Elysia } from "elysia";
+import { Service } from "./service";
 
-new Elysia()
-    .get('/', ({ stuff }) => {
-        Service.doStuff(stuff)
-    })
+new Elysia().get("/", ({ stuff }) => {
+  Service.doStuff(stuff);
+});
 ```
 
 This approach allows Elysia to infer the `Context` type automatically, ensuring type integrity and consistency between types and runtime code.
 
 ```typescript
 // ❌ Don't
-import { Elysia, t, type Context } from 'elysia'
+import { Elysia, t, type Context } from "elysia";
 
 abstract class Controller {
-    static root(context: Context) {
-        return Service.doStuff(context.stuff)
-    }
+  static root(context: Context) {
+    return Service.doStuff(context.stuff);
+  }
 }
 
-new Elysia()
-    .get('/', Controller.root)
+new Elysia().get("/", Controller.root);
 ```
 
 This approach makes it hard to type `Context` properly, and may lead to loss of type integrity.
@@ -583,16 +584,15 @@ If you want to create a controller class, we recommend creating a class that is 
 This approach allows you to decouple the controller from Elysia, making it easier to test, reuse, and even swap a framework while still follows the MVC pattern.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 abstract class Controller {
-	static doStuff(stuff: string) {
-		return Service.doStuff(stuff)
-	}
+  static doStuff(stuff: string) {
+    return Service.doStuff(stuff);
+  }
 }
 
-new Elysia()
-	.get('/', ({ stuff }) => Controller.doStuff(stuff))
+new Elysia().get("/", ({ stuff }) => Controller.doStuff(stuff));
 ```
 
 Tying the controller to Elysia Context may lead to:
@@ -610,15 +610,15 @@ We recommended to keep the controller decoupled from Elysia as much as possible.
 Do not pass an entire `Context` to a controller, instead use object destructuring to extract what you need and pass it to the controller.
 
 ```typescript
-import type { Context } from 'elysia'
+import type { Context } from "elysia";
 
 abstract class Controller {
-	constructor() {}
+  constructor() {}
 
-	// ❌ Don't do this
-	static root(context: Context) {
-		return Service.doStuff(context.stuff)
-	}
+  // ❌ Don't do this
+  static root(context: Context) {
+    return Service.doStuff(context.stuff);
+  }
 }
 ```
 
@@ -629,27 +629,26 @@ This approach makes it hard to type `Context` properly, and may lead to loss of 
 If you're using Elysia as a controller, you can test your controller using `handle` to directly call a function (and it's lifecycle)
 
 ```typescript
-import { Elysia } from 'elysia'
-import { Service } from './service'
+import { Elysia } from "elysia";
+import { Service } from "./service";
 
-import { describe, it, expect } from 'bun:test'
+import { describe, it, expect } from "bun:test";
 
-const app = new Elysia()
-    .get('/', ({ stuff }) => {
-        Service.doStuff(stuff)
+const app = new Elysia().get("/", ({ stuff }) => {
+  Service.doStuff(stuff);
 
-        return 'ok'
-    })
+  return "ok";
+});
 
-describe('Controller', () => {
-	it('should work', async () => {
-		const response = await app
-			.handle(new Request('http://localhost/'))
-			.then((x) => x.text())
+describe("Controller", () => {
+  it("should work", async () => {
+    const response = await app
+      .handle(new Request("http://localhost/"))
+      .then((x) => x.text());
 
-		expect(response).toBe('ok')
-	})
-})
+    expect(response).toBe("ok");
+  });
+});
 ```
 
 You may find more information about testing in [Unit Test](/patterns/unit-test.html).
@@ -672,23 +671,25 @@ We recommend abstracting a service class/function away from Elysia.
 If the service or function isn't tied to an HTTP request or doesn't access a `Context`, it's recommended to implement it as a static class or function.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 abstract class Service {
-    static fibo(number: number): number {
-        if(number < 2)
-            return number
+  static fibo(number: number): number {
+    if (number < 2) return number;
 
-        return Service.fibo(number - 1) + Service.fibo(number - 2)
-    }
+    return Service.fibo(number - 1) + Service.fibo(number - 2);
+  }
 }
 
-new Elysia()
-    .get('/fibo', ({ body }) => {
-        return Service.fibo(body)
-    }, {
-        body: t.Numeric()
-    })
+new Elysia().get(
+  "/fibo",
+  ({ body }) => {
+    return Service.fibo(body);
+  },
+  {
+    body: t.Numeric(),
+  },
+);
 ```
 
 If your service doesn't need to store a property, you may use `abstract class` and `static` instead to avoid allocating class instance.
@@ -698,27 +699,26 @@ If your service doesn't need to store a property, you may use `abstract class` a
 **If the service is a request-dependent service** or needs to process HTTP requests, we recommend abstracting it as an Elysia instance to ensure type integrity and inference:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 // ✅ Do
-const AuthService = new Elysia({ name: 'Auth.Service' })
-    .macro({
-        isSignIn: {
-            resolve({ cookie, status }) {
-                if (!cookie.session.value) return status(401)
+const AuthService = new Elysia({ name: "Auth.Service" }).macro({
+  isSignIn: {
+    resolve({ cookie, status }) {
+      if (!cookie.session.value) return status(401);
 
-                return {
-                	session: cookie.session.value,
-                }
-            }
-        }
-    })
+      return {
+        session: cookie.session.value,
+      };
+    },
+  },
+});
 
 const UserController = new Elysia()
-    .use(AuthService)
-    .get('/profile', ({ Auth: { user } }) => user, {
-    	isSignIn: true
-    })
+  .use(AuthService)
+  .get("/profile", ({ Auth: { user } }) => user, {
+    isSignIn: true,
+  });
 ```
 
 ::: tip
@@ -732,15 +732,18 @@ It's recommended to `decorate` only request-dependent properties, such as `reque
 Overusing decorators may tie your code to Elysia, making it harder to test and reuse.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.decorate('requestIP', ({ request }) => request.headers.get('x-forwarded-for') || request.ip)
-	.decorate('requestTime', () => Date.now())
-	.decorate('session', ({ cookie }) => cookie.session.value)
-	.get('/', ({ requestIP, requestTime, session }) => {
-		return { requestIP, requestTime, session }
-	})
+  .decorate(
+    "requestIP",
+    ({ request }) => request.headers.get("x-forwarded-for") || request.ip,
+  )
+  .decorate("requestTime", () => Date.now())
+  .decorate("session", ({ cookie }) => cookie.session.value)
+  .get("/", ({ requestIP, requestTime, session }) => {
+    return { requestIP, requestTime, session };
+  });
 ```
 
 ## Model
@@ -757,21 +760,19 @@ Instead of declaring an interface, reuse validation's model instead:
 
 ```typescript twoslash
 // ✅ Do
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const customBody = t.Object({
-	username: t.String(),
-	password: t.String()
-})
+  username: t.String(),
+  password: t.String(),
+});
 
 // Optional if you want to get the type of the model
 // Usually if we didn't use the type, as it's already inferred by Elysia
-type CustomBody = typeof customBody.static
-    // ^?
+type CustomBody = typeof customBody.static;
+// ^?
 
-
-
-export { customBody }
+export { customBody };
 ```
 
 We can get type of model by using `typeof` with `.static` property from the model.
@@ -779,21 +780,24 @@ We can get type of model by using `typeof` with `.static` property from the mode
 Then you can use the `CustomBody` type to infer the type of the request body.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const customBody = t.Object({
-	username: t.String(),
-	password: t.String()
-})
+  username: t.String(),
+  password: t.String(),
+});
 // ---cut---
 // ✅ Do
-new Elysia()
-	.post('/login', ({ body }) => {
-	                 // ^?
-		return body
-	}, {
-		body: customBody
-	})
+new Elysia().post(
+  "/login",
+  ({ body }) => {
+    // ^?
+    return body;
+  },
+  {
+    body: customBody,
+  },
+);
 ```
 
 ### ❌ Don't: Declare a class instance as a model
@@ -803,19 +807,19 @@ Do not declare a class instance as a model:
 ```typescript
 // ❌ Don't
 class CustomBody {
-	username: string
-	password: string
+  username: string;
+  password: string;
 
-	constructor(username: string, password: string) {
-		this.username = username
-		this.password = password
-	}
+  constructor(username: string, password: string) {
+    this.username = username;
+    this.password = password;
+  }
 }
 
 // ❌ Don't
 interface ICustomBody {
-	username: string
-	password: string
+  username: string;
+  password: string;
 }
 ```
 
@@ -825,25 +829,25 @@ Do not declare a type separate from the model, instead use `typeof` with `.stati
 
 ```typescript
 // ❌ Don't
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const customBody = t.Object({
-	username: t.String(),
-	password: t.String()
-})
+  username: t.String(),
+  password: t.String(),
+});
 
 type CustomBody = {
-	username: string
-	password: string
-}
+  username: string;
+  password: string;
+};
 
 // ✅ Do
 const customBody = t.Object({
-	username: t.String(),
-	password: t.String()
-})
+  username: t.String(),
+  password: t.String(),
+});
 
-type CustomBody = typeof customBody.static
+type CustomBody = typeof customBody.static;
 ```
 
 ### Group
@@ -851,16 +855,16 @@ type CustomBody = typeof customBody.static
 You can group multiple models into a single object to make it more organized.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 export const AuthModel = {
-	sign: t.Object({
-		username: t.String(),
-		password: t.String()
-	})
-}
+  sign: t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+};
 
-const models = AuthModel.models
+const models = AuthModel.models;
 ```
 
 ### Model Injection
@@ -870,30 +874,33 @@ Though this is optional, if you are strictly following MVC pattern, you may want
 Using Elysia's model reference
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const customBody = t.Object({
-	username: t.String(),
-	password: t.String()
-})
+  username: t.String(),
+  password: t.String(),
+});
 
-const AuthModel = new Elysia()
-    .model({
-        sign: customBody
-    })
+const AuthModel = new Elysia().model({
+  sign: customBody,
+});
 
-const models = AuthModel.models
+const models = AuthModel.models;
 
-const UserController = new Elysia({ prefix: '/auth' })
-    .use(AuthModel)
-    .prefix('model', 'auth.')
-    .post('/sign-in', async ({ body, cookie: { session } }) => {
-                             // ^?
+const UserController = new Elysia({ prefix: "/auth" })
+  .use(AuthModel)
+  .prefix("model", "auth.")
+  .post(
+    "/sign-in",
+    async ({ body, cookie: { session } }) => {
+      // ^?
 
-        return true
-    }, {
-        body: 'auth.Sign'
-    })
+      return true;
+    },
+    {
+      body: "auth.Sign",
+    },
+  );
 ```
 
 This approach provide several benefits:
@@ -906,8 +913,8 @@ This approach provide several benefits:
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/better-auth.md'
----
+
+## url: 'https://elysiajs.com/integrations/better-auth.md'
 
 # Better Auth
 
@@ -920,12 +927,12 @@ We recommend going through the [Better Auth basic setup](https://www.better-auth
 Our basic setup will look like this:
 
 ```ts [auth.ts]
-import { betterAuth } from 'better-auth'
-import { Pool } from 'pg'
+import { betterAuth } from "better-auth";
+import { Pool } from "pg";
 
 export const auth = betterAuth({
-    database: new Pool()
-})
+  database: new Pool(),
+});
 ```
 
 ## Handler
@@ -935,16 +942,16 @@ After setting up Better Auth instance, we can mount to Elysia via [mount](/patte
 We need to mount the handler to Elysia endpoint.
 
 ```ts [index.ts]
-import { Elysia } from 'elysia'
-import { auth } from './auth'
+import { Elysia } from "elysia";
+import { auth } from "./auth";
 
 const app = new Elysia()
-	.mount(auth.handler) // [!code ++]
-	.listen(3000)
+  .mount(auth.handler) // [!code ++]
+  .listen(3000);
 
 console.log(
-    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-)
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
 ```
 
 Then we can access Better Auth with `http://localhost:3000/api/auth`.
@@ -954,15 +961,15 @@ Then we can access Better Auth with `http://localhost:3000/api/auth`.
 We recommend setting a prefix path when using [mount](/patterns/mount.html).
 
 ```ts [index.ts]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.mount('/auth', auth.handler) // [!code ++]
-	.listen(3000)
+  .mount("/auth", auth.handler) // [!code ++]
+  .listen(3000);
 
 console.log(
-    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-)
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
 ```
 
 Then we can access Better Auth with `http://localhost:3000/auth/api/auth`.
@@ -970,15 +977,15 @@ Then we can access Better Auth with `http://localhost:3000/auth/api/auth`.
 But the URL looks redundant, we can customize the `/api/auth` prefix to something else in Better Auth instance.
 
 ```ts
-import { betterAuth } from 'better-auth'
-import { openAPI } from 'better-auth/plugins'
-import { passkey } from 'better-auth/plugins/passkey'
+import { betterAuth } from "better-auth";
+import { openAPI } from "better-auth/plugins";
+import { passkey } from "better-auth/plugins/passkey";
 
-import { Pool } from 'pg'
+import { Pool } from "pg";
 
 export const auth = betterAuth({
-    basePath: '/api' // [!code ++]
-})
+  basePath: "/api", // [!code ++]
+});
 ```
 
 Then we can access Better Auth with `http://localhost:3000/auth/api`.
@@ -994,49 +1001,49 @@ However if we are using [@elysiajs/openapi](/plugins/openapi), you might want to
 We may do that with the following code:
 
 ```ts
-import { openAPI } from 'better-auth/plugins'
+import { openAPI } from "better-auth/plugins";
 
-let _schema: ReturnType<typeof auth.api.generateOpenAPISchema>
-const getSchema = async () => (_schema ??= auth.api.generateOpenAPISchema())
+let _schema: ReturnType<typeof auth.api.generateOpenAPISchema>;
+const getSchema = async () => (_schema ??= auth.api.generateOpenAPISchema());
 
 export const OpenAPI = {
-    getPaths: (prefix = '/auth/api') =>
-        getSchema().then(({ paths }) => {
-            const reference: typeof paths = Object.create(null)
+  getPaths: (prefix = "/auth/api") =>
+    getSchema().then(({ paths }) => {
+      const reference: typeof paths = Object.create(null);
 
-            for (const path of Object.keys(paths)) {
-                const key = prefix + path
-                reference[key] = paths[path]
+      for (const path of Object.keys(paths)) {
+        const key = prefix + path;
+        reference[key] = paths[path];
 
-                for (const method of Object.keys(paths[path])) {
-                    const operation = (reference[key] as any)[method]
+        for (const method of Object.keys(paths[path])) {
+          const operation = (reference[key] as any)[method];
 
-                    operation.tags = ['Better Auth']
-                }
-            }
+          operation.tags = ["Better Auth"];
+        }
+      }
 
-            return reference
-        }) as Promise<any>,
-    components: getSchema().then(({ components }) => components) as Promise<any>
-} as const
+      return reference;
+    }) as Promise<any>,
+  components: getSchema().then(({ components }) => components) as Promise<any>,
+} as const;
 ```
 
 Then in our Elysia instance that use `@elysiajs/openapi`.
 
 ```ts
-import { Elysia } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
-import { OpenAPI } from './auth'
+import { OpenAPI } from "./auth";
 
 const app = new Elysia().use(
-    openapi({
-        documentation: {
-            components: await OpenAPI.components,
-            paths: await OpenAPI.getPaths()
-        }
-    })
-)
+  openapi({
+    documentation: {
+      components: await OpenAPI.components,
+      paths: await OpenAPI.getPaths(),
+    },
+  }),
+);
 ```
 
 ## CORS
@@ -1044,26 +1051,26 @@ const app = new Elysia().use(
 To configure cors, you can use the `cors` plugin from `@elysiajs/cors`.
 
 ```ts
-import { Elysia } from 'elysia'
-import { cors } from '@elysiajs/cors'
+import { Elysia } from "elysia";
+import { cors } from "@elysiajs/cors";
 
-import { auth } from './auth'
+import { auth } from "./auth";
 
 const app = new Elysia()
-    .use(
-        cors({
-            origin: 'http://localhost:3001',
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-            credentials: true,
-            allowedHeaders: ['Content-Type', 'Authorization']
-        })
-    )
-    .mount(auth.handler)
-    .listen(3000)
+  .use(
+    cors({
+      origin: "http://localhost:3001",
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      credentials: true,
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }),
+  )
+  .mount(auth.handler)
+  .listen(3000);
 
 console.log(
-    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-)
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
 ```
 
 ## Macro
@@ -1071,39 +1078,39 @@ console.log(
 You can use [macro](https://elysiajs.com/patterns/macro.html#macro) with [resolve](https://elysiajs.com/essential/handler.html#resolve) to provide session and user information before pass to view.
 
 ```ts
-import { Elysia } from 'elysia'
-import { auth } from './auth'
+import { Elysia } from "elysia";
+import { auth } from "./auth";
 
 // user middleware (compute user and session and pass to routes)
-const betterAuth = new Elysia({ name: 'better-auth' })
-    .mount(auth.handler)
-    .macro({
-        auth: {
-            async resolve({ status, request: { headers } }) {
-                const session = await auth.api.getSession({
-                    headers
-                })
+const betterAuth = new Elysia({ name: "better-auth" })
+  .mount(auth.handler)
+  .macro({
+    auth: {
+      async resolve({ status, request: { headers } }) {
+        const session = await auth.api.getSession({
+          headers,
+        });
 
-                if (!session) return status(401)
+        if (!session) return status(401);
 
-                return {
-                    user: session.user,
-                    session: session.session
-                }
-            }
-        }
-    })
+        return {
+          user: session.user,
+          session: session.session,
+        };
+      },
+    },
+  });
 
 const app = new Elysia()
-    .use(betterAuth)
-    .get('/user', ({ user }) => user, {
-        auth: true
-    })
-    .listen(3000)
+  .use(betterAuth)
+  .get("/user", ({ user }) => user, {
+    auth: true,
+  })
+  .listen(3000);
 
 console.log(
-    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-)
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
 ```
 
 This will allow you to access the `user` and `session` object in all of your routes.
@@ -1111,8 +1118,8 @@ This will allow you to access the `user` and `session` object in all of your rou
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/cheat-sheet.md'
----
+
+## url: 'https://elysiajs.com/integrations/cheat-sheet.md'
 
 # Cheat Sheet
 
@@ -1123,11 +1130,9 @@ Here are a quick overview for a common Elysia patterns
 A simple hello world
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/', () => 'Hello World')
-    .listen(3000)
+new Elysia().get("/", () => "Hello World").listen(3000);
 ```
 
 ## Custom HTTP Method
@@ -1137,14 +1142,14 @@ Define route using custom HTTP methods/verbs
 See [Route](/essential/route.html#custom-method)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/hi', () => 'Hi')
-    .post('/hi', () => 'From Post')
-    .put('/hi', () => 'From Put')
-    .route('M-SEARCH', '/hi', () => 'Custom Method')
-    .listen(3000)
+  .get("/hi", () => "Hi")
+  .post("/hi", () => "From Post")
+  .put("/hi", () => "From Put")
+  .route("M-SEARCH", "/hi", () => "Custom Method")
+  .listen(3000);
 ```
 
 ## Path Parameter
@@ -1154,12 +1159,12 @@ Using dynamic path parameter
 See [Path](/essential/route.html#path-type)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/id/:id', ({ params: { id } }) => id)
-    .get('/rest/*', () => 'Rest')
-    .listen(3000)
+  .get("/id/:id", ({ params: { id } }) => id)
+  .get("/rest/*", () => "Rest")
+  .listen(3000);
 ```
 
 ## Return JSON
@@ -1169,15 +1174,15 @@ Elysia converts response to JSON automatically
 See [Handler](/essential/handler.html)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/json', () => {
-        return {
-            hello: 'Elysia'
-        }
-    })
-    .listen(3000)
+  .get("/json", () => {
+    return {
+      hello: "Elysia",
+    };
+  })
+  .listen(3000);
 ```
 
 ## Return a file
@@ -1187,16 +1192,16 @@ A file can be return in as formdata response
 The response must be a 1-level deep object
 
 ```typescript
-import { Elysia, file } from 'elysia'
+import { Elysia, file } from "elysia";
 
 new Elysia()
-    .get('/json', () => {
-        return {
-            hello: 'Elysia',
-            image: file('public/cat.jpg')
-        }
-    })
-    .listen(3000)
+  .get("/json", () => {
+    return {
+      hello: "Elysia",
+      image: file("public/cat.jpg"),
+    };
+  })
+  .listen(3000);
 ```
 
 ## Header and status
@@ -1206,15 +1211,15 @@ Set a custom header and a status code
 See [Handler](/essential/handler.html)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/', ({ set, status }) => {
-        set.headers['x-powered-by'] = 'Elysia'
+  .get("/", ({ set, status }) => {
+    set.headers["x-powered-by"] = "Elysia";
 
-        return status(418, "I'm a teapot")
-    })
-    .listen(3000)
+    return status(418, "I'm a teapot");
+  })
+  .listen(3000);
 ```
 
 ## Group
@@ -1224,17 +1229,17 @@ Define a prefix once for sub routes
 See [Group](/essential/route.html#group)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get("/", () => "Hi")
-    .group("/auth", app => {
-        return app
-            .get("/", () => "Hi")
-            .post("/sign-in", ({ body }) => body)
-            .put("/sign-up", ({ body }) => body)
-    })
-    .listen(3000)
+  .get("/", () => "Hi")
+  .group("/auth", (app) => {
+    return app
+      .get("/", () => "Hi")
+      .post("/sign-in", ({ body }) => body)
+      .put("/sign-up", ({ body }) => body);
+  })
+  .listen(3000);
 ```
 
 ## Schema
@@ -1244,16 +1249,16 @@ Enforce a data type of a route
 See [Validation](/essential/validation)
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .post('/mirror', ({ body: { username } }) => username, {
-        body: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
-    .listen(3000)
+  .post("/mirror", ({ body: { username } }) => username, {
+    body: t.Object({
+      username: t.String(),
+      password: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 ## File upload
@@ -1261,22 +1266,18 @@ new Elysia()
 See [Validation#file](/essential/validation#file)
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post('/body', ({ body }) => body, {
-                    // ^?
+  .post("/body", ({ body }) => body, {
+    // ^?
 
-
-
-
-
-		body: t.Object({
-			file: t.File({ format: 'image/*' }),
-			multipleFiles: t.Files()
-		})
-	})
-	.listen(3000)
+    body: t.Object({
+      file: t.File({ format: "image/*" }),
+      multipleFiles: t.Files(),
+    }),
+  })
+  .listen(3000);
 ```
 
 ## Lifecycle Hook
@@ -1286,25 +1287,25 @@ Intercept an Elysia event in order
 See [Lifecycle](/essential/life-cycle.html)
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .onRequest(() => {
-        console.log('On request')
-    })
-    .on('beforeHandle', () => {
-        console.log('Before handle')
-    })
-    .post('/mirror', ({ body }) => body, {
-        body: t.Object({
-            username: t.String(),
-            password: t.String()
-        }),
-        afterHandle: () => {
-            console.log("After handle")
-        }
-    })
-    .listen(3000)
+  .onRequest(() => {
+    console.log("On request");
+  })
+  .on("beforeHandle", () => {
+    console.log("Before handle");
+  })
+  .post("/mirror", ({ body }) => body, {
+    body: t.Object({
+      username: t.String(),
+      password: t.String(),
+    }),
+    afterHandle: () => {
+      console.log("After handle");
+    },
+  })
+  .listen(3000);
 ```
 
 ## Guard
@@ -1315,17 +1316,20 @@ See [Scope](/essential/plugin.html#scope)
 
 ```typescript twoslash
 // @errors: 2345
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .guard({
-        response: t.String()
-    }, (app) => app
-        .get('/', () => 'Hi')
+  .guard(
+    {
+      response: t.String(),
+    },
+    (app) =>
+      app
+        .get("/", () => "Hi")
         // Invalid: will throws error, and TypeScript will report error
-        .get('/invalid', () => 1)
-    )
-    .listen(3000)
+        .get("/invalid", () => 1),
+  )
+  .listen(3000);
 ```
 
 ## Custom context
@@ -1335,16 +1339,16 @@ Add custom variable to route context
 See [Context](/essential/handler.html#context)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .state('version', 1)
-    .decorate('getDate', () => Date.now())
-    .get('/version', ({
-        getDate,
-        store: { version }
-    }) => `${version} ${getDate()}`)
-    .listen(3000)
+  .state("version", 1)
+  .decorate("getDate", () => Date.now())
+  .get(
+    "/version",
+    ({ getDate, store: { version } }) => `${version} ${getDate()}`,
+  )
+  .listen(3000);
 ```
 
 ## Redirect
@@ -1354,14 +1358,14 @@ Redirect a response
 See [Handler](/essential/handler.html#redirect)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/', () => 'hi')
-    .get('/redirect', ({ redirect }) => {
-        return redirect('/')
-    })
-    .listen(3000)
+  .get("/", () => "hi")
+  .get("/redirect", ({ redirect }) => {
+    return redirect("/");
+  })
+  .listen(3000);
 ```
 
 ## Plugin
@@ -1371,16 +1375,14 @@ Create a separate instance
 See [Plugin](/essential/plugin)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const plugin = new Elysia()
-    .state('plugin-version', 1)
-    .get('/hi', () => 'hi')
+const plugin = new Elysia().state("plugin-version", 1).get("/hi", () => "hi");
 
 new Elysia()
-    .use(plugin)
-    .get('/version', ({ store }) => store['plugin-version'])
-    .listen(3000)
+  .use(plugin)
+  .get("/version", ({ store }) => store["plugin-version"])
+  .listen(3000);
 ```
 
 ## Web Socket
@@ -1390,15 +1392,15 @@ Create a realtime connection using Web Socket
 See [Web Socket](/patterns/websocket)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .ws('/ping', {
-        message(ws, message) {
-            ws.send('hello ' + message)
-        }
-    })
-    .listen(3000)
+  .ws("/ping", {
+    message(ws, message) {
+      ws.send("hello " + message);
+    },
+  })
+  .listen(3000);
 ```
 
 ## OpenAPI documentation
@@ -1408,14 +1410,14 @@ Create interactive documentation using Scalar (or optionally Swagger)
 See [openapi](/plugins/openapi.html)
 
 ```typescript
-import { Elysia } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
-const app = new Elysia()
-    .use(openapi())
-    .listen(3000)
+const app = new Elysia().use(openapi()).listen(3000);
 
-console.log(`View documentation at "${app.server!.url}openapi" in your browser`);
+console.log(
+  `View documentation at "${app.server!.url}openapi" in your browser`,
+);
 ```
 
 ## Unit Test
@@ -1426,20 +1428,20 @@ See [Unit Test](/patterns/unit-test)
 
 ```typescript
 // test/index.test.ts
-import { describe, expect, it } from 'bun:test'
-import { Elysia } from 'elysia'
+import { describe, expect, it } from "bun:test";
+import { Elysia } from "elysia";
 
-describe('Elysia', () => {
-    it('return a response', async () => {
-        const app = new Elysia().get('/', () => 'hi')
+describe("Elysia", () => {
+  it("return a response", async () => {
+    const app = new Elysia().get("/", () => "hi");
 
-        const response = await app
-            .handle(new Request('http://localhost/'))
-            .then((res) => res.text())
+    const response = await app
+      .handle(new Request("http://localhost/"))
+      .then((res) => res.text());
 
-        expect(response).toBe('hi')
-    })
-})
+    expect(response).toBe("hi");
+  });
+});
 ```
 
 ## Custom body parser
@@ -1449,13 +1451,11 @@ Create custom logic for parsing body
 See [Parse](/essential/life-cycle.html#parse)
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .onParse(({ request, contentType }) => {
-        if (contentType === 'application/custom-type')
-            return request.text()
-    })
+new Elysia().onParse(({ request, contentType }) => {
+  if (contentType === "application/custom-type") return request.text();
+});
 ```
 
 ## GraphQL
@@ -1465,32 +1465,33 @@ Create a custom GraphQL server using GraphQL Yoga or Apollo
 See [GraphQL Yoga](/plugins/graphql-yoga)
 
 ```typescript
-import { Elysia } from 'elysia'
-import { yoga } from '@elysiajs/graphql-yoga'
+import { Elysia } from "elysia";
+import { yoga } from "@elysiajs/graphql-yoga";
 
 const app = new Elysia()
-    .use(
-        yoga({
-            typeDefs: /* GraphQL */`
-                type Query {
-                    hi: String
-                }
-            `,
-            resolvers: {
-                Query: {
-                    hi: () => 'Hello from Elysia'
-                }
-            }
-        })
-    )
-    .listen(3000)
+  .use(
+    yoga({
+      typeDefs: /* GraphQL */ `
+        type Query {
+          hi: String
+        }
+      `,
+      resolvers: {
+        Query: {
+          hi: () => "Hello from Elysia",
+        },
+      },
+    }),
+  )
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/migrate.md'
----
+
+## url: 'https://elysiajs.com/migrate.md'
+
 # Comparison with Other Frameworks
 
 Elysia is designed to be intuitive and easy to use, especially for those familiar with other web frameworks.
@@ -1500,8 +1501,8 @@ If you have used other popular frameworks like Express, Fastify, or Hono, you wi
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/configuration.md'
----
+
+## url: 'https://elysiajs.com/patterns/configuration.md'
 
 # Config
 
@@ -1510,12 +1511,12 @@ Elysia comes with a configurable behavior, allowing us to customize various aspe
 We can define a configuration by using a constructor.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia({
-	prefix: '/v1',
-	normalize: true
-})
+  prefix: "/v1",
+  normalize: true,
+});
 ```
 
 ## adapter
@@ -1527,12 +1528,12 @@ Runtime adapter for using Elysia in different environments.
 Default to appropriate adapter based on the environment.
 
 ```ts
-import { Elysia, t } from 'elysia'
-import { BunAdapter } from 'elysia/adapter/bun'
+import { Elysia, t } from "elysia";
+import { BunAdapter } from "elysia/adapter/bun";
 
 new Elysia({
-	adapter: BunAdapter
-})
+  adapter: BunAdapter,
+});
 ```
 
 ## allowUnsafeValidationDetails
@@ -1542,11 +1543,11 @@ new Elysia({
 Whether Elysia should include unsafe validation details in the error response on production.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia({
-	allowUnsafeValidationDetails: true
-})
+  allowUnsafeValidationDetails: true,
+});
 ```
 
 By default, Elysia will omitted all validation detail on production.
@@ -1557,8 +1558,8 @@ Ideally, this should only be enabled on a public APIs as it may leak sensitive i
 
 #### Options - @default `false`
 
-* `true` - Include unsafe validation details in the error response on production
-* `false` - Exclude unsafe validation details in the error response on production
+- `true` - Include unsafe validation details in the error response on production
+- `false` - Exclude unsafe validation details in the error response on production
 
 ## aot
 
@@ -1566,23 +1567,23 @@ Ideally, this should only be enabled on a public APIs as it may leak sensitive i
 
 Ahead of Time compilation.
 
-Elysia has a built-in JIT *"compiler"* that can [optimize performance](/blog/elysia-04.html#ahead-of-time-complie).
+Elysia has a built-in JIT _"compiler"_ that can [optimize performance](/blog/elysia-04.html#ahead-of-time-complie).
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	aot: true
-})
+  aot: true,
+});
 ```
 
 Disable Ahead of Time compilation
 
 #### Options - @default `false`
 
-* `true` - Precompile every route before starting the server
+- `true` - Precompile every route before starting the server
 
-* `false` - Disable JIT entirely. Faster startup time without cost of performance
+- `false` - Disable JIT entirely. Faster startup time without cost of performance
 
 ## detail
 
@@ -1591,14 +1592,14 @@ Define an OpenAPI schema for all routes of an instance.
 This schema will be used to generate OpenAPI documentation for all routes of an instance.
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	detail: {
-		hide: true,
-		tags: ['elysia']
-	}
-})
+  detail: {
+    hide: true,
+    tags: ["elysia"],
+  },
+});
 ```
 
 ## encodeSchema
@@ -1608,26 +1609,26 @@ Handle custom `t.Transform` schema with custom `Encode` before returning the res
 This allows us to create custom encode function for your data before sending response to the client.
 
 ```ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia({ encodeSchema: true })
+new Elysia({ encodeSchema: true });
 ```
 
 #### Options - @default `true`
 
-* `true` - Run `Encode` before sending the response to client
-* `false` - Skip `Encode` entirely
+- `true` - Run `Encode` before sending the response to client
+- `false` - Skip `Encode` entirely
 
 ## name
 
 Define a name of an instance which is used for debugging and [Plugin Deduplication](/essential/plugin.html#plugin-deduplication)
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	name: 'service.thing'
-})
+  name: "service.thing",
+});
 ```
 
 ## nativeStaticResponse
@@ -1637,11 +1638,11 @@ new Elysia({
 Use an optimized function for handling inline value for each respective runtime.
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	nativeStaticResponse: true
-})
+  nativeStaticResponse: true,
+});
 ```
 
 #### Example
@@ -1649,19 +1650,19 @@ new Elysia({
 If enabled on Bun, Elysia will insert inline value into `Bun.serve.static` improving performance for static value.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 // This
 new Elysia({
-	nativeStaticResponse: true
-}).get('/version', 1)
+  nativeStaticResponse: true,
+}).get("/version", 1);
 
 // is an equivalent to
 Bun.serve({
-	static: {
-		'/version': new Response(1)
-	}
-})
+  static: {
+    "/version": new Response(1),
+  },
+});
 ```
 
 ## normalize
@@ -1671,22 +1672,22 @@ Bun.serve({
 Whether Elysia should coerce field into a specified schema.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia({
-	normalize: true
-})
+  normalize: true,
+});
 ```
 
 When unknown properties that are not specified in schema are found on either input and output, how should Elysia handle the field?
 
 Options - @default `true`
 
-* `true`: Elysia will coerce fields into a specified schema using [exact mirror](/blog/elysia-13.html#exact-mirror)
+- `true`: Elysia will coerce fields into a specified schema using [exact mirror](/blog/elysia-13.html#exact-mirror)
 
-* `typebox`: Elysia will coerce fields into a specified schema using [TypeBox's Value.Clean](https://github.com/sinclairzx81/typebox)
+- `typebox`: Elysia will coerce fields into a specified schema using [TypeBox's Value.Clean](https://github.com/sinclairzx81/typebox)
 
-* `false`: Elysia will raise an error if a request or response contains fields that are not explicitly allowed in the schema of the respective handler.
+- `false`: Elysia will raise an error if a request or response contains fields that are not explicitly allowed in the schema of the respective handler.
 
 ## precompile
 
@@ -1695,18 +1696,18 @@ Options - @default `true`
 Whether Elysia should [precompile all routes](/blog/elysia-10.html#improved-startup-time) ahead of time before starting the server.
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	precompile: true
-})
+  precompile: true,
+});
 ```
 
 Options - @default `false`
 
-* `true`: Run JIT on all routes before starting the server
+- `true`: Run JIT on all routes before starting the server
 
-* `false`: Dynamically compile routes on demand
+- `false`: Dynamically compile routes on demand
 
 It's recommended to leave it as `false`.
 
@@ -1715,11 +1716,11 @@ It's recommended to leave it as `false`.
 Define a prefix for all routes of an instance
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia({
-	prefix: '/v1'
-})
+  prefix: "/v1",
+});
 ```
 
 When prefix is defined, all routes will be prefixed with the given value.
@@ -1727,9 +1728,9 @@ When prefix is defined, all routes will be prefixed with the given value.
 #### Example
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia({ prefix: '/v1' }).get('/name', 'elysia') // Path is /v1/name
+new Elysia({ prefix: "/v1" }).get("/name", "elysia"); // Path is /v1/name
 ```
 
 ## sanitize
@@ -1739,11 +1740,11 @@ A function or an array of function that calls and intercepts on every `t.String`
 Allowing us to read and transform a string into a new value.
 
 ```ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia({
-	sanitize: (value) => Bun.escapeHTML(value)
-})
+  sanitize: (value) => Bun.escapeHTML(value),
+});
 ```
 
 ## seed
@@ -1751,13 +1752,13 @@ new Elysia({
 Define a value which will be used to generate checksum of an instance, used for [Plugin Deduplication](/essential/plugin.html#plugin-deduplication)
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	seed: {
-		value: 'service.thing'
-	}
-})
+  seed: {
+    value: "service.thing",
+  },
+});
 ```
 
 The value could be any type not limited to string, number, or object.
@@ -1769,26 +1770,26 @@ Whether should Elysia handle path strictly.
 According to [RFC 3986](https://tools.ietf.org/html/rfc3986#section-3.3), a path should be strictly equal to the path defined in the route.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia({ strictPath: true })
+new Elysia({ strictPath: true });
 ```
 
 #### Options - @default `false`
 
-* `true` - Follows [RFC 3986](https://tools.ietf.org/html/rfc3986#section-3.3) for path matching strictly
-* `false` - Tolerate suffix '/' or vice-versa.
+- `true` - Follows [RFC 3986](https://tools.ietf.org/html/rfc3986#section-3.3) for path matching strictly
+- `false` - Tolerate suffix '/' or vice-versa.
 
 #### Example
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 // Path can be either /name or /name/
-new Elysia({ strictPath: false }).get('/name', 'elysia')
+new Elysia({ strictPath: false }).get("/name", "elysia");
 
 // Path can be only /name
-new Elysia({ strictPath: true }).get('/name', 'elysia')
+new Elysia({ strictPath: true }).get("/name", "elysia");
 ```
 
 ## serve
@@ -1798,17 +1799,17 @@ Customize HTTP server behavior.
 Bun serve configuration.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	serve: {
-		hostname: 'elysiajs.com',
-		tls: {
-			cert: Bun.file('cert.pem'),
-			key: Bun.file('key.pem')
-		}
-	},
-})
+  serve: {
+    hostname: "elysiajs.com",
+    tls: {
+      cert: Bun.file("cert.pem"),
+      key: Bun.file("key.pem"),
+    },
+  },
+});
 ```
 
 This configuration extends [Bun Serve API](https://bun.sh/docs/api/http) and [Bun TLS](https://bun.sh/docs/api/http#tls)
@@ -1818,27 +1819,27 @@ This configuration extends [Bun Serve API](https://bun.sh/docs/api/http) and [Bu
 We can set the maximum body size by setting [`serve.maxRequestBodySize`](#serve-maxrequestbodysize) in the `serve` configuration.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	serve: {
-		maxRequestBodySize: 1024 * 1024 * 256 // 256MB
-	}
-})
+  serve: {
+    maxRequestBodySize: 1024 * 1024 * 256, // 256MB
+  },
+});
 ```
 
 By default the maximum request body size is 128MB (1024 \* 1024 \* 128).
 Define body size limit.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	serve: {
-		// Maximum message size (in bytes)
-	    maxPayloadLength: 64 * 1024,
-	}
-})
+  serve: {
+    // Maximum message size (in bytes)
+    maxPayloadLength: 64 * 1024,
+  },
+});
 ```
 
 ### Example: HTTPS / TLS
@@ -1846,16 +1847,16 @@ new Elysia({
 We can enable TLS (known as successor of SSL) by passing in a value for key and cert; both are required to enable TLS.
 
 ```ts
-import { Elysia, file } from 'elysia'
+import { Elysia, file } from "elysia";
 
 new Elysia({
-	serve: {
-		tls: {
-			cert: file('cert.pem'),
-			key: file('key.pem')
-		}
-	}
-})
+  serve: {
+    tls: {
+      cert: file("cert.pem"),
+      key: file("key.pem"),
+    },
+  },
+});
 ```
 
 ### Example: Increase timeout
@@ -1863,19 +1864,19 @@ new Elysia({
 We can increase the idle timeout by setting [`serve.idleTimeout`](#serve-idletimeout) in the `serve` configuration.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	serve: {
-		// Increase idle timeout to 30 seconds
-		idleTimeout: 30
-	}
-})
+  serve: {
+    // Increase idle timeout to 30 seconds
+    idleTimeout: 30,
+  },
+});
 ```
 
 By default the idle timeout is 10 seconds (on Bun).
 
-***
+---
 
 ## serve
 
@@ -1942,16 +1943,16 @@ If set, the HTTP server will listen on a unix socket instead of a port.
 We can enable TLS (known as successor of SSL) by passing in a value for key and cert; both are required to enable TLS.
 
 ```ts
-import { Elysia, file } from 'elysia'
+import { Elysia, file } from "elysia";
 
 new Elysia({
-	serve: {
-		tls: {
-			cert: file('cert.pem'),
-			key: file('key.pem')
-		}
-	}
-})
+  serve: {
+    tls: {
+      cert: file("cert.pem"),
+      key: file("key.pem"),
+    },
+  },
+});
 ```
 
 Elysia extends Bun configuration which supports TLS out of the box, powered by BoringSSL.
@@ -2014,7 +2015,7 @@ Optionally affect the OpenSSL protocol behavior, which is not usually necessary.
 
 This should be used carefully if at all!
 
-Value is a numeric bitmask of the SSL\_OP\_\* options from OpenSSL Options
+Value is a numeric bitmask of the SSL_OP\_\* options from OpenSSL Options
 
 ### serve.tls.serverName
 
@@ -2025,11 +2026,11 @@ Explicitly set a server name
 Define an tags for OpenAPI schema for all routes of an instance similar to [detail](#detail)
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	tags: ['elysia']
-})
+  tags: ["elysia"],
+});
 ```
 
 ## systemRouter
@@ -2049,39 +2050,39 @@ This configuration extends [Bun's WebSocket API](https://bun.sh/docs/api/websock
 #### Example
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	websocket: {
-		// enable compression and decompression
-    	perMessageDeflate: true
-	}
-})
+  websocket: {
+    // enable compression and decompression
+    perMessageDeflate: true,
+  },
+});
 ```
 
-***
-
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/patterns/cookie.md'
+
 ---
+
+## url: 'https://elysiajs.com/tutorial/patterns/cookie.md'
 
 # Cookie
 
 You interact with cookie by using cookie from context.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ cookie: { visit } }) => {
-		const total = +visit.value ?? 0
-		visit.value++
+  .get("/", ({ cookie: { visit } }) => {
+    const total = +visit.value ?? 0;
+    visit.value++;
 
-		return `You have visited ${visit.value} times`
-	})
-	.listen(3000)
+    return `You have visited ${visit.value} times`;
+  })
+  .listen(3000);
 ```
 
 Cookie is a reactive object. Once modified, it will be reflected in response.
@@ -2091,24 +2092,28 @@ Cookie is a reactive object. Once modified, it will be reflected in response.
 Elysia will then try to coerce it into its respective value when a type annotation if provided.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ cookie: { visit } }) => {
-		visit.value ??= 0
-		visit.value.total++
+  .get(
+    "/",
+    ({ cookie: { visit } }) => {
+      visit.value ??= 0;
+      visit.value.total++;
 
-		return `You have visited ${visit.value.total} times`
-	}, {
-		cookie: t.Object({
-			visit: t.Optional(
-				t.Object({
-					total: t.Number()
-				})
-			)
-		})
-	})
-	.listen(3000)
+      return `You have visited ${visit.value.total} times`;
+    },
+    {
+      cookie: t.Object({
+        visit: t.Optional(
+          t.Object({
+            total: t.Number(),
+          }),
+        ),
+      }),
+    },
+  )
+  .listen(3000);
 ```
 
 We can use cookie schema to validate and parse cookie.
@@ -2120,25 +2125,25 @@ We can get/set cookie attribute by its respective property name.
 Otherwise, use `.set()` to bulk set attribute.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ cookie: { visit } }) => {
-		visit.value ??= 0
-		visit.value++
+  .get("/", ({ cookie: { visit } }) => {
+    visit.value ??= 0;
+    visit.value++;
 
-		visit.httpOnly = true
-		visit.path = '/'
+    visit.httpOnly = true;
+    visit.path = "/";
 
-		visit.set({
-			sameSite: 'lax',
-			secure: true,
-			maxAge: 60 * 60 * 24 * 7
-		})
+    visit.set({
+      sameSite: "lax",
+      secure: true,
+      maxAge: 60 * 60 * 24 * 7,
+    });
 
-		return `You have visited ${visit.value} times`
-	})
-	.listen(3000)
+    return `You have visited ${visit.value} times`;
+  })
+  .listen(3000);
 ```
 
 See Cookie Attribute.
@@ -2148,15 +2153,15 @@ See Cookie Attribute.
 We can remove cookie by calling `.remove()` method.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ cookie: { visit } }) => {
-		visit.remove()
+  .get("/", ({ cookie: { visit } }) => {
+    visit.remove();
 
-		return `Cookie removed`
-	})
-	.listen(3000)
+    return `Cookie removed`;
+  })
+  .listen(3000);
 ```
 
 ## Cookie Signature
@@ -2167,27 +2172,34 @@ Elysia can sign cookie to prevent tampering by:
 2. Use `t.Cookie` to provide secret for each cookie.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-	cookie: {
-		secret: 'Fischl von Luftschloss Narfidort',
-	}
+  cookie: {
+    secret: "Fischl von Luftschloss Narfidort",
+  },
 })
-	.get('/', ({ cookie: { visit } }) => {
-		visit.value ??= 0
-		visit.value++
+  .get(
+    "/",
+    ({ cookie: { visit } }) => {
+      visit.value ??= 0;
+      visit.value++;
 
-		return `You have visited ${visit.value} times`
-	}, {
-		cookie: t.Cookie({
-			visit: t.Optional(t.Number())
-        }, {
-            secrets: 'Fischl von Luftschloss Narfidort',
-            sign: ['visit']
-        })
-	})
-	.listen(3000)
+      return `You have visited ${visit.value} times`;
+    },
+    {
+      cookie: t.Cookie(
+        {
+          visit: t.Optional(t.Number()),
+        },
+        {
+          secrets: "Fischl von Luftschloss Narfidort",
+          sign: ["visit"],
+        },
+      ),
+    },
+  )
+  .listen(3000);
 ```
 
 If multiple secrets are provided, Elysia will use the first secret to sign cookie, and try to verify with the rest.
@@ -2204,31 +2216,33 @@ Let's create a simple counter that tracks how many times you have visited the si
 2. We can set **HTTP only** attribute by setting `visit.httpOnly = true`.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.get('/', ({ cookie: { visit } }) => {
-		visit.value ??= 0
-		visit.value++
+  .get(
+    "/",
+    ({ cookie: { visit } }) => {
+      visit.value ??= 0;
+      visit.value++;
 
-		visit.httpOnly = true
+      visit.httpOnly = true;
 
-		return `You have visited ${visit.value} times`
-	}, {
-		cookie: t.Object({
-			visit: t.Optional(
-				t.Number()
-			)
-		})
-	})
-	.listen(3000)
+      return `You have visited ${visit.value} times`;
+    },
+    {
+      cookie: t.Object({
+        visit: t.Optional(t.Number()),
+      }),
+    },
+  )
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/cors.md'
----
+
+## url: 'https://elysiajs.com/plugins/cors.md'
 
 # CORS Plugin
 
@@ -2243,10 +2257,10 @@ bun add @elysiajs/cors
 Then use it:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { cors } from '@elysiajs/cors'
+import { Elysia } from "elysia";
+import { cors } from "@elysiajs/cors";
 
-new Elysia().use(cors()).listen(3000)
+new Elysia().use(cors()).listen(3000);
 ```
 
 This will set Elysia to accept requests from any origin.
@@ -2263,17 +2277,17 @@ Indicates whether the response can be shared with the requesting code from the g
 
 Value can be one of the following:
 
-* **string** - Name of origin which will directly assign to [Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) header.
-* **boolean** - If set to true, [Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) will be set to `*` (any origins)
-* **RegExp** - Pattern to match request's URL, allowed if matched.
-* **Function** - Custom logic to allow resource sharing, allow if `true` is returned.
-  * Expected to have the type of:
+- **string** - Name of origin which will directly assign to [Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) header.
+- **boolean** - If set to true, [Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) will be set to `*` (any origins)
+- **RegExp** - Pattern to match request's URL, allowed if matched.
+- **Function** - Custom logic to allow resource sharing, allow if `true` is returned.
+  - Expected to have the type of:
   ```typescript
   cors(context: Context) => boolean | void
   ```
-* **Array\<string | RegExp | Function>** - iterate through all cases above in order, allowed if any of the values are `true`.
+- **Array\<string | RegExp | Function>** - iterate through all cases above in order, allowed if any of the values are `true`.
 
-***
+---
 
 ### methods
 
@@ -2285,14 +2299,14 @@ Assign [Access-Control-Allow-Methods](https://developer.mozilla.org/en-US/docs/W
 
 Value can be one of the following:
 
-* **undefined | null | ''** - Ignore all methods.
-* **\*** - Allows all methods.
-* **string** - Expects either a single method or a comma-delimited string
-  * (eg: `'GET, PUT, POST'`)
-* **string\[]** - Allow multiple HTTP methods.
-  * eg: `['GET', 'PUT', 'POST']`
+- **undefined | null | ''** - Ignore all methods.
+- **\*** - Allows all methods.
+- **string** - Expects either a single method or a comma-delimited string
+  - (eg: `'GET, PUT, POST'`)
+- **string\[]** - Allow multiple HTTP methods.
+  - eg: `['GET', 'PUT', 'POST']`
 
-***
+---
 
 ### allowedHeaders
 
@@ -2304,12 +2318,12 @@ Assign [Access-Control-Allow-Headers](https://developer.mozilla.org/en-US/docs/W
 
 Value can be one of the following:
 
-* **string** - Expects either a single header or a comma-delimited string
-  * eg: `'Content-Type, Authorization'`.
-* **string\[]** - Allow multiple HTTP headers.
-  * eg: `['Content-Type', 'Authorization']`
+- **string** - Expects either a single header or a comma-delimited string
+  - eg: `'Content-Type, Authorization'`.
+- **string\[]** - Allow multiple HTTP headers.
+  - eg: `['Content-Type', 'Authorization']`
 
-***
+---
 
 ### exposeHeaders
 
@@ -2321,12 +2335,12 @@ Assign [Access-Control-Expose-Headers](https://developer.mozilla.org/en-US/docs/
 
 Value can be one of the following:
 
-* **string** - Expects either a single header or a comma-delimited string.
-  * eg: `'Content-Type, X-Powered-By'`.
-* **string\[]** - Allow multiple HTTP headers.
-  * eg: `['Content-Type', 'X-Powered-By']`
+- **string** - Expects either a single header or a comma-delimited string.
+  - eg: `'Content-Type, X-Powered-By'`.
+- **string\[]** - Allow multiple HTTP headers.
+  - eg: `['Content-Type', 'X-Powered-By']`
 
-***
+---
 
 ### credentials
 
@@ -2340,7 +2354,7 @@ Credentials are cookies, authorization headers, or TLS client certificates.
 
 Assign [Access-Control-Allow-Credentials](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials) header.
 
-***
+---
 
 ### maxAge
 
@@ -2350,7 +2364,7 @@ Indicates how long the results of a [preflight request](https://developer.mozill
 
 Assign [Access-Control-Max-Age](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age) header.
 
-***
+---
 
 ### preflight
 
@@ -2358,9 +2372,9 @@ The preflight request is a request sent to check if the CORS protocol is underst
 
 Response with **OPTIONS** request with 3 HTTP request headers:
 
-* **Access-Control-Request-Method**
-* **Access-Control-Request-Headers**
-* **Origin**
+- **Access-Control-Request-Method**
+- **Access-Control-Request-Headers**
+- **Origin**
 
 This config indicates if the server should respond to preflight requests.
 
@@ -2371,17 +2385,17 @@ Below you can find the common patterns to use the plugin.
 ## Allow CORS by top-level domain
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { cors } from '@elysiajs/cors'
+import { Elysia } from "elysia";
+import { cors } from "@elysiajs/cors";
 
 const app = new Elysia()
-	.use(
-		cors({
-			origin: /.*\.saltyaom\.com$/
-		})
-	)
-	.get('/', () => 'Hi')
-	.listen(3000)
+  .use(
+    cors({
+      origin: /.*\.saltyaom\.com$/,
+    }),
+  )
+  .get("/", () => "Hi")
+  .listen(3000);
 ```
 
 This will allow requests from top-level domains with `saltyaom.com`
@@ -2389,8 +2403,8 @@ This will allow requests from top-level domains with `saltyaom.com`
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/cron.md'
----
+
+## url: 'https://elysiajs.com/plugins/cron.md'
 
 # Cron Plugin
 
@@ -2405,20 +2419,20 @@ bun add @elysiajs/cron
 Then use it:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { cron } from '@elysiajs/cron'
+import { Elysia } from "elysia";
+import { cron } from "@elysiajs/cron";
 
 new Elysia()
-	.use(
-		cron({
-			name: 'heartbeat',
-			pattern: '*/10 * * * * *',
-			run() {
-				console.log('Heartbeat')
-			}
-		})
-	)
-	.listen(3000)
+  .use(
+    cron({
+      name: "heartbeat",
+      pattern: "*/10 * * * * *",
+      run() {
+        console.log("Heartbeat");
+      },
+    }),
+  )
+  .listen(3000);
 ```
 
 The above code will log `heartbeat` every 10 seconds.
@@ -2458,7 +2472,7 @@ Time to run the job as specified by [cron syntax](https://en.wikipedia.org/wiki/
 
 This can be generated by tools like [Crontab Guru](https://crontab.guru/)
 
-***
+---
 
 This plugin extends the cron method to Elysia using [cronner](https://github.com/hexagon/croner).
 
@@ -2497,32 +2511,32 @@ Below you can find the common patterns to use the plugin.
 You can stop cronjob manually by accessing the cronjob name registered to `store`.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { cron } from '@elysiajs/cron'
+import { Elysia } from "elysia";
+import { cron } from "@elysiajs/cron";
 
 const app = new Elysia()
-	.use(
-		cron({
-			name: 'heartbeat',
-			pattern: '*/1 * * * * *',
-			run() {
-				console.log('Heartbeat')
-			}
-		})
-	)
-	.get(
-		'/stop',
-		({
-			store: {
-				cron: { heartbeat }
-			}
-		}) => {
-			heartbeat.stop()
+  .use(
+    cron({
+      name: "heartbeat",
+      pattern: "*/1 * * * * *",
+      run() {
+        console.log("Heartbeat");
+      },
+    }),
+  )
+  .get(
+    "/stop",
+    ({
+      store: {
+        cron: { heartbeat },
+      },
+    }) => {
+      heartbeat.stop();
 
-			return 'Stop heartbeat'
-		}
-	)
-	.listen(3000)
+      return "Stop heartbeat";
+    },
+  )
+  .listen(3000);
 ```
 
 ## Predefined patterns
@@ -2530,32 +2544,32 @@ const app = new Elysia()
 You can use predefined patterns from `@elysiajs/cron/schedule`
 
 ```typescript
-import { Elysia } from 'elysia'
-import { cron, Patterns } from '@elysiajs/cron'
+import { Elysia } from "elysia";
+import { cron, Patterns } from "@elysiajs/cron";
 
 const app = new Elysia()
-	.use(
-		cron({
-			name: 'heartbeat',
-			pattern: Patterns.everySecond(),
-			run() {
-				console.log('Heartbeat')
-			}
-		})
-	)
-	.get(
-		'/stop',
-		({
-			store: {
-				cron: { heartbeat }
-			}
-		}) => {
-			heartbeat.stop()
+  .use(
+    cron({
+      name: "heartbeat",
+      pattern: Patterns.everySecond(),
+      run() {
+        console.log("Heartbeat");
+      },
+    }),
+  )
+  .get(
+    "/stop",
+    ({
+      store: {
+        cron: { heartbeat },
+      },
+    }) => {
+      heartbeat.stop();
 
-			return 'Stop heartbeat'
-		}
-	)
-	.listen(3000)
+      return "Stop heartbeat";
+    },
+  )
+  .listen(3000);
 ```
 
 ### Functions
@@ -2575,16 +2589,16 @@ const app = new Elysia()
 
 | Function          | Constant                           |
 | ----------------- | ---------------------------------- |
-| `.everySecond()`  | EVERY\_SECOND                       |
-| `.everyMinute()`  | EVERY\_MINUTE                       |
-| `.hourly()`       | EVERY\_HOUR                         |
-| `.daily()`        | EVERY\_DAY\_AT\_MIDNIGHT              |
-| `.everyWeekday()` | EVERY\_WEEKDAY                      |
-| `.everyWeekend()` | EVERY\_WEEKEND                      |
-| `.weekly()`       | EVERY\_WEEK                         |
-| `.monthly()`      | EVERY\_1ST\_DAY\_OF\_MONTH\_AT\_MIDNIGHT |
-| `.everyQuarter()` | EVERY\_QUARTER                      |
-| `.yearly()`       | EVERY\_YEAR                         |
+| `.everySecond()`  | EVERY_SECOND                       |
+| `.everyMinute()`  | EVERY_MINUTE                       |
+| `.hourly()`       | EVERY_HOUR                         |
+| `.daily()`        | EVERY_DAY_AT_MIDNIGHT              |
+| `.everyWeekday()` | EVERY_WEEKDAY                      |
+| `.everyWeekend()` | EVERY_WEEKEND                      |
+| `.weekly()`       | EVERY_WEEK                         |
+| `.monthly()`      | EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT |
+| `.everyQuarter()` | EVERY_QUARTER                      |
+| `.yearly()`       | EVERY_YEAR                         |
 
 ### Constants
 
@@ -2652,8 +2666,8 @@ const app = new Elysia()
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/vercel.md'
----
+
+## url: 'https://elysiajs.com/integrations/vercel.md'
 
 # Deploy Elysia on Vercel
 
@@ -2663,15 +2677,15 @@ Elysia can deploys on Vercel with zero configuration using either Bun or Node ru
 2. Export the Elysia server as default export
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 export default new Elysia() // [!code ++]
-    .get('/', () => 'Hello Vercel Function')
-    .post('/', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+  .get("/", () => "Hello Vercel Function")
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  });
 ```
 
 3. Develop locally with Vercel CLI
@@ -2723,8 +2737,8 @@ Vercel has zero configuration for Elysia, for additional configuration, please r
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/deploy.md'
----
+
+## url: 'https://elysiajs.com/patterns/deploy.md'
 
 # Deploy to production
 
@@ -2739,25 +2753,22 @@ Let's create a **index.ts** file that import our main server from **server.ts** 
 ::: code-group
 
 ```ts [src/index.ts]
-import cluster from 'node:cluster'
-import os from 'node:os'
-import process from 'node:process'
+import cluster from "node:cluster";
+import os from "node:os";
+import process from "node:process";
 
 if (cluster.isPrimary) {
-  	for (let i = 0; i < os.availableParallelism(); i++)
-    	cluster.fork()
+  for (let i = 0; i < os.availableParallelism(); i++) cluster.fork();
 } else {
-  	await import('./server')
-  	console.log(`Worker ${process.pid} started`)
+  await import("./server");
+  console.log(`Worker ${process.pid} started`);
 }
 ```
 
 ```ts [src/server.ts]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.get('/', () => 'Hello World!')
-	.listen(3000)
+new Elysia().get("/", () => "Hello World!").listen(3000);
 ```
 
 :::
@@ -2765,7 +2776,7 @@ new Elysia()
 This will make sure that Elysia is running on multiple CPU cores.
 
 ::: tip
-Elysia on Bun use SO\_REUSEPORT by default, which allows multiple instances to listen on the same port. This only works on Linux.
+Elysia on Bun use SO_REUSEPORT by default, which allows multiple instances to listen on the same port. This only works on Linux.
 :::
 
 ## Compile to binary
@@ -2822,16 +2833,16 @@ bun build \
 ```
 
 Here's a list of available targets:
-| Target                  | Operating System | Architecture | Modern | Baseline | Libc  |
+| Target | Operating System | Architecture | Modern | Baseline | Libc |
 |--------------------------|------------------|--------------|--------|----------|-------|
-| bun-linux-x64           | Linux            | x64          | ✅      | ✅        | glibc |
-| bun-linux-arm64         | Linux            | arm64        | ✅      | N/A      | glibc |
-| bun-windows-x64         | Windows          | x64          | ✅      | ✅        | -     |
-| bun-windows-arm64       | Windows          | arm64        | ❌      | ❌        | -     |
-| bun-darwin-x64          | macOS            | x64          | ✅      | ✅        | -     |
-| bun-darwin-arm64        | macOS            | arm64        | ✅      | N/A      | -     |
-| bun-linux-x64-musl      | Linux            | x64          | ✅      | ✅        | musl  |
-| bun-linux-arm64-musl    | Linux            | arm64        | ✅      | N/A      | musl  |
+| bun-linux-x64 | Linux | x64 | ✅ | ✅ | glibc |
+| bun-linux-arm64 | Linux | arm64 | ✅ | N/A | glibc |
+| bun-windows-x64 | Windows | x64 | ✅ | ✅ | - |
+| bun-windows-arm64 | Windows | arm64 | ❌ | ❌ | - |
+| bun-darwin-x64 | macOS | x64 | ✅ | ✅ | - |
+| bun-darwin-arm64 | macOS | arm64 | ✅ | N/A | - |
+| bun-linux-x64-musl | Linux | x64 | ✅ | ✅ | musl |
+| bun-linux-arm64-musl | Linux | arm64 | ✅ | N/A | musl |
 
 ### Why not --minify
 
@@ -2952,15 +2963,15 @@ It's recommended to specify packages that should be available in a production se
 
 ```json
 {
-	"dependencies": {
-		"pg": "^8.15.6"
-	},
-	"devDependencies": {
-		"@elysiajs/opentelemetry": "^1.2.0",
-		"@opentelemetry/instrumentation-pg": "^0.52.0",
-		"@types/pg": "^8.11.14",
-		"elysia": "^1.2.25"
-	}
+  "dependencies": {
+    "pg": "^8.15.6"
+  },
+  "devDependencies": {
+    "@elysiajs/opentelemetry": "^1.2.0",
+    "@opentelemetry/instrumentation-pg": "^0.52.0",
+    "@types/pg": "^8.11.14",
+    "elysia": "^1.2.25"
+  }
 }
 ```
 
@@ -2970,7 +2981,7 @@ Then after running a build command, on a production server
 bun install --production
 ```
 
-If the node\_modules directory still includes development dependencies, you may remove the node\_modules directory and reinstall production dependencies again.
+If the node_modules directory still includes development dependencies, you may remove the node_modules directory and reinstall production dependencies again.
 
 ### Monorepo
 
@@ -2980,11 +2991,11 @@ If you are using Turborepo, you may place a Dockerfile inside an your apps direc
 
 Assume that our monorepo are using Turborepo with structure as follows:
 
-* apps
-  * server
-    * **Dockerfile (place a Dockerfile here)**
-* packages
-  * config
+- apps
+  - server
+    - **Dockerfile (place a Dockerfile here)**
+- packages
+  - config
 
 Then we can build our Dockerfile on monorepo root (not app root):
 
@@ -3045,8 +3056,8 @@ Instead of a fixed port, we may use `process.env.PORT` and provide a fallback on
 
 ```ts
 new Elysia()
-	.listen(3000) // [!code --]
-	.listen(process.env.PORT ?? 3000) // [!code ++]
+  .listen(3000) // [!code --]
+  .listen(process.env.PORT ?? 3000); // [!code ++]
 ```
 
 This should allows Elysia to intercept port provided by Railway.
@@ -3058,8 +3069,8 @@ Elysia assign hostname to `0.0.0.0` automatically, which works with Railway
 ---
 
 ---
-url: 'https://elysiajs.com/eden/fetch.md'
----
+
+## url: 'https://elysiajs.com/eden/fetch.md'
 
 # Eden Fetch
 
@@ -3067,54 +3078,54 @@ A fetch-like alternative to Eden Treaty.
 
 With Eden Fetch, you can interact with Elysia server in a type-safe manner using Fetch API.
 
-***
+---
 
 First export your existing Elysia server type:
 
 ```typescript
 // server.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .get('/hi', () => 'Hi Elysia')
-    .get('/id/:id', ({ params: { id } }) => id)
-    .post('/mirror', ({ body }) => body, {
-        body: t.Object({
-            id: t.Number(),
-            name: t.String()
-        })
-    })
-    .listen(3000)
+  .get("/hi", () => "Hi Elysia")
+  .get("/id/:id", ({ params: { id } }) => id)
+  .post("/mirror", ({ body }) => body, {
+    body: t.Object({
+      id: t.Number(),
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 
-export type App = typeof app
+export type App = typeof app;
 ```
 
 Then import the server type, and consume the Elysia API on client:
 
 ```typescript
-import { edenFetch } from '@elysiajs/eden'
-import type { App } from './server'
+import { edenFetch } from "@elysiajs/eden";
+import type { App } from "./server";
 
-const fetch = edenFetch<App>('http://localhost:3000')
+const fetch = edenFetch<App>("http://localhost:3000");
 
 // response type: 'Hi Elysia'
-const pong = await fetch('/hi', {})
+const pong = await fetch("/hi", {});
 
 // response type: 1895
-const id = await fetch('/id/:id', {
-    params: {
-        id: '1895'
-    }
-})
+const id = await fetch("/id/:id", {
+  params: {
+    id: "1895",
+  },
+});
 
 // response type: { id: 1895, name: 'Skadi' }
-const nendoroid = await fetch('/mirror', {
-    method: 'POST',
-    body: {
-        id: 1895,
-        name: 'Skadi'
-    }
-})
+const nendoroid = await fetch("/mirror", {
+  method: "POST",
+  body: {
+    id: 1895,
+    name: "Skadi",
+  },
+});
 ```
 
 ## Error Handling
@@ -3122,39 +3133,39 @@ const nendoroid = await fetch('/mirror', {
 You can handle errors the same way as Eden Treaty:
 
 ```typescript
-import { edenFetch } from '@elysiajs/eden'
-import type { App } from './server'
+import { edenFetch } from "@elysiajs/eden";
+import type { App } from "./server";
 
-const fetch = edenFetch<App>('http://localhost:3000')
+const fetch = edenFetch<App>("http://localhost:3000");
 
 // response type: { id: 1895, name: 'Skadi' }
-const { data: nendoroid, error } = await fetch('/mirror', {
-    method: 'POST',
-    body: {
-        id: 1895,
-        name: 'Skadi'
-    }
-})
+const { data: nendoroid, error } = await fetch("/mirror", {
+  method: "POST",
+  body: {
+    id: 1895,
+    name: "Skadi",
+  },
+});
 
-if(error) {
-    switch(error.status) {
-        case 400:
-        case 401:
-            throw error.value
-            break
+if (error) {
+  switch (error.status) {
+    case 400:
+    case 401:
+      throw error.value;
+      break;
 
-        case 500:
-        case 502:
-            throw error.value
-            break
+    case 500:
+    case 502:
+      throw error.value;
+      break;
 
-        default:
-            throw error.value
-            break
-    }
+    default:
+      throw error.value;
+      break;
+  }
 }
 
-const { id, name } = nendoroid
+const { id, name } = nendoroid;
 ```
 
 ## When should I use Eden Fetch over Eden Treaty
@@ -3176,8 +3187,8 @@ If your single process contains **more than 500 routes**, and you need to consum
 ---
 
 ---
-url: 'https://elysiajs.com/eden/installation.md'
----
+
+## url: 'https://elysiajs.com/eden/installation.md'
 
 # Eden Installation
 
@@ -3198,20 +3209,20 @@ First, export your existing Elysia server type:
 
 ```typescript
 // server.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .get('/', () => 'Hi Elysia')
-    .get('/id/:id', ({ params: { id } }) => id)
-    .post('/mirror', ({ body }) => body, {
-        body: t.Object({
-            id: t.Number(),
-            name: t.String()
-        })
-    })
-    .listen(3000)
+  .get("/", () => "Hi Elysia")
+  .get("/id/:id", ({ params: { id } }) => id)
+  .post("/mirror", ({ body }) => body, {
+    body: t.Object({
+      id: t.Number(),
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 
-export type App = typeof app // [!code ++]
+export type App = typeof app; // [!code ++]
 ```
 
 Then consume the Elysia API on client side:
@@ -3323,13 +3334,13 @@ Using method chaining will help save that new type reference.
 For example:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .state('build', 1)
-    // Store is strictly typed // [!code ++]
-    .get('/', ({ store: { build } }) => build)
-    .listen(3000)
+  .state("build", 1)
+  // Store is strictly typed // [!code ++]
+  .get("/", ({ store: { build } }) => build)
+  .listen(3000);
 ```
 
 Using this, **state** now returns a new **ElysiaInstance** type, introducing **build** into store replacing the current one.
@@ -3338,15 +3349,15 @@ Without method chaining, Elysia doesn't save the new type when introduced, leadi
 
 ```typescript twoslash
 // @errors: 2339
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
+const app = new Elysia();
 
-app.state('build', 1)
+app.state("build", 1);
 
-app.get('/', ({ store: { build } }) => build)
+app.get("/", ({ store: { build } }) => build);
 
-app.listen(3000)
+app.listen(3000);
 ```
 
 ### Type Definitions
@@ -3370,10 +3381,10 @@ For example, if you have the following path alias for your backend in **tsconfig
 ```json
 {
   "compilerOptions": {
-  	"baseUrl": ".",
-	"paths": {
-	  "@/*": ["./src/*"]
-	}
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
 ```
@@ -3381,27 +3392,24 @@ For example, if you have the following path alias for your backend in **tsconfig
 And your backend code is like this:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { a, b } from '@/controllers'
+import { Elysia } from "elysia";
+import { a, b } from "@/controllers";
 
-const app = new Elysia()
-	.use(a)
-	.use(b)
-	.listen(3000)
+const app = new Elysia().use(a).use(b).listen(3000);
 
-export type app = typeof app
+export type app = typeof app;
 ```
 
 You **must** make sure that your frontend code is able to resolve the same path alias. Otherwise, type inference will be resolved as any.
 
 ```typescript
-import { treaty } from '@elysiajs/eden'
-import type { app } from '@/index'
+import { treaty } from "@elysiajs/eden";
+import type { app } from "@/index";
 
-const client = treaty<app>('localhost:3000')
+const client = treaty<app>("localhost:3000");
 
 // This should be able to resolve the same module both frontend and backend, and not `any`
-import { a, b } from '@/controllers' // [!code ++]
+import { a, b } from "@/controllers"; // [!code ++]
 ```
 
 To fix this, you must make sure that path alias is resolved to the same file in both frontend and backend.
@@ -3411,10 +3419,10 @@ So, you must change the path alias in **tsconfig.json** to:
 ```json
 {
   "compilerOptions": {
-  	"baseUrl": ".",
-	"paths": {
-	  "@/*": ["../apps/backend/src/*"]
-	}
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["../apps/backend/src/*"]
+    }
   }
 }
 ```
@@ -3423,7 +3431,7 @@ If configured correctly, you should be able to resolve the same module in both f
 
 ```typescript
 // This should be able to resolve the same module both frontend and backend, and not `any`
-import { a, b } from '@/controllers'
+import { a, b } from "@/controllers";
 ```
 
 #### Namespace
@@ -3433,11 +3441,11 @@ We recommended adding a **namespace** prefix for each module in your monorepo to
 ```json
 {
   "compilerOptions": {
-  	"baseUrl": ".",
-	"paths": {
-	  "@frontend/*": ["./apps/frontend/src/*"],
-	  "@backend/*": ["./apps/backend/src/*"]
-	}
+    "baseUrl": ".",
+    "paths": {
+      "@frontend/*": ["./apps/frontend/src/*"],
+      "@backend/*": ["./apps/backend/src/*"]
+    }
   }
 }
 ```
@@ -3446,7 +3454,7 @@ Then, you can import the module like this:
 
 ```typescript
 // Should work in both frontend and backend and not return `any`
-import { a, b } from '@backend/controllers'
+import { a, b } from "@backend/controllers";
 ```
 
 We recommend creating a **single tsconfig.json** that defines a `baseUrl` as the root of your repo, provide a path according to the module location, and create a **tsconfig.json** for each module that inherits the root **tsconfig.json** which has the path alias.
@@ -3456,8 +3464,8 @@ You may find a working example of in this [path alias example repo](https://gith
 ---
 
 ---
-url: 'https://elysiajs.com/eden/test.md'
----
+
+## url: 'https://elysiajs.com/eden/test.md'
 
 # Eden Test
 
@@ -3471,23 +3479,21 @@ Create **test/index.test.ts** in the root of project directory with the followin
 
 ```typescript
 // test/index.test.ts
-import { describe, expect, it } from 'bun:test'
+import { describe, expect, it } from "bun:test";
 
-import { edenTreaty } from '@elysiajs/eden'
+import { edenTreaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-    .get('/', () => 'hi')
-    .listen(3000)
+const app = new Elysia().get("/", () => "hi").listen(3000);
 
-const api = edenTreaty<typeof app>('http://localhost:3000')
+const api = edenTreaty<typeof app>("http://localhost:3000");
 
-describe('Elysia', () => {
-    it('return a response', async () => {
-        const { data } = await api.get()
+describe("Elysia", () => {
+  it("return a response", async () => {
+    const { data } = await api.get();
 
-        expect(data).toBe('hi')
-    })
-})
+    expect(data).toBe("hi");
+  });
+});
 ```
 
 Then we can perform tests by running **bun test**
@@ -3501,15 +3507,15 @@ This allows us to perform integration tests programmatically instead of manual f
 ---
 
 ---
-url: 'https://elysiajs.com/eden/treaty/config.md'
----
+
+## url: 'https://elysiajs.com/eden/treaty/config.md'
 
 # Config
 
 Eden Treaty accepts 2 parameters:
 
-* **urlOrInstance** - URL endpoint or Elysia instance
-* **options** (optional) - Customize fetch behavior
+- **urlOrInstance** - URL endpoint or Elysia instance
+- **options** (optional) - Customize fetch behavior
 
 ## urlOrInstance
 
@@ -3522,10 +3528,10 @@ Eden will change the behavior based on type as follows:
 If URL endpoint is passed, Eden Treaty will use `fetch` or `config.fetcher` to create a network request to an Elysia instance.
 
 ```typescript
-import { treaty } from '@elysiajs/eden'
-import type { App } from './server'
+import { treaty } from "@elysiajs/eden";
+import type { App } from "./server";
 
-const api = treaty<App>('localhost:3000')
+const api = treaty<App>("localhost:3000");
 ```
 
 You may or may not specify a protocol for URL endpoint.
@@ -3538,7 +3544,7 @@ Elysia will append the endpoints automatically as follows:
 
 This also applies to Web Socket as well for determining between **ws://** or **wss://**.
 
-***
+---
 
 ### Elysia Instance
 
@@ -3547,14 +3553,12 @@ If Elysia instance is passed, Eden Treaty will create a `Request` class and pass
 This allows us to interact with Elysia server directly without request overhead, or the need to start a server.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-    .get('/hi', 'Hi Elysia')
-    .listen(3000)
+const app = new Elysia().get("/hi", "Hi Elysia").listen(3000);
 
-const api = treaty(app)
+const api = treaty(app);
 ```
 
 If an instance is passed, generic is not needed to be passed as Eden Treaty can infer the type from a parameter directly.
@@ -3565,33 +3569,33 @@ This pattern is recommended for performing unit tests, or creating a type-safe r
 
 2nd optional parameter for Eden Treaty to customize fetch behavior, accepting parameters as follows:
 
-* [fetch](#fetch) - add default parameters to fetch initialization (RequestInit)
-* [headers](#headers) - define default headers
-* [fetcher](#fetcher) - custom fetch function eg. Axios, unfetch
-* [onRequest](#onrequest) - Intercept and modify fetch request before firing
-* [onResponse](#onresponse) - Intercept and modify fetch's response
+- [fetch](#fetch) - add default parameters to fetch initialization (RequestInit)
+- [headers](#headers) - define default headers
+- [fetcher](#fetcher) - custom fetch function eg. Axios, unfetch
+- [onRequest](#onrequest) - Intercept and modify fetch request before firing
+- [onResponse](#onresponse) - Intercept and modify fetch's response
 
 ## Fetch
 
 Default parameters append to 2nd parameters of fetch extends type of **Fetch.RequestInit**.
 
 ```typescript
-export type App = typeof app // [!code ++]
-import { treaty } from '@elysiajs/eden'
+export type App = typeof app; // [!code ++]
+import { treaty } from "@elysiajs/eden";
 // ---cut---
-treaty<App>('localhost:3000', {
-    fetch: {
-        credentials: 'include'
-    }
-})
+treaty<App>("localhost:3000", {
+  fetch: {
+    credentials: "include",
+  },
+});
 ```
 
 All parameters that are passed to fetch will be passed to fetcher, which is equivalent to:
 
 ```typescript
-fetch('http://localhost:3000', {
-    credentials: 'include'
-})
+fetch("http://localhost:3000", {
+  credentials: "include",
+});
 ```
 
 ## Headers
@@ -3599,38 +3603,38 @@ fetch('http://localhost:3000', {
 Provide an additional default headers to fetch, a shorthand of `options.fetch.headers`.
 
 ```typescript
-treaty<App>('localhost:3000', {
-    headers: {
-        'X-Custom': 'Griseo'
-    }
-})
+treaty<App>("localhost:3000", {
+  headers: {
+    "X-Custom": "Griseo",
+  },
+});
 ```
 
 All parameters that passed to fetch, will be passed to fetcher, which is an equivalent to:
 
 ```typescript twoslash
-fetch('localhost:3000', {
-    headers: {
-        'X-Custom': 'Griseo'
-    }
-})
+fetch("localhost:3000", {
+  headers: {
+    "X-Custom": "Griseo",
+  },
+});
 ```
 
 headers may accept the following as parameters:
 
-* Object
-* Function
+- Object
+- Function
 
 ### Headers Object
 
 If object is passed, then it will be passed to fetch directly
 
 ```typescript
-treaty<App>('localhost:3000', {
-    headers: {
-        'X-Custom': 'Griseo'
-    }
-})
+treaty<App>("localhost:3000", {
+  headers: {
+    "X-Custom": "Griseo",
+  },
+});
 ```
 
 ### Function
@@ -3638,39 +3642,39 @@ treaty<App>('localhost:3000', {
 You may specify headers as a function to return custom headers based on condition
 
 ```typescript
-treaty<App>('localhost:3000', {
-    headers(path, options) {
-        if(path.startsWith('user'))
-            return {
-                authorization: 'Bearer 12345'
-            }
-    }
-})
+treaty<App>("localhost:3000", {
+  headers(path, options) {
+    if (path.startsWith("user"))
+      return {
+        authorization: "Bearer 12345",
+      };
+  },
+});
 ```
 
 You may return object to append its value to fetch headers.
 
 headers function accepts 2 parameters:
 
-* path `string` - path which will be sent to parameter
-  * note: hostname will be **exclude** eg. (/user/griseo)
-* options `RequestInit`: Parameters that passed through 2nd parameter of fetch
+- path `string` - path which will be sent to parameter
+  - note: hostname will be **exclude** eg. (/user/griseo)
+- options `RequestInit`: Parameters that passed through 2nd parameter of fetch
 
 ### Array
 
 You may define a headers function as an array if multiple conditions are needed.
 
 ```typescript
-treaty<App>('localhost:3000', {
-    headers: [
-      (path, options) => {
-        if(path.startsWith('user'))
-            return {
-                authorization: 'Bearer 12345'
-            }
-        }
-    ]
-})
+treaty<App>("localhost:3000", {
+  headers: [
+    (path, options) => {
+      if (path.startsWith("user"))
+        return {
+          authorization: "Bearer 12345",
+        };
+    },
+  ],
+});
 ```
 
 Eden Treaty will **run all functions** even if the value is already returned.
@@ -3682,34 +3686,34 @@ Eden Treaty will prioritize the order headers if duplicated as follows:
 1. Inline method - Passed in method function directly
 2. headers - Passed in `config.headers`
 
-* If `config.headers` is array, parameters that come after will be prioritized
+- If `config.headers` is array, parameters that come after will be prioritized
 
 3. fetch - Passed in `config.fetch.headers`
 
 For example, for the following example:
 
 ```typescript
-const api = treaty<App>('localhost:3000', {
-    headers: {
-        authorization: 'Bearer Aponia'
-    }
-})
+const api = treaty<App>("localhost:3000", {
+  headers: {
+    authorization: "Bearer Aponia",
+  },
+});
 
 api.profile.get({
-    headers: {
-        authorization: 'Bearer Griseo'
-    }
-})
+  headers: {
+    authorization: "Bearer Griseo",
+  },
+});
 ```
 
 This will result in:
 
 ```typescript
-fetch('http://localhost:3000', {
-    headers: {
-        authorization: 'Bearer Griseo'
-    }
-})
+fetch("http://localhost:3000", {
+  headers: {
+    authorization: "Bearer Griseo",
+  },
+});
 ```
 
 If inline function doesn't specified headers, then the result will be "**Bearer Aponia**" instead.
@@ -3719,11 +3723,11 @@ If inline function doesn't specified headers, then the result will be "**Bearer 
 Provide a custom fetcher function instead of using an environment's default fetch.
 
 ```typescript
-treaty<App>('localhost:3000', {
-    fetcher(url, options) {
-        return fetch(url, options)
-    }
-})
+treaty<App>("localhost:3000", {
+  fetcher(url, options) {
+    return fetch(url, options);
+  },
+});
 ```
 
 It's recommended to replace fetch if you want to use other client other than fetch, eg. Axios, unfetch.
@@ -3735,43 +3739,43 @@ Intercept and modify fetch request before firing.
 You may return object to append the value to **RequestInit**.
 
 ```typescript
-treaty<App>('localhost:3000', {
-    onRequest(path, options) {
-        if(path.startsWith('user'))
-            return {
-                headers: {
-                    authorization: 'Bearer 12345'
-                }
-            }
-    }
-})
+treaty<App>("localhost:3000", {
+  onRequest(path, options) {
+    if (path.startsWith("user"))
+      return {
+        headers: {
+          authorization: "Bearer 12345",
+        },
+      };
+  },
+});
 ```
 
 If value is returned, Eden Treaty will perform a **shallow merge** for returned value and `value.headers`.
 
 **onRequest** accepts 2 parameters:
 
-* path `string` - path which will be sent to parameter
-  * note: hostname will be **exclude** eg. (/user/griseo)
-* options `RequestInit`: Parameters that passed through 2nd parameter of fetch
+- path `string` - path which will be sent to parameter
+  - note: hostname will be **exclude** eg. (/user/griseo)
+- options `RequestInit`: Parameters that passed through 2nd parameter of fetch
 
 ### Array
 
 You may define an onRequest function as an array if multiples conditions are need.
 
 ```typescript
-treaty<App>('localhost:3000', {
-    onRequest: [
-      (path, options) => {
-        if(path.startsWith('user'))
-            return {
-                headers: {
-                    authorization: 'Bearer 12345'
-                }
-            }
-        }
-    ]
-})
+treaty<App>("localhost:3000", {
+  onRequest: [
+    (path, options) => {
+      if (path.startsWith("user"))
+        return {
+          headers: {
+            authorization: "Bearer 12345",
+          },
+        };
+    },
+  ],
+});
 ```
 
 Eden Treaty will **run all functions** even if the value is already returned.
@@ -3781,31 +3785,29 @@ Eden Treaty will **run all functions** even if the value is already returned.
 Intercept and modify fetch's response or return a new value.
 
 ```typescript
-treaty<App>('localhost:3000', {
-    onResponse(response) {
-        if(response.ok)
-            return response.json()
-    }
-})
+treaty<App>("localhost:3000", {
+  onResponse(response) {
+    if (response.ok) return response.json();
+  },
+});
 ```
 
 **onRequest** accepts 1 parameter:
 
-* response `Response` - Web Standard Response normally returned from `fetch`
+- response `Response` - Web Standard Response normally returned from `fetch`
 
 ### Array
 
 You may define an onResponse function as an array if multiple conditions are need.
 
 ```typescript
-treaty<App>('localhost:3000', {
-    onResponse: [
-        (response) => {
-            if(response.ok)
-                return response.json()
-        }
-    ]
-})
+treaty<App>("localhost:3000", {
+  onResponse: [
+    (response) => {
+      if (response.ok) return response.json();
+    },
+  ],
+});
 ```
 
 Unlike [headers](#headers) and [onRequest](#onrequest), Eden Treaty will loop through functions until a returned value is found or error thrown, the returned value will be use as a new response.
@@ -3813,8 +3815,8 @@ Unlike [headers](#headers) and [onRequest](#onrequest), Eden Treaty will loop th
 ---
 
 ---
-url: 'https://elysiajs.com/eden/treaty/legacy.md'
----
+
+## url: 'https://elysiajs.com/eden/treaty/legacy.md'
 
 # Eden Treaty Legacy
 
@@ -3828,48 +3830,48 @@ Eden Treaty is an object-like representation of an Elysia server.
 
 Providing accessor like a normal object with type directly from the server, helping us to move faster, and make sure that nothing break
 
-***
+---
 
 To use Eden Treaty, first export your existing Elysia server type:
 
 ```typescript
 // server.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .get('/', () => 'Hi Elysia')
-    .get('/id/:id', ({ params: { id } }) => id)
-    .post('/mirror', ({ body }) => body, {
-        body: t.Object({
-            id: t.Number(),
-            name: t.String()
-        })
-    })
-    .listen(3000)
+  .get("/", () => "Hi Elysia")
+  .get("/id/:id", ({ params: { id } }) => id)
+  .post("/mirror", ({ body }) => body, {
+    body: t.Object({
+      id: t.Number(),
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 
-export type App = typeof app // [!code ++]
+export type App = typeof app; // [!code ++]
 ```
 
 Then import the server type, and consume the Elysia API on client:
 
 ```typescript
 // client.ts
-import { edenTreaty } from '@elysiajs/eden'
-import type { App } from './server' // [!code ++]
+import { edenTreaty } from "@elysiajs/eden";
+import type { App } from "./server"; // [!code ++]
 
-const app = edenTreaty<App>('http://localhost:')
+const app = edenTreaty<App>("http://localhost:");
 
 // response type: 'Hi Elysia'
-const { data: pong, error } = app.get()
+const { data: pong, error } = app.get();
 
 // response type: 1895
-const { data: id, error } = app.id['1895'].get()
+const { data: id, error } = app.id["1895"].get();
 
 // response type: { id: 1895, name: 'Skadi' }
 const { data: nendoroid, error } = app.mirror.post({
-    id: 1895,
-    name: 'Skadi'
-})
+  id: 1895,
+  name: "Skadi",
+});
 ```
 
 ::: tip
@@ -3892,16 +3894,16 @@ EdenTreaty.<1>.<2>.<n>.<method>({
 
 Eden will transform `/` into `.` which can be called with a registered `method`, for example:
 
-* **/path** -> .path
-* **/nested/path** -> .nested.path
+- **/path** -> .path
+- **/nested/path** -> .nested.path
 
 ### Path parameters
 
 Path parameters will be mapped automatically by their name in the URL.
 
-* **/id/:id** -> .id.`<anyThing>`
-* eg: .id.hi
-* eg: .id\['123']
+- **/id/:id** -> .id.`<anyThing>`
+- eg: .id.hi
+- eg: .id\['123']
 
 ::: tip
 If a path doesn't support path parameters, TypeScript will show an error.
@@ -3913,11 +3915,11 @@ You can append queries to path with `$query`:
 
 ```typescript
 app.get({
-    $query: {
-        name: 'Eden',
-        code: 'Gold'
-    }
-})
+  $query: {
+    name: "Eden",
+    code: "Gold",
+  },
+});
 ```
 
 ### Fetch
@@ -3926,12 +3928,12 @@ Eden Treaty is a fetch wrapper, you can add any valid [Fetch](https://developer.
 
 ```typescript
 app.post({
-    $fetch: {
-        headers: {
-            'x-organization': 'MANTIS'
-        }
-    }
-})
+  $fetch: {
+    headers: {
+      "x-organization": "MANTIS",
+    },
+  },
+});
 ```
 
 ## Error Handling
@@ -3941,31 +3943,31 @@ Eden Treaty will return a value of `data` and `error` as a result, both fully ty
 ```typescript
 // response type: { id: 1895, name: 'Skadi' }
 const { data: nendoroid, error } = app.mirror.post({
-    id: 1895,
-    name: 'Skadi'
-})
+  id: 1895,
+  name: "Skadi",
+});
 
-if(error) {
-    switch(error.status) {
-        case 400:
-        case 401:
-            warnUser(error.value)
-            break
+if (error) {
+  switch (error.status) {
+    case 400:
+    case 401:
+      warnUser(error.value);
+      break;
 
-        case 500:
-        case 502:
-            emergencyCallDev(error.value)
-            break
+    case 500:
+    case 502:
+      emergencyCallDev(error.value);
+      break;
 
-        default:
-            reportError(error.value)
-            break
-    }
+    default:
+      reportError(error.value);
+      break;
+  }
 
-    throw error
+  throw error;
 }
 
-const { id, name } = nendoroid
+const { id, name } = nendoroid;
 ```
 
 Both **data**, and **error** will be typed as nullable until you can confirm their statuses with a type guard.
@@ -3982,56 +3984,56 @@ Both Eden Treaty and Eden Fetch can narrow down an error type based on status co
 
 ```typescript
 // server.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .model({
-        nendoroid: t.Object({
-            id: t.Number(),
-            name: t.String()
-        }),
-        error: t.Object({
-            message: t.String()
-        })
-    })
-    .get('/', () => 'Hi Elysia')
-    .get('/id/:id', ({ params: { id } }) => id)
-    .post('/mirror', ({ body }) => body, {
-        body: 'nendoroid',
-        response: {
-            200: 'nendoroid', // [!code ++]
-            400: 'error', // [!code ++]
-            401: 'error' // [!code ++]
-        }
-    })
-    .listen(3000)
+  .model({
+    nendoroid: t.Object({
+      id: t.Number(),
+      name: t.String(),
+    }),
+    error: t.Object({
+      message: t.String(),
+    }),
+  })
+  .get("/", () => "Hi Elysia")
+  .get("/id/:id", ({ params: { id } }) => id)
+  .post("/mirror", ({ body }) => body, {
+    body: "nendoroid",
+    response: {
+      200: "nendoroid", // [!code ++]
+      400: "error", // [!code ++]
+      401: "error", // [!code ++]
+    },
+  })
+  .listen(3000);
 
-export type App = typeof app
+export type App = typeof app;
 ```
 
 An on the client side:
 
 ```typescript
 const { data: nendoroid, error } = app.mirror.post({
-    id: 1895,
-    name: 'Skadi'
-})
+  id: 1895,
+  name: "Skadi",
+});
 
-if(error) {
-    switch(error.status) {
-        case 400:
-        case 401:
-            // narrow down to type 'error' described in the server
-            warnUser(error.value)
-            break
+if (error) {
+  switch (error.status) {
+    case 400:
+    case 401:
+      // narrow down to type 'error' described in the server
+      warnUser(error.value);
+      break;
 
-        default:
-            // typed as unknown
-            reportError(error.value)
-            break
-    }
+    default:
+      // typed as unknown
+      reportError(error.value);
+      break;
+  }
 
-    throw error
+  throw error;
 }
 ```
 
@@ -4041,40 +4043,40 @@ Eden supports WebSocket using the same API as a normal route.
 
 ```typescript
 // Server
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .ws('/chat', {
-        message(ws, message) {
-            ws.send(message)
-        },
-        body: t.String(),
-        response: t.String()
-    })
-    .listen(3000)
+  .ws("/chat", {
+    message(ws, message) {
+      ws.send(message);
+    },
+    body: t.String(),
+    response: t.String(),
+  })
+  .listen(3000);
 
-type App = typeof app
+type App = typeof app;
 ```
 
 To start listening to real-time data, call the `.subscribe` method:
 
 ```typescript
 // Client
-import { edenTreaty } from '@elysiajs/eden'
-const app = edenTreaty<App>('http://localhost:')
+import { edenTreaty } from "@elysiajs/eden";
+const app = edenTreaty<App>("http://localhost:");
 
-const chat = app.chat.subscribe()
+const chat = app.chat.subscribe();
 
 chat.subscribe((message) => {
-    console.log('got', message)
-})
+  console.log("got", message);
+});
 
-chat.send('hello from client')
+chat.send("hello from client");
 ```
 
 We can use [schema](/integrations/cheat-sheet#schema) to enforce type-safety on WebSockets, just like a normal route.
 
-***
+---
 
 **Eden.subscribe** returns **EdenWebSocket** which extends the [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/WebSocket) class with type-safety. The syntax is identical with the WebSocket
 
@@ -4084,9 +4086,9 @@ If more control is need, **EdenWebSocket.raw** can be accessed to interact with 
 
 You may either pass one of the following to the field to attach file:
 
-* **File**
-* **FileList**
-* **Blob**
+- **File**
+- **FileList**
+- **Blob**
 
 Attaching a file will results **content-type** to be **multipart/form-data**
 
@@ -4094,43 +4096,43 @@ Suppose we have the server as the following:
 
 ```typescript
 // server.ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-    .post('/image', ({ body: { image, title } }) => title, {
-        body: t.Object({
-            title: t.String(),
-            image: t.Files(),
-        })
-    })
-    .listen(3000)
+  .post("/image", ({ body: { image, title } }) => title, {
+    body: t.Object({
+      title: t.String(),
+      image: t.Files(),
+    }),
+  })
+  .listen(3000);
 
-export type App = typeof app
+export type App = typeof app;
 ```
 
 We may use the client as follows:
 
 ```typescript
 // client.ts
-import { edenTreaty } from '@elysia/eden'
-import type { Server } from './server'
+import { edenTreaty } from "@elysia/eden";
+import type { Server } from "./server";
 
-export const client = edenTreaty<Server>('http://localhost:3000')
+export const client = edenTreaty<Server>("http://localhost:3000");
 
 const id = <T extends HTMLElement = HTMLElement>(id: string) =>
-    document.getElementById(id)! as T
+  document.getElementById(id)! as T;
 
 const { data } = await client.image.post({
-    title: "Misono Mika",
-    image: id<HTMLInputElement>('picture').files!,
-})
+  title: "Misono Mika",
+  image: id<HTMLInputElement>("picture").files!,
+});
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/eden/treaty/parameters.md'
----
+
+## url: 'https://elysiajs.com/eden/treaty/parameters.md'
 
 # Parameters
 
@@ -4142,41 +4144,44 @@ Both parameters are type safe and will be guided by TypeScript automatically:
 
 1. body
 2. additional parameters
-   * query
-   * headers
-   * fetch
+   - query
+   - headers
+   - fetch
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
 const app = new Elysia()
-    .post('/user', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
-    .listen(3000)
+  .post("/user", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 
-const api = treaty<typeof app>('localhost:3000')
+const api = treaty<typeof app>("localhost:3000");
 
 // ✅ works
 api.user.post({
-    name: 'Elysia'
-})
+  name: "Elysia",
+});
 
 // ✅ also works
-api.user.post({
-    name: 'Elysia'
-}, {
+api.user.post(
+  {
+    name: "Elysia",
+  },
+  {
     // This is optional as not specified in schema
     headers: {
-        authorization: 'Bearer 12345'
+      authorization: "Bearer 12345",
     },
     query: {
-        id: 2
-    }
-})
+      id: 2,
+    },
+  },
+);
 ```
 
 Unless if the method doesn't accept body, then body will be omitted and left with single parameter only.
@@ -4184,27 +4189,25 @@ Unless if the method doesn't accept body, then body will be omitted and left wit
 If the method **"GET"** or **"HEAD"**:
 
 1. Additional parameters
-   * query
-   * headers
-   * fetch
+   - query
+   - headers
+   - fetch
 
 ```typescript
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-    .get('/hello', () => 'hi')
-    .listen(3000)
+const app = new Elysia().get("/hello", () => "hi").listen(3000);
 
-const api = treaty<typeof app>('localhost:3000')
+const api = treaty<typeof app>("localhost:3000");
 
 // ✅ works
 api.hello.get({
-    // This is optional as not specified in schema
-    headers: {
-        hello: 'world'
-    }
-})
+  // This is optional as not specified in schema
+  headers: {
+    hello: "world",
+  },
+});
 ```
 
 ## Empty body
@@ -4212,24 +4215,24 @@ api.hello.get({
 If body is optional or not need but query or headers is required, you may pass the body as `null` or `undefined` instead.
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
 const app = new Elysia()
-    .post('/user', () => 'hi', {
-        query: t.Object({
-            name: t.String()
-        })
-    })
-    .listen(3000)
+  .post("/user", () => "hi", {
+    query: t.Object({
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 
-const api = treaty<typeof app>('localhost:3000')
+const api = treaty<typeof app>("localhost:3000");
 
 api.user.post(null, {
-    query: {
-        name: 'Ely'
-    }
-})
+  query: {
+    name: "Ely",
+  },
+});
 ```
 
 ## Fetch parameters
@@ -4237,124 +4240,126 @@ api.user.post(null, {
 Eden Treaty is a fetch wrapper, we may add any valid [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) parameters to Eden by passing it to `$fetch`:
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-    .get('/hello', () => 'hi')
-    .listen(3000)
+const app = new Elysia().get("/hello", () => "hi").listen(3000);
 
-const api = treaty<typeof app>('localhost:3000')
+const api = treaty<typeof app>("localhost:3000");
 
-const controller = new AbortController()
+const controller = new AbortController();
 
 const cancelRequest = setTimeout(() => {
-    controller.abort()
-}, 5000)
+  controller.abort();
+}, 5000);
 
 await api.hello.get({
-    fetch: {
-        signal: controller.signal
-    }
-})
+  fetch: {
+    signal: controller.signal,
+  },
+});
 
-clearTimeout(cancelRequest)
+clearTimeout(cancelRequest);
 ```
 
 ## File Upload
 
 We may either pass one of the following to attach file(s):
 
-* **File**
-* **File\[]**
-* **FileList**
-* **Blob**
+- **File**
+- **File\[]**
+- **FileList**
+- **Blob**
 
 Attaching a file will results **content-type** to be **multipart/form-data**
 
 Suppose we have the server as the following:
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
 const app = new Elysia()
-    .post('/image', ({ body: { image, title } }) => title, {
-        body: t.Object({
-            title: t.String(),
-            image: t.Files()
-        })
-    })
-    .listen(3000)
+  .post("/image", ({ body: { image, title } }) => title, {
+    body: t.Object({
+      title: t.String(),
+      image: t.Files(),
+    }),
+  })
+  .listen(3000);
 
-export const api = treaty<typeof app>('localhost:3000')
+export const api = treaty<typeof app>("localhost:3000");
 
-const images = document.getElementById('images') as HTMLInputElement
+const images = document.getElementById("images") as HTMLInputElement;
 
 const { data } = await api.image.post({
-    title: "Misono Mika",
-    image: images.files!,
-})
+  title: "Misono Mika",
+  image: images.files!,
+});
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/eden/treaty/response.md'
----
+
+## url: 'https://elysiajs.com/eden/treaty/response.md'
 
 # Response
 
 Once the fetch method is called, Eden Treaty returns a `Promise` containing an object with the following properties:
 
-* data - returned value of the response (2xx)
-* error - returned value from the response (>= 3xx)
-* response `Response` - Web Standard Response class
-* status `number` - HTTP status code
-* headers `FetchRequestInit['headers']` - response headers
+- data - returned value of the response (2xx)
+- error - returned value from the response (>= 3xx)
+- response `Response` - Web Standard Response class
+- status `number` - HTTP status code
+- headers `FetchRequestInit['headers']` - response headers
 
 Once returned, you must provide error handling to ensure that the response data value is unwrapped, otherwise the value will be nullable. Elysia provides a `error()` helper function to handle the error, and Eden will provide type narrowing for the error value.
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
 const app = new Elysia()
-    .post('/user', ({ body: { name }, status }) => {
-        if(name === 'Otto') return status(400)
+  .post(
+    "/user",
+    ({ body: { name }, status }) => {
+      if (name === "Otto") return status(400);
 
-        return name
-    }, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
-    .listen(3000)
+      return name;
+    },
+    {
+      body: t.Object({
+        name: t.String(),
+      }),
+    },
+  )
+  .listen(3000);
 
-const api = treaty<typeof app>('localhost:3000')
+const api = treaty<typeof app>("localhost:3000");
 
 const submit = async (name: string) => {
-    const { data, error } = await api.user.post({
-        name
-    })
+  const { data, error } = await api.user.post({
+    name,
+  });
 
-    // type: string | null
-    console.log(data)
+  // type: string | null
+  console.log(data);
 
-    if (error)
-        switch(error.status) {
-            case 400:
-                // Error type will be narrow down
-                throw error.value
+  if (error)
+    switch (error.status) {
+      case 400:
+        // Error type will be narrow down
+        throw error.value;
 
-            default:
-                throw error.value
-        }
+      default:
+        throw error.value;
+    }
 
-    // Once the error is handled, type will be unwrapped
-    // type: string
-    return data
-}
+  // Once the error is handled, type will be unwrapped
+  // type: string
+  return data;
+};
 ```
 
 By default, Elysia infers `error` and `response` types to TypeScript automatically, and Eden will be providing auto-completion and type narrowing for accurate behavior.
@@ -4372,55 +4377,45 @@ Eden will interpret a stream response or [Server-Sent Events](/essential/handler
 ::: code-group
 
 ```typescript twoslash [Stream]
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-	.get('/ok', function* () {
-		yield 1
-		yield 2
-		yield 3
-	})
+const app = new Elysia().get("/ok", function* () {
+  yield 1;
+  yield 2;
+  yield 3;
+});
 
-const { data, error } = await treaty(app).ok.get()
-if (error) throw error
+const { data, error } = await treaty(app).ok.get();
+if (error) throw error;
 
-for await (const chunk of data)
-	console.log(chunk)
-               // ^?
+for await (const chunk of data) console.log(chunk);
+// ^?
 ```
 
 ```typescript twoslash [Server-Sent Events]
-import { Elysia, sse } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, sse } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-	.get('/ok', function* () {
-		yield sse({
-			event: 'message',
-			data: 1
-		})
-		yield sse({
-			event: 'message',
-			data: 2
-		})
-		yield sse({
-			event: 'end'
-		})
-	})
+const app = new Elysia().get("/ok", function* () {
+  yield sse({
+    event: "message",
+    data: 1,
+  });
+  yield sse({
+    event: "message",
+    data: 2,
+  });
+  yield sse({
+    event: "end",
+  });
+});
 
-const { data, error } = await treaty(app).ok.get()
-if (error) throw error
+const { data, error } = await treaty(app).ok.get();
+if (error) throw error;
 
-for await (const chunk of data)
-	console.log(chunk)
-               // ^?
-
-
-
-
-
-
+for await (const chunk of data) console.log(chunk);
+// ^?
 
 //
 ```
@@ -4432,52 +4427,41 @@ for await (const chunk of data)
 Eden Treaty provides a utility type `Treaty.Data<T>` and `Treaty.Error<T>` to extract the `data` and `error` type from the response.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-import { treaty, Treaty } from '@elysiajs/eden'
+import { treaty, Treaty } from "@elysiajs/eden";
 
 const app = new Elysia()
-	.post('/user', ({ body: { name }, status }) => {
-		if(name === 'Otto') return status(400)
+  .post(
+    "/user",
+    ({ body: { name }, status }) => {
+      if (name === "Otto") return status(400);
 
-		return name
-	}, {
-		body: t.Object({
-			name: t.String()
-		})
-	})
-	.listen(3000)
+      return name;
+    },
+    {
+      body: t.Object({
+        name: t.String(),
+      }),
+    },
+  )
+  .listen(3000);
 
-const api =
-	treaty<typeof app>('localhost:3000')
+const api = treaty<typeof app>("localhost:3000");
 
-type UserData = Treaty.Data<typeof api.user.post>
+type UserData = Treaty.Data<typeof api.user.post>;
 //     ^?
-
 
 // Alternatively you can also pass a response
 const response = await api.user.post({
-	name: 'Saltyaom'
-})
+  name: "Saltyaom",
+});
 
-type UserDataFromResponse = Treaty.Data<typeof response>
+type UserDataFromResponse = Treaty.Data<typeof response>;
 //     ^?
 
-
-
-type UserError = Treaty.Error<typeof api.user.post>
+type UserError = Treaty.Error<typeof api.user.post>;
 //     ^?
-
-
-
-
-
-
-
-
-
-
-
 
 //
 ```
@@ -4485,8 +4469,8 @@ type UserError = Treaty.Error<typeof api.user.post>
 ---
 
 ---
-url: 'https://elysiajs.com/eden/treaty/unit-test.md'
----
+
+## url: 'https://elysiajs.com/eden/treaty/unit-test.md'
 
 # Unit Test
 
@@ -4496,22 +4480,21 @@ We may use this pattern to create a unit test with end-to-end type safety and ty
 
 ```typescript twoslash
 // test/index.test.ts
-import { describe, expect, it } from 'bun:test'
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { describe, expect, it } from "bun:test";
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia().get('/hello', 'hi')
-const api = treaty(app)
+const app = new Elysia().get("/hello", "hi");
+const api = treaty(app);
 
-describe('Elysia', () => {
-    it('returns a response', async () => {
-        const { data } = await api.hello.get()
+describe("Elysia", () => {
+  it("returns a response", async () => {
+    const { data } = await api.hello.get();
 
-        expect(data).toBe('hi')
-              // ^?
-
-    })
-})
+    expect(data).toBe("hi");
+    // ^?
+  });
+});
 ```
 
 ## Type safety test
@@ -4527,8 +4510,8 @@ This is useful to ensure type integrity for both client and server, especially d
 ---
 
 ---
-url: 'https://elysiajs.com/eden/treaty/websocket.md'
----
+
+## url: 'https://elysiajs.com/eden/treaty/websocket.md'
 
 # WebSocket
 
@@ -4572,15 +4555,14 @@ If more control is need, **EdenWebSocket.raw** can be accessed to interact with 
 ---
 
 ---
-url: 'https://elysiajs.com/4koma.md'
----
 
-
----
+## url: 'https://elysiajs.com/4koma.md'
 
 ---
-url: 'https://elysiajs.com/tutorial/getting-started/encapsulation.md'
+
 ---
+
+## url: 'https://elysiajs.com/tutorial/getting-started/encapsulation.md'
 
 # Encapsulation
 
@@ -4589,21 +4571,18 @@ Elysia hooks are **encapsulated** to its own instance only.
 If you create a new instance, it will not share hook with other instances.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const profile = new Elysia()
-	.onBeforeHandle(
-		({ query: { name }, status }) => {
-			if(!name)
-				return status(401)
-		}
-	)
-	.get('/profile', () => 'Hi!')
+  .onBeforeHandle(({ query: { name }, status }) => {
+    if (!name) return status(401);
+  })
+  .get("/profile", () => "Hi!");
 
 new Elysia()
-	.use(profile)
-	.patch('/rename', () => 'Ok! XD')
-	.listen(3000)
+  .use(profile)
+  .patch("/rename", () => "Ok! XD")
+  .listen(3000);
 ```
 
 > Try changing the path in the URL bar to **/rename** and see the result
@@ -4625,21 +4604,21 @@ There are 3 scopes available:
 In our case, we want to apply the sign-in check to the `app` which is a direct parent, so we can use either **scoped** or **global**.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const profile = new Elysia()
-	.onBeforeHandle(
-		{ as: 'scoped' }, // [!code ++]
-		({ cookie }) => {
-			throwIfNotSignIn(cookie)
-		}
-	)
-	.get('/profile', () => 'Hi there!')
+  .onBeforeHandle(
+    { as: "scoped" }, // [!code ++]
+    ({ cookie }) => {
+      throwIfNotSignIn(cookie);
+    },
+  )
+  .get("/profile", () => "Hi there!");
 
 const app = new Elysia()
-	.use(profile)
-	// This has sign in check
-	.patch('/rename', ({ body }) => updateProfile(body))
+  .use(profile)
+  // This has sign in check
+  .patch("/rename", ({ body }) => updateProfile(body));
 ```
 
 Casting lifecycle to **"scoped"** will export lifecycle to **parent instance**.
@@ -4654,21 +4633,21 @@ Similar to lifecycle, **schema** is also encapsulated to its own instance.
 We can specify guard scope similar to lifecycle.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const user = new Elysia()
-	.guard({
-		as: 'scoped', // [!code ++]
-		query: t.Object({
-			age: t.Number(),
-			name: t.Optional(t.String())
-		}),
-		beforeHandle({ query: { age }, status }) {
-			if(age < 18) return status(403)
-		}
-	})
-	.get('/profile', () => 'Hi!')
-	.get('/settings', () => 'Settings')
+  .guard({
+    as: "scoped", // [!code ++]
+    query: t.Object({
+      age: t.Number(),
+      name: t.Optional(t.String()),
+    }),
+    beforeHandle({ query: { age }, status }) {
+      if (age < 18) return status(403);
+    },
+  })
+  .get("/profile", () => "Hi!")
+  .get("/settings", () => "Settings");
 ```
 
 It's very important to note that every hook will affect all routes **after** its declaration.
@@ -4687,67 +4666,59 @@ We can modify scope as follows:
 2. modify `ageCheck` scope to **global**
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const nameCheck = new Elysia()
-	.onBeforeHandle(
-		{ as: 'scoped' }, // [!code ++]
-		({ query: { name }, status }) => {
-			if(!name) return status(401)
-		}
-	)
+const nameCheck = new Elysia().onBeforeHandle(
+  { as: "scoped" }, // [!code ++]
+  ({ query: { name }, status }) => {
+    if (!name) return status(401);
+  },
+);
 
-const ageCheck = new Elysia()
-	.guard({
-		as: 'global', // [!code ++]
-		query: t.Object({
-			age: t.Number(),
-			name: t.Optional(t.String())
-		}),
-		beforeHandle({ query: { age }, status }) {
-			if(age < 18) return status(403)
-		}
-	})
+const ageCheck = new Elysia().guard({
+  as: "global", // [!code ++]
+  query: t.Object({
+    age: t.Number(),
+    name: t.Optional(t.String()),
+  }),
+  beforeHandle({ query: { age }, status }) {
+    if (age < 18) return status(403);
+  },
+});
 
-const name = new Elysia()
-	.use(nameCheck)
-	.patch('/rename', () => 'Ok! XD')
+const name = new Elysia().use(nameCheck).patch("/rename", () => "Ok! XD");
 
 const profile = new Elysia()
-	.use(ageCheck)
-	.use(name)
-	.get('/profile', () => 'Hi!')
+  .use(ageCheck)
+  .use(name)
+  .get("/profile", () => "Hi!");
 
-new Elysia()
-	.use(profile)
-	.listen(3000)
+new Elysia().use(profile).listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/features/end-to-end-type-safety.md'
----
+
+## url: 'https://elysiajs.com/tutorial/features/end-to-end-type-safety.md'
 
 # End-to-End Type Safety
 
 Elysia provides an end-to-end type safety between backend and frontend **without code generation** similar to tRPC, using Eden.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
 // Backend
-export const app = new Elysia()
-	.get('/', 'Hello Elysia!')
-	.listen(3000)
+export const app = new Elysia().get("/", "Hello Elysia!").listen(3000);
 
 // Frontend
-const client = treaty<typeof app>('localhost:3000')
+const client = treaty<typeof app>("localhost:3000");
 
-const { data, error } = await client.get()
+const { data, error } = await client.get();
 
-console.log(data) // Hello World
+console.log(data); // Hello World
 ```
 
 This works by inferring the types from the Elysia instance, and use type hints to provide type safety for the client.
@@ -4756,13 +4727,13 @@ See Eden Treaty.
 
 ## Assignment
 
-Let's tab the  icon in the preview to see how's the request is logged.
+Let's tab the icon in the preview to see how's the request is logged.
 
 ---
 
 ---
-url: 'https://elysiajs.com/eden/overview.md'
----
+
+## url: 'https://elysiajs.com/eden/overview.md'
 
 # End-to-End Type Safety&#x20;
 
@@ -4778,11 +4749,11 @@ Elysia provides end-to-end type safety **without code generation** out of the bo
 
 Other frameworks that support e2e type safety:
 
-* tRPC
-* Remix
-* SvelteKit
-* Nuxt
-* TS-Rest
+- tRPC
+- Remix
+- SvelteKit
+- Nuxt
+- TS-Rest
 
 Elysia allows you to change the type on the server and it will be instantly reflected on the client, helping with auto-completion and type-enforcement.
 
@@ -4854,21 +4825,21 @@ const { data: nendoroid, error } = await app.nendoroid({ id: 1895 }).put({
 A fetch-like alternative to Eden Treaty for developers that prefers fetch syntax.
 
 ```typescript
-import { edenFetch } from '@elysiajs/eden'
-import type { App } from './server'
+import { edenFetch } from "@elysiajs/eden";
+import type { App } from "./server";
 
-const fetch = edenFetch<App>('http://localhost:3000')
+const fetch = edenFetch<App>("http://localhost:3000");
 
-const { data } = await fetch('/name/:name', {
-    method: 'POST',
-    params: {
-        name: 'Saori'
-    },
-    body: {
-        branch: 'Arius',
-        type: 'Striker'
-    }
-})
+const { data } = await fetch("/name/:name", {
+  method: "POST",
+  params: {
+    name: "Saori",
+  },
+  body: {
+    branch: "Arius",
+    type: "Striker",
+  },
+});
 ```
 
 ::: tip NOTE
@@ -4878,8 +4849,8 @@ Unlike Eden Treaty, Eden Fetch doesn't provide Web Socket implementation for Ely
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/patterns/error-handling.md'
----
+
+## url: 'https://elysiajs.com/tutorial/patterns/error-handling.md'
 
 # Error Handling
 
@@ -4887,21 +4858,20 @@ onError is called when an **error is thrown**.
 
 It accept **context** similar to handler but include an additional:
 
-* error - a thrown error
-* code - error code
+- error - a thrown error
+- code - error code
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.onError(({ code, status }) => {
-		if(code === "NOT_FOUND")
-			return 'uhe~ are you lost?'
+  .onError(({ code, status }) => {
+    if (code === "NOT_FOUND") return "uhe~ are you lost?";
 
-		return status(418, "My bad! But I\'m cute so you'll forgive me, right?")
-	})
-	.get('/', () => 'ok')
-	.listen(3000)
+    return status(418, "My bad! But I\'m cute so you'll forgive me, right?");
+  })
+  .get("/", () => "ok")
+  .listen(3000);
 ```
 
 You can return a status to override the default error status.
@@ -4911,30 +4881,31 @@ You can return a status to override the default error status.
 You can provide a custom error with error code as follows:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class NicheError extends Error {
-	constructor(message: string) {
-		super(message)
-	}
+  constructor(message: string) {
+    super(message);
+  }
 }
 
 new Elysia()
-	.error({ // [!code ++]
-		'NICHE': NicheError // [!code ++]
-	}) // [!code ++]
-	.onError(({ error, code, status }) => {
-		if(code === 'NICHE') {
-			// Typed as NicheError
-			console.log(error)
+  .error({
+    // [!code ++]
+    NICHE: NicheError, // [!code ++]
+  }) // [!code ++]
+  .onError(({ error, code, status }) => {
+    if (code === "NICHE") {
+      // Typed as NicheError
+      console.log(error);
 
-			return status(418, "We have no idea how you got here")
-		}
-	})
-	.get('/', () => {
-        throw new NicheError('Custom error message')
-	})
-	.listen(3000)
+      return status(418, "We have no idea how you got here");
+    }
+  })
+  .get("/", () => {
+    throw new NicheError("Custom error message");
+  })
+  .listen(3000);
 ```
 
 Elysia use error code to narrow down type of error.
@@ -4946,14 +4917,14 @@ It's recommended to register a custom error as Elysia can narrow down the type.
 You can also provide a custom status code by adding a **status** property to class:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class NicheError extends Error {
-	status = 418 // [!code ++]
+  status = 418; // [!code ++]
 
-	constructor(message: string) {
-		super(message)
-	}
+  constructor(message: string) {
+    super(message);
+  }
 }
 ```
 
@@ -4964,18 +4935,19 @@ Elysia will use this status code if the error is thrown, see Custom Status Code.
 You can also define a custom error response directly into the error by providing a `toResponse` method:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class NicheError extends Error {
-	status = 418
+  status = 418;
 
-	constructor(message: string) {
-		super(message)
-	}
+  constructor(message: string) {
+    super(message);
+  }
 
-	toResponse() { // [!code ++]
-		return { message: this.message } // [!code ++]
-	} // [!code ++]
+  toResponse() {
+    // [!code ++]
+    return { message: this.message }; // [!code ++]
+  } // [!code ++]
 }
 ```
 
@@ -4987,39 +4959,38 @@ Let's try to extends Elysia's context.
 
 \<template #answer>
 
-1. You can narrow down error by "NOT\_FOUND" to override 404 response.
+1. You can narrow down error by "NOT_FOUND" to override 404 response.
 2. Provide your error to `.error()` method with status property of 418.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class YourError extends Error {
-	status = 418
+  status = 418;
 
-	constructor(message: string) {
-		super(message)
-	}
+  constructor(message: string) {
+    super(message);
+  }
 }
 
 new Elysia()
-	.error({
-		"YOUR_ERROR": YourError
-	})
-	.onError(({ code, status }) => {
-		if(code === "NOT_FOUND")
-			return "Hi there"
-	})
-	.get('/', () => {
-		throw new YourError("A")
-	})
-	.listen(3000)
+  .error({
+    YOUR_ERROR: YourError,
+  })
+  .onError(({ code, status }) => {
+    if (code === "NOT_FOUND") return "Hi there";
+  })
+  .get("/", () => {
+    throw new YourError("A");
+  })
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/error-handling.md'
----
+
+## url: 'https://elysiajs.com/patterns/error-handling.md'
 
 # Error Handling&#x20;
 
@@ -5034,15 +5005,15 @@ When defining a schema, you can provide a custom validation message for each fie
 This message will be returned as-is when the validation fails.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia().get('/:id', ({ params: { id } }) => id, {
-    params: t.Object({
-        id: t.Number({
-            error: 'id must be a number' // [!code ++]
-        })
-    })
-})
+new Elysia().get("/:id", ({ params: { id } }) => id, {
+  params: t.Object({
+    id: t.Number({
+      error: "id must be a number", // [!code ++]
+    }),
+  }),
+});
 ```
 
 If the validation fails on the `id` field, the response will be return as `id must be a number`.
@@ -5054,15 +5025,15 @@ Returning as value from `schema.error` will return the validation as-is, but som
 You can do this by using the `validationDetail` option.
 
 ```ts
-import { Elysia, validationDetail } from 'elysia' // [!code ++]
+import { Elysia, validationDetail } from "elysia"; // [!code ++]
 
-new Elysia().get('/:id', ({ params: { id } }) => id, {
-    params: t.Object({
-        id: t.Number({
-            error: validationDetail('id must be a number') // [!code ++]
-        })
-    })
-})
+new Elysia().get("/:id", ({ params: { id } }) => id, {
+  params: t.Object({
+    id: t.Number({
+      error: validationDetail("id must be a number"), // [!code ++]
+    }),
+  }),
+});
 ```
 
 This will include all of the validation details in the response, such as the field name and the expected type.
@@ -5073,17 +5044,17 @@ You can automatically add validation detail by handling it in `onError` hook.
 
 ```ts
 new Elysia()
-    .onError(({ error, code }) => {
-        if (code === 'VALIDATION') return error.detail(error.message) // [!code ++]
-    })
-    .get('/:id', ({ params: { id } }) => id, {
-        params: t.Object({
-            id: t.Number({
-                error: 'id must be a number'
-            })
-        })
-    })
-    .listen(3000)
+  .onError(({ error, code }) => {
+    if (code === "VALIDATION") return error.detail(error.message); // [!code ++]
+  })
+  .get("/:id", ({ params: { id } }) => id, {
+    params: t.Object({
+      id: t.Number({
+        error: "id must be a number",
+      }),
+    }),
+  })
+  .listen(3000);
 ```
 
 This will apply every validation error with a custom message with custom validation message.
@@ -5098,11 +5069,11 @@ Elysia will only return that validation failed without any details.
 
 ```json
 {
-    "type": "validation",
-    "on": "body",
-    "found": {},
-    // Only shown for custom error
-    "message": "x must be a number"
+  "type": "validation",
+  "on": "body",
+  "found": {},
+  // Only shown for custom error
+  "message": "x must be a number"
 }
 ```
 
@@ -5121,30 +5092,30 @@ If Elysia doesn't know the error, the error code will be `UNKNOWN` with default 
 But you can also add a custom error with type safety with `Elysia.error` which will help narrow down the error type for full type safety with auto-complete, and custom status code as follows:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class MyError extends Error {
-    constructor(public message: string) {
-        super(message)
-    }
+  constructor(public message: string) {
+    super(message);
+  }
 }
 
 new Elysia()
-    .error({
-        MyError
-    })
-    .onError(({ code, error }) => {
-        switch (code) {
-            // With auto-completion
-            case 'MyError':
-                // With type narrowing
-                // Hover to see error is typed as `CustomError`
-                return error
-        }
-    })
-    .get('/:id', () => {
-        throw new MyError('Hello Error')
-    })
+  .error({
+    MyError,
+  })
+  .onError(({ code, error }) => {
+    switch (code) {
+      // With auto-completion
+      case "MyError":
+        // With type narrowing
+        // Hover to see error is typed as `CustomError`
+        return error;
+    }
+  })
+  .get("/:id", () => {
+    throw new MyError("Hello Error");
+  });
 ```
 
 ### Custom Status Code
@@ -5152,14 +5123,14 @@ new Elysia()
 You can also provide a custom status code for your custom error by adding `status` property in your custom error class.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class MyError extends Error {
-    status = 418
+  status = 418;
 
-    constructor(public message: string) {
-        super(message)
-    }
+  constructor(public message: string) {
+    super(message);
+  }
 }
 ```
 
@@ -5168,27 +5139,27 @@ Elysia will then use this status code when the error is thrown.
 Otherwise you can also set the status code manually in the `onError` hook.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class MyError extends Error {
-	constructor(public message: string) {
-		super(message)
-	}
+  constructor(public message: string) {
+    super(message);
+  }
 }
 
 new Elysia()
-	.error({
-		MyError
-	})
-	.onError(({ code, error, status }) => {
-		switch (code) {
-			case 'MyError':
-				return status(418, error.message)
-		}
-	})
-	.get('/:id', () => {
-		throw new MyError('Hello Error')
-	})
+  .error({
+    MyError,
+  })
+  .onError(({ code, error, status }) => {
+    switch (code) {
+      case "MyError":
+        return status(418, error.message);
+    }
+  })
+  .get("/:id", () => {
+    throw new MyError("Hello Error");
+  });
 ```
 
 ### Custom Error Response
@@ -5196,23 +5167,26 @@ new Elysia()
 You can also provide a custom `toResponse` method in your custom error class to return a custom response when the error is thrown.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class MyError extends Error {
-	status = 418
+  status = 418;
 
-	constructor(public message: string) {
-		super(message)
-	}
+  constructor(public message: string) {
+    super(message);
+  }
 
-	toResponse() {
-		return Response.json({
-			error: this.message,
-			code: this.status
-		}, {
-			status: 418
-		})
-	}
+  toResponse() {
+    return Response.json(
+      {
+        error: this.message,
+        code: this.status,
+      },
+      {
+        status: 418,
+      },
+    );
+  }
 }
 ```
 
@@ -5224,33 +5198,33 @@ But for `status` it can be a little bit confusing, since it can be used both as 
 
 It could either be **return** or **throw** based on your specific needs.
 
-* If an `status` is **throw**, it will be caught by `onError` middleware.
-* If an `status` is **return**, it will be **NOT** caught by `onError` middleware.
+- If an `status` is **throw**, it will be caught by `onError` middleware.
+- If an `status` is **return**, it will be **NOT** caught by `onError` middleware.
 
 See the following code:
 
 ```typescript
-import { Elysia, file } from 'elysia'
+import { Elysia, file } from "elysia";
 
 new Elysia()
-    .onError(({ code, error, path }) => {
-        if (code === 418) return 'caught'
-    })
-    .get('/throw', ({ status }) => {
-        // This will be caught by onError
-        throw status(418)
-    })
-    .get('/return', ({ status }) => {
-        // This will NOT be caught by onError
-        return status(418)
-    })
+  .onError(({ code, error, path }) => {
+    if (code === 418) return "caught";
+  })
+  .get("/throw", ({ status }) => {
+    // This will be caught by onError
+    throw status(418);
+  })
+  .get("/return", ({ status }) => {
+    // This will NOT be caught by onError
+    return status(418);
+  });
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/patterns/extends-context.md'
----
+
+## url: 'https://elysiajs.com/tutorial/patterns/extends-context.md'
 
 # Extends Context
 
@@ -5268,21 +5242,19 @@ You can extends Elysia's context with:
 **Singleton**, and **immutable** that shared across all requests.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class Logger {
-    log(value: string) {
-        console.log(value)
-    }
+  log(value: string) {
+    console.log(value);
+  }
 }
 
-new Elysia()
-    .decorate('logger', new Logger())
-    .get('/', ({ logger }) => {
-        logger.log('hi')
+new Elysia().decorate("logger", new Logger()).get("/", ({ logger }) => {
+  logger.log("hi");
 
-        return 'hi'
-    })
+  return "hi";
+});
 ```
 
 Decorated value it will be available in the context as a read-only property, see Decorate.
@@ -5292,15 +5264,13 @@ Decorated value it will be available in the context as a read-only property, see
 A **mutable** reference that shared across all requests.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.state('count', 0)
-	.get('/', ({ store }) => {
-		store.count++
+new Elysia().state("count", 0).get("/", ({ store }) => {
+  store.count++;
 
-		return store.count
-	})
+  return store.count;
+});
 ```
 
 State will be available in **context.store** that is shared across every request, see State.
@@ -5312,13 +5282,13 @@ Decorate value is registered as a singleton.
 While Resolve, and Derive allows you to abstract a context value **per request**.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.derive(({ headers: { authorization } }) => ({
-		authorization
-	}))
-	.get('/', ({ authorization }) => authorization)
+  .derive(({ headers: { authorization } }) => ({
+    authorization,
+  }))
+  .get("/", ({ authorization }) => authorization);
 ```
 
 Any **returned value will available in context** except status, which will be send to client directly, and abort the subsequent handlers.
@@ -5327,8 +5297,8 @@ Syntax for both resolve, derive is similar but they have different use cases.
 
 Under the hood, both is a syntax sugar (with type safety) of a lifecycle:
 
-* derive is based on transform
-* resolve is based on before handle
+- derive is based on transform
+- resolve is based on before handle
 
 Since derive is based on transform means that data isn't validated, and coerce/transform yet. It's better to use resolve if you need a validated data.
 
@@ -5341,20 +5311,19 @@ Resolve, and Derive are per request, and has a encapulation scope (as they're ba
 If you want to use a resolved/derived value from a plugin, you would have to declare a Scope.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const plugin = new Elysia()
-	.derive(
-		{ as: 'scoped' }, // [!code ++]
-		({ headers: { authorization } }) => ({
-			authorization
-		})
-	)
+const plugin = new Elysia().derive(
+  { as: "scoped" }, // [!code ++]
+  ({ headers: { authorization } }) => ({
+    authorization,
+  }),
+);
 
 new Elysia()
-	.use(plugin)
-	.get('/', ({ authorization }) => authorization)
-	.listen(3000)
+  .use(plugin)
+  .get("/", ({ authorization }) => authorization)
+  .listen(3000);
 ```
 
 ## Assignment
@@ -5366,40 +5335,40 @@ Let's try to extends Elysia's context.
 We can use resolve to extract age from query.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 class Logger {
-	log(info: string) {
-		console.log(info)
-	}
+  log(info: string) {
+    console.log(info);
+  }
 }
 
 new Elysia()
-	.decorate('logger', new Logger())
-	.onRequest(({ request, logger }) => {
-		logger.log(`Request to ${request.url}`)
-	})
-	.guard({
-		query: t.Optional(
-			t.Object({
-				age: t.Number({ min: 15 })
-			})
-		)
-	})
-	.resolve(({ query: { age }, status }) => {
-		if(!age) return status(401)
+  .decorate("logger", new Logger())
+  .onRequest(({ request, logger }) => {
+    logger.log(`Request to ${request.url}`);
+  })
+  .guard({
+    query: t.Optional(
+      t.Object({
+        age: t.Number({ min: 15 }),
+      }),
+    ),
+  })
+  .resolve(({ query: { age }, status }) => {
+    if (!age) return status(401);
 
-		return { age }
-	})
-	.get('/profile', ({ age }) => age)
-	.listen(3000)
+    return { age };
+  })
+  .get("/profile", ({ age }) => age)
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/extends-context.md'
----
+
+## url: 'https://elysiajs.com/patterns/extends-context.md'
 
 # Extends context&#x20;
 
@@ -5407,23 +5376,23 @@ Elysia provides a minimal Context by default, allowing us to extend Context for 
 
 Elysia allows us to extend Context for various use cases like:
 
-* extracting user ID as variable
-* inject a common pattern repository
-* add a database connection
+- extracting user ID as variable
+- inject a common pattern repository
+- add a database connection
 
 We may extend Elysia's context by using the following APIs to customize the Context:
 
-* [state](#state) - a global mutable state
-* [decorate](#decorate) - additional property assigned to **Context**
-* [derive](#derive) / [resolve](#resolve) - create a new value from existing property
+- [state](#state) - a global mutable state
+- [decorate](#decorate) - additional property assigned to **Context**
+- [derive](#derive) / [resolve](#resolve) - create a new value from existing property
 
 ### When to extend context
 
 You should only extend context when:
 
-* A property is a global mutable state, and shared across multiple routes using [state](#state)
-* A property is associated with a request or response using [decorate](#decorate)
-* A property is derived from an existing property using [derive](#derive) / [resolve](#resolve)
+- A property is a global mutable state, and shared across multiple routes using [state](#state)
+- A property is associated with a request or response using [decorate](#decorate)
+- A property is derived from an existing property using [derive](#derive) / [resolve](#resolve)
 
 Otherwise, we recommend defining a value or function separately than extending the context.
 
@@ -5438,38 +5407,38 @@ It's recommended to assign properties related to request and response, or freque
 Once **state** is called, value will be added to **store** property **once at call time**, and can be used in handler.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .state('version', 1)
-    .get('/a', ({ store: { version } }) => version)
-                // ^?
-    .get('/b', ({ store }) => store)
-    .get('/c', () => 'still ok')
-    .listen(3000)
+  .state("version", 1)
+  .get("/a", ({ store: { version } }) => version)
+  // ^?
+  .get("/b", ({ store }) => store)
+  .get("/c", () => "still ok")
+  .listen(3000);
 ```
 
 ### When to use
 
-* When you need to share a primitive mutable value across multiple routes
-* If you want to use a non-primitive or a `wrapper` value or class that mutate an internal state, use [decorate](#decorate) instead.
+- When you need to share a primitive mutable value across multiple routes
+- If you want to use a non-primitive or a `wrapper` value or class that mutate an internal state, use [decorate](#decorate) instead.
 
 ### Key takeaway
 
-* **store** is a representation of a single-source-of-truth global mutable object for the entire Elysia app.
-* **state** is a function to assign an initial value to **store**, which could be mutated later.
-* Make sure to assign a value before using it in a handler.
+- **store** is a representation of a single-source-of-truth global mutable object for the entire Elysia app.
+- **state** is a function to assign an initial value to **store**, which could be mutated later.
+- Make sure to assign a value before using it in a handler.
 
 ```typescript twoslash
 // @errors: 2339
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    // ❌ TypeError: counter doesn't exist in store
-    .get('/error', ({ store }) => store.counter)
-    .state('counter', 0)
-    // ✅ Because we assigned a counter before, we can now access it
-    .get('/', ({ store }) => store.counter)
+  // ❌ TypeError: counter doesn't exist in store
+  .get("/error", ({ store }) => store.counter)
+  .state("counter", 0)
+  // ✅ Because we assigned a counter before, we can now access it
+  .get("/", ({ store }) => store.counter);
 ```
 
 ::: tip
@@ -5488,11 +5457,11 @@ For example:
 
 ```typescript
 const store = {
-    counter: 0
-}
+  counter: 0,
+};
 
-store.counter++
-console.log(store.counter) // ✅ 1
+store.counter++;
+console.log(store.counter); // ✅ 1
 ```
 
 We can use **store.counter** to access and mutate the property.
@@ -5501,14 +5470,14 @@ However, if we define a counter as a new value
 
 ```typescript
 const store = {
-    counter: 0
-}
+  counter: 0,
+};
 
-let counter = store.counter
+let counter = store.counter;
 
-counter++
-console.log(store.counter) // ❌ 0
-console.log(counter) // ✅ 1
+counter++;
+console.log(store.counter); // ❌ 0
+console.log(counter); // ✅ 1
 ```
 
 Once a primitive value is redefined as a new variable, the reference **"link"** will be missing, causing unexpected behavior.
@@ -5516,14 +5485,14 @@ Once a primitive value is redefined as a new variable, the reference **"link"** 
 This can apply to `store`, as it's a global mutable object instead.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .state('counter', 0)
-    // ✅ Using reference, value is shared
-    .get('/', ({ store }) => store.counter++)
-    // ❌ Creating a new variable on primitive value, the link is lost
-    .get('/error', ({ store: { counter } }) => counter)
+  .state("counter", 0)
+  // ✅ Using reference, value is shared
+  .get("/", ({ store }) => store.counter++)
+  // ❌ Creating a new variable on primitive value, the link is lost
+  .get("/error", ({ store: { counter } }) => counter);
 ```
 
 ## Decorate
@@ -5531,34 +5500,34 @@ new Elysia()
 **decorate** assigns an additional property to **Context** directly **at call time**.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class Logger {
-    log(value: string) {
-        console.log(value)
-    }
+  log(value: string) {
+    console.log(value);
+  }
 }
 
 new Elysia()
-    .decorate('logger', new Logger())
-    // ✅ defined from the previous line
-    .get('/', ({ logger }) => {
-        logger.log('hi')
+  .decorate("logger", new Logger())
+  // ✅ defined from the previous line
+  .get("/", ({ logger }) => {
+    logger.log("hi");
 
-        return 'hi'
-    })
+    return "hi";
+  });
 ```
 
 ### When to use
 
-* A constant or readonly value object to **Context**
-* Non primitive value or class that may contain internal mutable state
-* Additional functions, singleton, or immutable property to all handlers.
+- A constant or readonly value object to **Context**
+- Non primitive value or class that may contain internal mutable state
+- Additional functions, singleton, or immutable property to all handlers.
 
 ### Key takeaway
 
-* Unlike **state**, decorated value **SHOULD NOT** be mutated although it's possible
-* Make sure to assign a value before using it in a handler.
+- Unlike **state**, decorated value **SHOULD NOT** be mutated although it's possible
+- Make sure to assign a value before using it in a handler.
 
 ## Derive
 
@@ -5569,30 +5538,30 @@ Retrieve values from existing properties in **Context** and assign new propertie
 Derive assigns when request happens **at transform lifecycle** allowing us to "derive" (create new properties from existing properties).
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .derive(({ headers }) => {
-        const auth = headers['authorization']
+  .derive(({ headers }) => {
+    const auth = headers["authorization"];
 
-        return {
-            bearer: auth?.startsWith('Bearer ') ? auth.slice(7) : null
-        }
-    })
-    .get('/', ({ bearer }) => bearer)
+    return {
+      bearer: auth?.startsWith("Bearer ") ? auth.slice(7) : null,
+    };
+  })
+  .get("/", ({ bearer }) => bearer);
 ```
 
 Because **derive** is assigned once a new request starts, **derive** can access request properties like **headers**, **query**, **body** where **store**, and **decorate** can't.
 
 ### When to use
 
-* Create a new property from existing properties in **Context** without validation or type checking
-* When you need to access request properties like **headers**, **query**, **body** without validation
+- Create a new property from existing properties in **Context** without validation or type checking
+- When you need to access request properties like **headers**, **query**, **body** without validation
 
 ### Key takeaway
 
-* Unlike **state** and **decorate** instead of assign **at call time**, **derive** is assigned once a new request starts.
-* **derive is called at transform, or before validation** happens, Elysia cannot safely confirm the type of request property resulting in as **unknown**. If you want to assign a new value from typed request properties, you may want to use [resolve](#resolve) instead.
+- Unlike **state** and **decorate** instead of assign **at call time**, **derive** is assigned once a new request starts.
+- **derive is called at transform, or before validation** happens, Elysia cannot safely confirm the type of request property resulting in as **unknown**. If you want to assign a new value from typed request properties, you may want to use [resolve](#resolve) instead.
 
 ## Resolve
 
@@ -5603,60 +5572,60 @@ Resolve allow us to assign a new property to context.
 Resolve is called at **beforeHandle** lifecycle or **after validation**, allowing us to **resolve** request properties safely.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.guard({
-		headers: t.Object({
-			bearer: t.String({
-				pattern: '^Bearer .+$'
-			})
-		})
-	})
-	.resolve(({ headers }) => {
-		return {
-			bearer: headers.bearer.slice(7)
-		}
-	})
-	.get('/', ({ bearer }) => bearer)
+  .guard({
+    headers: t.Object({
+      bearer: t.String({
+        pattern: "^Bearer .+$",
+      }),
+    }),
+  })
+  .resolve(({ headers }) => {
+    return {
+      bearer: headers.bearer.slice(7),
+    };
+  })
+  .get("/", ({ bearer }) => bearer);
 ```
 
 ### When to use
 
-* Create a new property from existing properties in **Context** with type integrity (type checked)
-* When you need to access request properties like **headers**, **query**, **body** with validation
+- Create a new property from existing properties in **Context** with type integrity (type checked)
+- When you need to access request properties like **headers**, **query**, **body** with validation
 
 ### Key takeaway
 
-* **resolve is called at beforeHandle, or after validation** happens. Elysia can safely confirm the type of request property resulting in as **typed**.
+- **resolve is called at beforeHandle, or after validation** happens. Elysia can safely confirm the type of request property resulting in as **typed**.
 
 ### Error from resolve/derive
 
 As resolve and derive is based on **transform** and **beforeHandle** lifecycle, we can return an error from resolve and derive. If error is returned from **derive**, Elysia will return early exit and return the error as response.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .derive(({ headers, status }) => {
-        const auth = headers['authorization']
+  .derive(({ headers, status }) => {
+    const auth = headers["authorization"];
 
-        if(!auth) return status(400)
+    if (!auth) return status(400);
 
-        return {
-            bearer: auth?.startsWith('Bearer ') ? auth.slice(7) : null
-        }
-    })
-    .get('/', ({ bearer }) => bearer)
+    return {
+      bearer: auth?.startsWith("Bearer ") ? auth.slice(7) : null,
+    };
+  })
+  .get("/", ({ bearer }) => bearer);
 ```
 
 ## Pattern Advance Concept
 
 **state**, **decorate** offers a similar APIs pattern for assigning property to Context as the following:
 
-* key-value
-* object
-* remap
+- key-value
+- object
+- remap
 
 Where **derive** can be only used with **remap** because it depends on existing value.
 
@@ -5665,17 +5634,15 @@ Where **derive** can be only used with **remap** because it depends on existing 
 We can use **state**, and **decorate** to assign a value using a key-value pattern.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class Logger {
-    log(value: string) {
-        console.log(value)
-    }
+  log(value: string) {
+    console.log(value);
+  }
 }
 
-new Elysia()
-    .state('counter', 0)
-    .decorate('logger', new Logger())
+new Elysia().state("counter", 0).decorate("logger", new Logger());
 ```
 
 This pattern is great for readability for setting a single property.
@@ -5685,14 +5652,13 @@ This pattern is great for readability for setting a single property.
 Assigning multiple properties is better contained in an object for a single assignment.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .decorate({
-        logger: new Logger(),
-        trace: new Trace(),
-        telemetry: new Telemetry()
-    })
+new Elysia().decorate({
+  logger: new Logger(),
+  trace: new Trace(),
+  telemetry: new Telemetry(),
+});
 ```
 
 The object offers a less repetitive API for setting multiple values.
@@ -5707,19 +5673,19 @@ By providing a function, and returning an entirely new object to reassign the va
 
 ```typescript twoslash
 // @errors: 2339
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .state('counter', 0)
-    .state('version', 1)
-    .state(({ version, ...store }) => ({
-        ...store,
-        elysiaVersion: 1
-    }))
-    // ✅ Create from state remap
-    .get('/elysia-version', ({ store }) => store.elysiaVersion)
-    // ❌ Excluded from state remap
-    .get('/version', ({ store }) => store.version)
+  .state("counter", 0)
+  .state("version", 1)
+  .state(({ version, ...store }) => ({
+    ...store,
+    elysiaVersion: 1,
+  }))
+  // ✅ Create from state remap
+  .get("/elysia-version", ({ store }) => store.elysiaVersion)
+  // ❌ Excluded from state remap
+  .get("/version", ({ store }) => store.version);
 ```
 
 It's a good idea to use state remap to create a new initial value from the existing value.
@@ -5737,19 +5703,18 @@ To provide a smoother experience, some plugins might have a lot of property valu
 The **Affix** function which consists of **prefix** and **suffix**, allowing us to remap all property of an instance.
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const setup = new Elysia({ name: 'setup' })
-    .decorate({
-        argon: 'a',
-        boron: 'b',
-        carbon: 'c'
-    })
+const setup = new Elysia({ name: "setup" }).decorate({
+  argon: "a",
+  boron: "b",
+  carbon: "c",
+});
 
 const app = new Elysia()
-    .use(setup)
-    .prefix('decorator', 'setup')
-    .get('/', ({ setupCarbon, ...rest }) => setupCarbon)
+  .use(setup)
+  .prefix("decorator", "setup")
+  .get("/", ({ setupCarbon, ...rest }) => setupCarbon);
 ```
 
 Allowing us to bulk remap a property of the plugin effortlessly, preventing the name collision of the plugin.
@@ -5759,26 +5724,25 @@ By default, **affix** will handle both runtime, type-level code automatically, r
 In some condition, we can also remap `all` property of the plugin:
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const setup = new Elysia({ name: 'setup' })
-    .decorate({
-        argon: 'a',
-        boron: 'b',
-        carbon: 'c'
-    })
+const setup = new Elysia({ name: "setup" }).decorate({
+  argon: "a",
+  boron: "b",
+  carbon: "c",
+});
 
 const app = new Elysia()
-    .use(setup)
-    .prefix('all', 'setup') // [!code ++]
-    .get('/', ({ setupCarbon, ...rest }) => setupCarbon)
+  .use(setup)
+  .prefix("all", "setup") // [!code ++]
+  .get("/", ({ setupCarbon, ...rest }) => setupCarbon);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/fullstack-dev-server.md'
----
+
+## url: 'https://elysiajs.com/patterns/fullstack-dev-server.md'
 
 # Elysia with Bun Fullstack Dev Server
 
@@ -5793,12 +5757,12 @@ Otherwise, install it manually:
 1. Install Elysia Static plugin
 
 ```ts
-import { Elysia } from 'elysia'
-import { staticPlugin } from '@elysiajs/static'
+import { Elysia } from "elysia";
+import { staticPlugin } from "@elysiajs/static";
 
 new Elysia()
-	.use(await staticPlugin()) // [!code ++]
-	.listen(3000)
+  .use(await staticPlugin()) // [!code ++]
+  .listen(3000);
 ```
 
 :::tip
@@ -5814,39 +5778,37 @@ This is required to setup the necessary HMR hooks.
 ```html [public/index.html]
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Elysia React App</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Elysia React App</title>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
-	<body>
-		<div id="root"></div>
-		<script type="module" src="./index.tsx"></script>
-	</body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  </body>
 </html>
 ```
 
 ```tsx [public/index.tsx]
-import { useState } from 'react'
-import { createRoot } from 'react-dom/client'
+import { useState } from "react";
+import { createRoot } from "react-dom/client";
 
 function App() {
-	const [count, setCount] = useState(0)
-	const increase = () => setCount((c) => c + 1)
+  const [count, setCount] = useState(0);
+  const increase = () => setCount((c) => c + 1);
 
-	return (
-		<main>
-			<h2>{count}</h2>
-			<button onClick={increase}>
-				Increase
-			</button>
-		</main>
-	)
+  return (
+    <main>
+      <h2>{count}</h2>
+      <button onClick={increase}>Increase</button>
+    </main>
+  );
 }
 
-const root = createRoot(document.getElementById('root')!)
-root.render(<App />)
+const root = createRoot(document.getElementById("root")!);
+root.render(<App />);
 ```
 
 :::
@@ -5856,7 +5818,7 @@ root.render(<App />)
 ```json
 {
   "compilerOptions": {
-	"jsx": "react-jsx" // [!code ++]
+    "jsx": "react-jsx" // [!code ++]
   }
 }
 ```
@@ -5872,16 +5834,16 @@ We have verified that Fullstack Dev Server works with HMR, [Tailwind](#tailwind)
 We can change the default `/public` prefix by passing the `prefix` option to `staticPlugin`.
 
 ```ts
-import { Elysia } from 'elysia'
-import { staticPlugin } from '@elysiajs/static'
+import { Elysia } from "elysia";
+import { staticPlugin } from "@elysiajs/static";
 
 new Elysia()
-  	.use(
-  		await staticPlugin({
-  			prefix: '/' // [!code ++]
-   		})
-   )
-  .listen(3000)
+  .use(
+    await staticPlugin({
+      prefix: "/", // [!code ++]
+    }),
+  )
+  .listen(3000);
 ```
 
 This would serve the static files at `/` instead of `/public`.
@@ -5923,42 +5885,41 @@ plugins = ["bun-plugin-tailwind"]
 ```html [public/index.html]
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Elysia React App</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Elysia React App</title>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  		<link rel="stylesheet" href="tailwindcss"> <!-- [!code ++] -->
-	</head>
-	<body>
-		<div id="root"></div>
-		<script type="module" src="./index.tsx"></script>
-	</body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="tailwindcss" />
+    <!-- [!code ++] -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  </body>
 </html>
 ```
 
 ```tsx [public/index.tsx]
-import { useState } from 'react'
-import { createRoot } from 'react-dom/client'
+import { useState } from "react";
+import { createRoot } from "react-dom/client";
 
-import './global.css' // [!code ++]
+import "./global.css"; // [!code ++]
 
 function App() {
-	const [count, setCount] = useState(0)
-	const increase = () => setCount((c) => c + 1)
+  const [count, setCount] = useState(0);
+  const increase = () => setCount((c) => c + 1);
 
-	return (
-		<main>
-			<h2>{count}</h2>
-			<button onClick={increase}>
-				Increase
-			</button>
-		</main>
-	)
+  return (
+    <main>
+      <h2>{count}</h2>
+      <button onClick={increase}>Increase</button>
+    </main>
+  );
 }
 
-const root = createRoot(document.getElementById('root')!)
-root.render(<App />)
+const root = createRoot(document.getElementById("root")!);
+root.render(<App />);
 ```
 
 :::
@@ -5972,10 +5933,11 @@ We can also use path alias in Bun Fullstack Dev Server.
 ```json
 {
   "compilerOptions": {
-	"baseUrl": ".", // [!code ++]
-	"paths": { // [!code ++]
-	  "@public/*": ["public/*"] // [!code ++]
-	} // [!code ++]
+    "baseUrl": ".", // [!code ++]
+    "paths": {
+      // [!code ++]
+      "@public/*": ["public/*"] // [!code ++]
+    } // [!code ++]
   }
 }
 ```
@@ -5983,27 +5945,25 @@ We can also use path alias in Bun Fullstack Dev Server.
 2. Use the alias in your code
 
 ```tsx
-import { useState } from 'react'
-import { createRoot } from 'react-dom/client'
+import { useState } from "react";
+import { createRoot } from "react-dom/client";
 
-import '@public/global.css' // [!code ++]
+import "@public/global.css"; // [!code ++]
 
 function App() {
-	const [count, setCount] = useState(0)
-	const increase = () => setCount((c) => c + 1)
+  const [count, setCount] = useState(0);
+  const increase = () => setCount((c) => c + 1);
 
-	return (
-		<main>
-			<h2>{count}</h2>
-			<button onClick={increase}>
-				Increase
-			</button>
-		</main>
-	)
+  return (
+    <main>
+      <h2>{count}</h2>
+      <button onClick={increase}>Increase</button>
+    </main>
+  );
 }
 
-const root = createRoot(document.getElementById('root')!)
-root.render(<App />)
+const root = createRoot(document.getElementById("root")!);
+root.render(<App />);
 ```
 
 This would works out of the box without any additional configuration.
@@ -6025,8 +5985,8 @@ See [Deploy to Production](/patterns/deploy) for more information.
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/graphql-yoga.md'
----
+
+## url: 'https://elysiajs.com/plugins/graphql-yoga.md'
 
 # GraphQL Yoga Plugin
 
@@ -6041,25 +6001,25 @@ bun add @elysiajs/graphql-yoga
 Then use it:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { yoga } from '@elysiajs/graphql-yoga'
+import { Elysia } from "elysia";
+import { yoga } from "@elysiajs/graphql-yoga";
 
 const app = new Elysia()
-	.use(
-		yoga({
-			typeDefs: /* GraphQL */ `
-				type Query {
-					hi: String
-				}
-			`,
-			resolvers: {
-				Query: {
-					hi: () => 'Hello from Elysia'
-				}
-			}
-		})
-	)
-	.listen(3000)
+  .use(
+    yoga({
+      typeDefs: /* GraphQL */ `
+        type Query {
+          hi: String
+        }
+      `,
+      resolvers: {
+        Query: {
+          hi: () => "Hello from Elysia",
+        },
+      },
+    }),
+  )
+  .listen(3000);
 ```
 
 Accessing `/graphql` in the browser (GET request) would show you a GraphiQL instance for the GraphQL-enabled Elysia server.
@@ -6079,31 +6039,31 @@ Elysia uses [Mobius](https://github.com/saltyaom/mobius) to infer type from **ty
 You can add custom context to the resolver function by adding **context**
 
 ```ts
-import { Elysia } from 'elysia'
-import { yoga } from '@elysiajs/graphql-yoga'
+import { Elysia } from "elysia";
+import { yoga } from "@elysiajs/graphql-yoga";
 
 const app = new Elysia()
-	.use(
-		yoga({
-			typeDefs: /* GraphQL */ `
-				type Query {
-					hi: String
-				}
-			`,
-			context: {
-				name: 'Mobius'
-			},
-			// If context is a function on this doesn't present
-			// for some reason it won't infer context type
-			useContext(_) {},
-			resolvers: {
-				Query: {
-					hi: async (parent, args, context) => context.name
-				}
-			}
-		})
-	)
-	.listen(3000)
+  .use(
+    yoga({
+      typeDefs: /* GraphQL */ `
+        type Query {
+          hi: String
+        }
+      `,
+      context: {
+        name: "Mobius",
+      },
+      // If context is a function on this doesn't present
+      // for some reason it won't infer context type
+      useContext(_) {},
+      resolvers: {
+        Query: {
+          hi: async (parent, args, context) => context.name,
+        },
+      },
+    }),
+  )
+  .listen(3000);
 ```
 
 ## Config
@@ -6121,101 +6081,106 @@ Endpoint to expose GraphQL handler
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/getting-started/guard.md'
----
+
+## url: 'https://elysiajs.com/tutorial/getting-started/guard.md'
 
 # Guard
 
 When you need to apply multiple hook to your application, instead of repeating hook multiple time, you can use `guard` to bulk add hooks to your application.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.onBeforeHandle(({ query: { name }, status }) => { // [!code --]
-		if(!name) return status(401) // [!code --]
-	}) // [!code --]
-	.onBeforeHandle(({ query: { name } }) => { // [!code --]
-		console.log(name) // [!code --]
-	}) // [!code --]
-	.onAfterResponse(({ responseValue }) => { // [!code --]
-		console.log(responseValue) // [!code --]
-	}) // [!code --]
-	.guard({ // [!code ++]
-		beforeHandle: [ // [!code ++]
-			({ query: { name }, status }) => { // [!code ++]
-				if(!name) return status(401) // [!code ++]
-			}, // [!code ++]
-			({ query: { name } }) => { // [!code ++]
-				console.log(name) // [!code ++]
-			} // [!code ++]
-		], // [!code ++]
-		afterResponse({ responseValue }) { // [!code ++]
-			console.log(responseValue) // [!code ++]
-		} // [!code ++]
-	}) // [!code ++]
-	.get(
-		'/auth',
-		({ query: { name = 'anon' } }) => `Hello ${name}!`,
-		{
-			query: t.Object({
-				name: t.String()
-			})
-		}
-	)
-	.get(
-		'/profile',
-		({ query: { name = 'anon' } }) => `Hello ${name}!`,
-		{
-			query: t.Object({
-				name: t.String()
-			})
-		}
-	)
-	.listen(3000)
+  .onBeforeHandle(({ query: { name }, status }) => {
+    // [!code --]
+    if (!name) return status(401); // [!code --]
+  }) // [!code --]
+  .onBeforeHandle(({ query: { name } }) => {
+    // [!code --]
+    console.log(name); // [!code --]
+  }) // [!code --]
+  .onAfterResponse(({ responseValue }) => {
+    // [!code --]
+    console.log(responseValue); // [!code --]
+  }) // [!code --]
+  .guard({
+    // [!code ++]
+    beforeHandle: [
+      // [!code ++]
+      ({ query: { name }, status }) => {
+        // [!code ++]
+        if (!name) return status(401); // [!code ++]
+      }, // [!code ++]
+      ({ query: { name } }) => {
+        // [!code ++]
+        console.log(name); // [!code ++]
+      }, // [!code ++]
+    ], // [!code ++]
+    afterResponse({ responseValue }) {
+      // [!code ++]
+      console.log(responseValue); // [!code ++]
+    }, // [!code ++]
+  }) // [!code ++]
+  .get("/auth", ({ query: { name = "anon" } }) => `Hello ${name}!`, {
+    query: t.Object({
+      name: t.String(),
+    }),
+  })
+  .get("/profile", ({ query: { name = "anon" } }) => `Hello ${name}!`, {
+    query: t.Object({
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 Not only that, you can also apply **schema** to multiple routes using `guard`.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.guard({
-		beforeHandle: [
-			({ query: { name }, status }) => {
-				if(!name) return status(401)
-			},
-			({ query: { name } }) => {
-				console.log(name)
-			}
-		],
-		afterResponse({ responseValue }) {
-			console.log(responseValue)
-		},
-		query: t.Object({ // [!code ++]
-			name: t.String() // [!code ++]
-		}) // [!code ++]
-	})
-	.get(
-		'/auth',
-		({ query: { name = 'anon' } }) => `Hello ${name}!`,
-		{ // [!code --]
-			query: t.Object({ // [!code --]
-				name: t.String() // [!code --]
-			}) // [!code --]
-		} // [!code --]
-	)
-	.get(
-		'/profile',
-		({ query: { name = 'anon' } }) => `Hello ${name}!`,
-		{ // [!code --]
-			query: t.Object({ // [!code --]
-				name: t.String() // [!code --]
-			}) // [!code --]
-		} // [!code --]
-	)
-	.listen(3000)
+  .guard({
+    beforeHandle: [
+      ({ query: { name }, status }) => {
+        if (!name) return status(401);
+      },
+      ({ query: { name } }) => {
+        console.log(name);
+      },
+    ],
+    afterResponse({ responseValue }) {
+      console.log(responseValue);
+    },
+    query: t.Object({
+      // [!code ++]
+      name: t.String(), // [!code ++]
+    }), // [!code ++]
+  })
+  .get(
+    "/auth",
+    ({ query: { name = "anon" } }) => `Hello ${name}!`,
+    {
+      // [!code --]
+      query: t.Object({
+        // [!code --]
+        name: t.String(), // [!code --]
+      }), // [!code --]
+    }, // [!code --]
+  )
+  .get(
+    "/profile",
+    ({ query: { name = "anon" } }) => `Hello ${name}!`,
+    {
+      // [!code --]
+      query: t.Object({
+        // [!code --]
+        name: t.String(), // [!code --]
+      }), // [!code --]
+    }, // [!code --]
+  )
+  .listen(3000);
 ```
 
 This will apply hooks and schema to every routes **after .guard** is called in the same instance.
@@ -6231,49 +6196,49 @@ Let's put 2 types of hooks into practice.
 We can use `beforeHandle` to intercept the request before it reaches the handler, and return a response with `status` method.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.onBeforeHandle(({ query: { name }, status }) => {
-		if(!name) return status(401)
-	})
-	.get('/auth', ({ query: { name = 'anon' } }) => {
-		return `Hello ${name}!`
-	})
-	.get('/profile', ({ query: { name = 'anon' } }) => {
-		return `Hello ${name}!`
-	})
-	.listen(3000)
+  .onBeforeHandle(({ query: { name }, status }) => {
+    if (!name) return status(401);
+  })
+  .get("/auth", ({ query: { name = "anon" } }) => {
+    return `Hello ${name}!`;
+  })
+  .get("/profile", ({ query: { name = "anon" } }) => {
+    return `Hello ${name}!`;
+  })
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/essential/handler.md'
----
+
+## url: 'https://elysiajs.com/essential/handler.md'
 
 # Handler&#x20;
 
 **Handler** - a function that accept an HTTP request, and return a response.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    // the function `() => 'hello world'` is a handler
-    .get('/', () => 'hello world')
-    .listen(3000)
+  // the function `() => 'hello world'` is a handler
+  .get("/", () => "hello world")
+  .listen(3000);
 ```
 
 A handler may be a literal value, and can be inlined.
 
 ```typescript
-import { Elysia, file } from 'elysia'
+import { Elysia, file } from "elysia";
 
 new Elysia()
-    .get('/', 'Hello Elysia')
-    .get('/video', file('kyuukurarin.mp4'))
-    .listen(3000)
+  .get("/", "Hello Elysia")
+  .get("/video", file("kyuukurarin.mp4"))
+  .listen(3000);
 ```
 
 Using an **inline value** always returns the same value which is useful to optimize performance for static resources like files.
@@ -6291,69 +6256,68 @@ Static resource values, headers and status can be mutated dynamically using life
 **Context** contains request information which is unique for each request, and is not shared except for `store` (global mutable state).
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.get('/', (context) => context.path)
-            // ^ This is a context
+new Elysia().get("/", (context) => context.path);
+// ^ This is a context
 ```
 
 **Context** can only be retrieved in a route handler. It consists of:
 
 #### Property
 
-* [**body**](/essential/validation.html#body) - [HTTP message](https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages), form or file upload.
-* [**query**](/essential/validation.html#query) - [Query String](https://en.wikipedia.org/wiki/Query_string), include additional parameters for search query as JavaScript Object. (Query is extracted from a value after pathname starting from '?' question mark sign)
-* [**params**](/essential/validation.html#params) - Elysia's path parameters parsed as JavaScript object
-* [**headers**](/essential/validation.html#headers) - [HTTP Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers), additional information about the request like User-Agent, Content-Type, Cache Hint.
-* [**cookie**](#cookie) - A global mutable signal store for interacting with Cookie (including get/set)
-* [**store**](#state) - A global mutable store for Elysia instance
+- [**body**](/essential/validation.html#body) - [HTTP message](https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages), form or file upload.
+- [**query**](/essential/validation.html#query) - [Query String](https://en.wikipedia.org/wiki/Query_string), include additional parameters for search query as JavaScript Object. (Query is extracted from a value after pathname starting from '?' question mark sign)
+- [**params**](/essential/validation.html#params) - Elysia's path parameters parsed as JavaScript object
+- [**headers**](/essential/validation.html#headers) - [HTTP Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers), additional information about the request like User-Agent, Content-Type, Cache Hint.
+- [**cookie**](#cookie) - A global mutable signal store for interacting with Cookie (including get/set)
+- [**store**](#state) - A global mutable store for Elysia instance
 
 #### Utility Function
 
-* [**redirect**](#redirect) - A function to redirect a response
-* [**status**](#status) - A function to return custom status code
-* [**set**](#set) - Property to apply to Response:
-  * [**headers**](#set.headers) - Response headers
+- [**redirect**](#redirect) - A function to redirect a response
+- [**status**](#status) - A function to return custom status code
+- [**set**](#set) - Property to apply to Response:
+  - [**headers**](#set.headers) - Response headers
 
 #### Additional Property
 
-* [**request**](#request) - [Web Standard Request](https://developer.mozilla.org/en-US/docs/Web/API/Request)
-* [**server**](#server-bun-only) - Bun server instance
-* **path** - Pathname of the request
+- [**request**](#request) - [Web Standard Request](https://developer.mozilla.org/en-US/docs/Web/API/Request)
+- [**server**](#server-bun-only) - Bun server instance
+- **path** - Pathname of the request
 
 ## status&#x20;
 
 A function to return a custom status code with type narrowing.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/', ({ status }) => status(418, "Kirifuji Nagisa"))
-    .listen(3000)
+  .get("/", ({ status }) => status(418, "Kirifuji Nagisa"))
+  .listen(3000);
 ```
 
 It's recommended use **never-throw** approach to return **status** instead of throw as it:
 
-* allows TypeScript to check if a return value is correctly type to response schema
-* autocompletion for type narrowing based on status code
-* type narrowing for error handling using End-to-end type safety ([Eden](/eden/overview))
+- allows TypeScript to check if a return value is correctly type to response schema
+- autocompletion for type narrowing based on status code
+- type narrowing for error handling using End-to-end type safety ([Eden](/eden/overview))
 
 ## Set
 
 **set** is a mutable property that form a response accessible via `Context.set`.
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ set, status }) => {
-		set.headers = { 'X-Teapot': 'true' }
+  .get("/", ({ set, status }) => {
+    set.headers = { "X-Teapot": "true" };
 
-		return status(418, 'I am a teapot')
-	})
-	.listen(3000)
+    return status(418, "I am a teapot");
+  })
+  .listen(3000);
 ```
 
 ### set.headers
@@ -6361,15 +6325,15 @@ new Elysia()
 Allowing us to append or delete response headers represented as an Object.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/', ({ set }) => {
-        set.headers['x-powered-by'] = 'Elysia'
+  .get("/", ({ set }) => {
+    set.headers["x-powered-by"] = "Elysia";
 
-        return 'a mimir'
-    })
-    .listen(3000)
+    return "a mimir";
+  })
+  .listen(3000);
 ```
 
 ::: tip
@@ -6379,17 +6343,17 @@ Elysia provide an auto-completion for lowercase for case-sensitivity consistency
 Redirect a request to another resource.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/', ({ redirect }) => {
-        return redirect('https://youtu.be/whpVWVWBW4U?&t=8')
-    })
-    .get('/custom-status', ({ redirect }) => {
-        // You can also set custom status to redirect
-        return redirect('https://youtu.be/whpVWVWBW4U?&t=8', 302)
-    })
-    .listen(3000)
+  .get("/", ({ redirect }) => {
+    return redirect("https://youtu.be/whpVWVWBW4U?&t=8");
+  })
+  .get("/custom-status", ({ redirect }) => {
+    // You can also set custom status to redirect
+    return redirect("https://youtu.be/whpVWVWBW4U?&t=8", 302);
+  })
+  .listen(3000);
 ```
 
 When using redirect, returned value is not required and will be ignored. As response will be from another resource.
@@ -6399,16 +6363,16 @@ Set a default status code if not provided.
 It's recommended to use this in a plugin that only needs to return a specific status code while allowing the user to return a custom value. For example, HTTP 201/206 or 403/405, etc.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .onBeforeHandle(({ set }) => {
-        set.status = 418
+  .onBeforeHandle(({ set }) => {
+    set.status = 418;
 
-        return 'Kirifuji Nagisa'
-    })
-    .get('/', () => 'hi')
-    .listen(3000)
+    return "Kirifuji Nagisa";
+  })
+  .get("/", () => "hi")
+  .listen(3000);
 ```
 
 Unlike `status` function, `set.status` cannot infer the return value type, therefore it can't check if the return value is correctly type to response schema.
@@ -6421,16 +6385,16 @@ You can also set a status code using the common name of the status code instead 
 
 ```typescript twoslash
 // @errors 2322
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/', ({ set }) => {
-        set.status
-          // ^?
+  .get("/", ({ set }) => {
+    set.status;
+    // ^?
 
-        return 'Kirifuji Nagisa'
-    })
-    .listen(3000)
+    return "Kirifuji Nagisa";
+  })
+  .listen(3000);
 ```
 
 ## Cookie
@@ -6440,16 +6404,15 @@ Elysia provides a mutable signal for interacting with Cookie.
 There's no get/set, you can extract the cookie name and retrieve or update its value directly.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.get('/set', ({ cookie: { name } }) => {
-		// Get
-        name.value
+new Elysia().get("/set", ({ cookie: { name } }) => {
+  // Get
+  name.value;
 
-        // Set
-        name.value = "New Value"
-	})
+  // Set
+  name.value = "New Value";
+});
 ```
 
 See [Patterns: Cookie](/essentials/cookie) for more information.
@@ -6459,17 +6422,17 @@ See [Patterns: Cookie](/essentials/cookie) for more information.
 Redirect a request to another resource.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ redirect }) => {
-		return redirect('https://youtu.be/whpVWVWBW4U?&t=8')
-	})
-	.get('/custom-status', ({ redirect }) => {
-		// You can also set custom status to redirect
-		return redirect('https://youtu.be/whpVWVWBW4U?&t=8', 302)
-	})
-	.listen(3000)
+  .get("/", ({ redirect }) => {
+    return redirect("https://youtu.be/whpVWVWBW4U?&t=8");
+  })
+  .get("/custom-status", ({ redirect }) => {
+    // You can also set custom status to redirect
+    return redirect("https://youtu.be/whpVWVWBW4U?&t=8", 302);
+  })
+  .listen(3000);
 ```
 
 When using redirect, returned value is not required and will be ignored. As response will be from another resource.
@@ -6479,14 +6442,16 @@ When using redirect, returned value is not required and will be ignored. As resp
 We may return a `FormData` by using returning `form` utility directly from the handler.
 
 ```typescript
-import { Elysia, form, file } from 'elysia'
+import { Elysia, form, file } from "elysia";
 
 new Elysia()
-	.get('/', () => form({
-		name: 'Tea Party',
-		images: [file('nagi.web'), file('mika.webp')]
-	}))
-	.listen(3000)
+  .get("/", () =>
+    form({
+      name: "Tea Party",
+      images: [file("nagi.web"), file("mika.webp")],
+    }),
+  )
+  .listen(3000);
 ```
 
 This pattern is useful if even need to return a file or multipart form data.
@@ -6496,11 +6461,9 @@ This pattern is useful if even need to return a file or multipart form data.
 Or alternatively, you can return a single file by returning `file` directly without `form`.
 
 ```typescript
-import { Elysia, file } from 'elysia'
+import { Elysia, file } from "elysia";
 
-new Elysia()
-	.get('/', file('nagi.web'))
-	.listen(3000)
+new Elysia().get("/", file("nagi.web")).listen(3000);
 ```
 
 ## Stream
@@ -6508,14 +6471,13 @@ new Elysia()
 To return a response streaming out of the box by using a generator function with `yield` keyword.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.get('/ok', function* () {
-		yield 1
-		yield 2
-		yield 3
-	})
+const app = new Elysia().get("/ok", function* () {
+  yield 1;
+  yield 2;
+  yield 3;
+});
 ```
 
 This this example, we may stream a response by using `yield` keyword.
@@ -6525,19 +6487,18 @@ This this example, we may stream a response by using `yield` keyword.
 Elysia supports [Server Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) by providing a `sse` utility function.
 
 ```typescript twoslash
-import { Elysia, sse } from 'elysia'
+import { Elysia, sse } from "elysia";
 
-new Elysia()
-	.get('/sse', function* () {
-		yield sse('hello world')
-		yield sse({
-			event: 'message',
-			data: {
-				message: 'This is a message',
-				timestamp: new Date().toISOString()
-			},
-		})
-	})
+new Elysia().get("/sse", function* () {
+  yield sse("hello world");
+  yield sse({
+    event: "message",
+    data: {
+      message: "This is a message",
+      timestamp: new Date().toISOString(),
+    },
+  });
+});
 ```
 
 When a value is wrapped in `sse`, Elysia will automatically set the response headers to `text/event-stream` and format the data as an SSE event.
@@ -6547,19 +6508,18 @@ When a value is wrapped in `sse`, Elysia will automatically set the response hea
 Headers can only be set before the first chunk is yielded.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.get('/ok', function* ({ set }) {
-		// This will set headers
-		set.headers['x-name'] = 'Elysia'
-		yield 1
-		yield 2
+const app = new Elysia().get("/ok", function* ({ set }) {
+  // This will set headers
+  set.headers["x-name"] = "Elysia";
+  yield 1;
+  yield 2;
 
-		// This will do nothing
-		set.headers['x-id'] = '1'
-		yield 3
-	})
+  // This will do nothing
+  set.headers["x-id"] = "1";
+  yield 3;
+});
 ```
 
 Once the first chunk is yielded, Elysia will send the headers to the client, therefore mutating headers after the first chunk is yielded will do nothing.
@@ -6569,16 +6529,15 @@ Once the first chunk is yielded, Elysia will send the headers to the client, the
 If the response is returned without yield, Elysia will automatically convert stream to normal response instead.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.get('/ok', function* () {
-		if (Math.random() > 0.5) return 'ok'
+const app = new Elysia().get("/ok", function* () {
+  if (Math.random() > 0.5) return "ok";
 
-		yield 1
-		yield 2
-		yield 3
-	})
+  yield 1;
+  yield 2;
+  yield 3;
+});
 ```
 
 This allows us to conditionally stream a response or return a normal response if necessary.
@@ -6592,21 +6551,19 @@ Before response streaming is completed, if the user cancels the request, Elysia 
 [Eden](/eden/overview) will interpret a stream response as `AsyncGenerator` allowing us to use `for await` loop to consume the stream.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-	.get('/ok', function* () {
-		yield 1
-		yield 2
-		yield 3
-	})
+const app = new Elysia().get("/ok", function* () {
+  yield 1;
+  yield 2;
+  yield 3;
+});
 
-const { data, error } = await treaty(app).ok.get()
-if (error) throw error
+const { data, error } = await treaty(app).ok.get();
+if (error) throw error;
 
-for await (const chunk of data)
-	console.log(chunk)
+for await (const chunk of data) console.log(chunk);
 ```
 
 ## Request
@@ -6614,13 +6571,13 @@ for await (const chunk of data)
 Elysia is built on top of [Web Standard Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) which is shared between multiple runtime like Node, Bun, Deno, Cloudflare Worker, Vercel Edge Function, and more.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/user-agent', ({ request }) => {
-		return request.headers.get('user-agent')
-	})
-	.listen(3000)
+  .get("/user-agent", ({ request }) => {
+    return request.headers.get("user-agent");
+  })
+  .listen(3000);
 ```
 
 Allowing you to access low-level request information if necessary.
@@ -6632,13 +6589,13 @@ Server instance is a Bun server instance, allowing us to access server informati
 Server will only be available when HTTP server is running with `listen`.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/port', ({ server }) => {
-		return server?.port
-	})
-	.listen(3000)
+  .get("/port", ({ server }) => {
+    return server?.port;
+  })
+  .listen(3000);
 ```
 
 ### Request IP Bun only
@@ -6646,13 +6603,13 @@ new Elysia()
 We can get request IP by using `server.requestIP` method
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/ip', ({ server, request }) => {
-		return server?.requestIP(request)
-	})
-	.listen(3000)
+  .get("/ip", ({ server, request }) => {
+    return server?.requestIP(request);
+  })
+  .listen(3000);
 ```
 
 ## Extends context Advance concept
@@ -6664,31 +6621,31 @@ See [Extends Context](/patterns/extends-context) for more information on how to 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/getting-started/handler-and-context.md'
----
+
+## url: 'https://elysiajs.com/tutorial/getting-started/handler-and-context.md'
 
 # Handler and Context
 
 **Handler** - a resource or a route function to send data back to client.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    // `() => 'hello world'` is a handler
-    .get('/', () => 'hello world')
-    .listen(3000)
+  // `() => 'hello world'` is a handler
+  .get("/", () => "hello world")
+  .listen(3000);
 ```
 
 A handler can also be a literal value, see Handler
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    // `'hello world'` is a handler
-    .get('/', 'hello world')
-    .listen(3000)
+  // `'hello world'` is a handler
+  .get("/", "hello world")
+  .listen(3000);
 ```
 
 Using an inline value can be useful for static resource like **file**.
@@ -6698,19 +6655,18 @@ Using an inline value can be useful for static resource like **file**.
 Contains information about each request. It is passed as the only argument of a handler.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.get('/', (context) => context.path)
-            // ^ This is a context
+new Elysia().get("/", (context) => context.path);
+// ^ This is a context
 ```
 
 **Context** stores information about the request like:
 
-* body - data sent by client to server like form data, JSON payload.
-* query - query string as an object. (Query is extracted from a value after pathname starting from '?' question mark sign)
-* params - Path parameters parsed as object
-* headers - HTTP Header, additional information about the request like "Content-Type".
+- body - data sent by client to server like form data, JSON payload.
+- query - query string as an object. (Query is extracted from a value after pathname starting from '?' question mark sign)
+- params - Path parameters parsed as object
+- headers - HTTP Header, additional information about the request like "Content-Type".
 
 See Context.
 
@@ -6722,7 +6678,7 @@ There should be a tiny navigator on the **top left** of the preview window.
 
 You can use it to switch between path and method to see the response.
 
-You can also click  to edit body, and headers.
+You can also click to edit body, and headers.
 
 ## Assignment
 
@@ -6734,24 +6690,24 @@ Let's try extracting context parameters:
 2. We can then return them like `{ body, query, headers }`.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.post('/', ({ body, query, headers }) => {
-		return {
-			query,
-			body,
-			headers
-		}
-	})
-	.listen(3000)
+  .post("/", ({ body, query, headers }) => {
+    return {
+      query,
+      body,
+      headers,
+    };
+  })
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/html.md'
----
+
+## url: 'https://elysiajs.com/plugins/html.md'
 
 # HTML Plugin
 
@@ -6766,16 +6722,16 @@ bun add @elysiajs/html
 Then use it:
 
 ```tsx twoslash
-import React from 'react'
+import React from "react";
 // ---cut---
-import { Elysia } from 'elysia'
-import { html, Html } from '@elysiajs/html'
+import { Elysia } from "elysia";
+import { html, Html } from "@elysiajs/html";
 
 new Elysia()
-	.use(html())
-	.get(
-		'/html',
-		() => `
+  .use(html())
+  .get(
+    "/html",
+    () => `
             <html lang='en'>
                 <head>
                     <title>Hello World</title>
@@ -6783,19 +6739,19 @@ new Elysia()
                 <body>
                     <h1>Hello World</h1>
                 </body>
-            </html>`
-	)
-	.get('/jsx', () => (
-		<html lang="en">
-			<head>
-				<title>Hello World</title>
-			</head>
-			<body>
-				<h1>Hello World</h1>
-			</body>
-		</html>
-	))
-	.listen(3000)
+            </html>`,
+  )
+  .get("/jsx", () => (
+    <html lang="en">
+      <head>
+        <title>Hello World</title>
+      </head>
+      <body>
+        <h1>Hello World</h1>
+      </body>
+    </html>
+  ))
+  .listen(3000);
 ```
 
 This plugin will automatically add `Content-Type: text/html; charset=utf8` header to the response, add `<!doctype html>`, and convert it into a Response object.
@@ -6806,49 +6762,49 @@ Elysia HTML is based on [@kitajs/html](https://github.com/kitajs/html) allowing 
 
 Name your file that needs to use JSX to end with affix **"x"**:
 
-* .js -> .jsx
-* .ts -> .tsx
+- .js -> .jsx
+- .ts -> .tsx
 
 To register the TypeScript type, please append the following to **tsconfig.json**:
 
 ```jsonc
 // tsconfig.json
 {
-	"compilerOptions": {
-		"jsx": "react",
-		"jsxFactory": "Html.createElement",
-		"jsxFragmentFactory": "Html.Fragment"
-	}
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "Html.createElement",
+    "jsxFragmentFactory": "Html.Fragment",
+  },
 }
 ```
 
 That's it, now you can use JSX as your template engine:
 
 ```tsx twoslash
-import React from 'react'
+import React from "react";
 // ---cut---
-import { Elysia } from 'elysia'
-import { html, Html } from '@elysiajs/html' // [!code ++]
+import { Elysia } from "elysia";
+import { html, Html } from "@elysiajs/html"; // [!code ++]
 
 new Elysia()
-	.use(html()) // [!code ++]
-	.get('/', () => (
-		<html lang="en">
-			<head>
-				<title>Hello World</title>
-			</head>
-			<body>
-				<h1>Hello World</h1>
-			</body>
-		</html>
-	))
-	.listen(3000)
+  .use(html()) // [!code ++]
+  .get("/", () => (
+    <html lang="en">
+      <head>
+        <title>Hello World</title>
+      </head>
+      <body>
+        <h1>Hello World</h1>
+      </body>
+    </html>
+  ))
+  .listen(3000);
 ```
 
 If the error `Cannot find name 'Html'. Did you mean 'html'?` occurs, this import must be added to the JSX template:
 
 ```tsx
-import { Html } from '@elysiajs/html'
+import { Html } from "@elysiajs/html";
 ```
 
 It is important that it is written in uppercase.
@@ -6860,28 +6816,28 @@ Elysia HTML is based use of the Kita HTML plugin to detect possible XSS attacks 
 You can use a dedicated `safe` attribute to sanitize user value to prevent XSS vulnerability.
 
 ```tsx
-import { Elysia, t } from 'elysia'
-import { html, Html } from '@elysiajs/html'
+import { Elysia, t } from "elysia";
+import { html, Html } from "@elysiajs/html";
 
 new Elysia()
-	.use(html())
-	.post(
-		'/',
-		({ body }) => (
-			<html lang="en">
-				<head>
-					<title>Hello World</title>
-				</head>
-				<body>
-					<h1 safe>{body}</h1>
-				</body>
-			</html>
-		),
-		{
-			body: t.String()
-		}
-	)
-	.listen(3000)
+  .use(html())
+  .post(
+    "/",
+    ({ body }) => (
+      <html lang="en">
+        <head>
+          <title>Hello World</title>
+        </head>
+        <body>
+          <h1 safe>{body}</h1>
+        </body>
+      </html>
+    ),
+    {
+      body: t.String(),
+    },
+  )
+  .listen(3000);
 ```
 
 However, when are building a large-scale app, it's best to have a type reminder to detect possible XSS vulnerabilities in your codebase.
@@ -6897,12 +6853,12 @@ Then appends the following **tsconfig.json**
 ```jsonc
 // tsconfig.json
 {
-	"compilerOptions": {
-		"jsx": "react",
-		"jsxFactory": "Html.createElement",
-		"jsxFragmentFactory": "Html.Fragment",
-		"plugins": [{ "name": "@kitajs/ts-html-plugin" }]
-	}
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "Html.createElement",
+    "jsxFragmentFactory": "Html.Fragment",
+    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
+  },
 }
 ```
 
@@ -6910,22 +6866,22 @@ Then appends the following **tsconfig.json**
 
 ### contentType
 
-* Type: `string`
-* Default: `'text/html; charset=utf8'`
+- Type: `string`
+- Default: `'text/html; charset=utf8'`
 
 The content-type of the response.
 
 ### autoDetect
 
-* Type: `boolean`
-* Default: `true`
+- Type: `boolean`
+- Default: `true`
 
 Whether to automatically detect HTML content and set the content-type.
 
 ### autoDoctype
 
-* Type: `boolean | 'full'`
-* Default: `true`
+- Type: `boolean | 'full'`
+- Default: `true`
 
 Whether to automatically add `<!doctype html>` to a response starting with `<html>`, if not found.
 
@@ -6933,16 +6889,16 @@ Use `full` to also automatically add doctypes on responses returned without this
 
 ```ts
 // without the plugin
-app.get('/', () => '<html></html>')
+app.get("/", () => "<html></html>");
 
 // With the plugin
-app.get('/', ({ html }) => html('<html></html>'))
+app.get("/", ({ html }) => html("<html></html>"));
 ```
 
 ### isHtml
 
-* Type: `(value: string) => boolean`
-* Default: `isHtml` (exported function)
+- Type: `(value: string) => boolean`
+- Default: `isHtml` (exported function)
 
 The function is used to detect if a string is a html or not. Default implementation if length is greater than 7, starts with `<` and ends with `>`.
 
@@ -6951,8 +6907,8 @@ Keep in mind there's no real way to validate HTML, so the default implementation
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/ai-sdk.md'
----
+
+## url: 'https://elysiajs.com/integrations/ai-sdk.md'
 
 # Integration with AI SDK
 
@@ -6963,23 +6919,23 @@ Elysia provides a support for response streaming with ease, allowing you to inte
 Elysia support continous streaming of a `ReadableStream` and `Response` allowing you to return stream directly from the AI SDKs.
 
 ```ts
-import { Elysia } from 'elysia'
-import { streamText } from 'ai'
-import { openai } from '@ai-sdk/openai'
+import { Elysia } from "elysia";
+import { streamText } from "ai";
+import { openai } from "@ai-sdk/openai";
 
-new Elysia().get('/', () => {
-    const stream = streamText({
-        model: openai('gpt-5'),
-        system: 'You are Yae Miko from Genshin Impact',
-        prompt: 'Hi! How are you doing?'
-    })
+new Elysia().get("/", () => {
+  const stream = streamText({
+    model: openai("gpt-5"),
+    system: "You are Yae Miko from Genshin Impact",
+    prompt: "Hi! How are you doing?",
+  });
 
-    // Just return a ReadableStream
-    return stream.textStream // [!code ++]
+  // Just return a ReadableStream
+  return stream.textStream; // [!code ++]
 
-    // UI Message Stream is also supported
-    return stream.toUIMessageStream() // [!code ++]
-})
+  // UI Message Stream is also supported
+  return stream.toUIMessageStream(); // [!code ++]
+});
 ```
 
 Elysia will handle the stream automatically, allowing you to use it in various ways.
@@ -6989,23 +6945,23 @@ Elysia will handle the stream automatically, allowing you to use it in various w
 Elysia also supports Server Sent Event for streaming response by simply wrap a `ReadableStream` with `sse` function.
 
 ```ts
-import { Elysia, sse } from 'elysia' // [!code ++]
-import { streamText } from 'ai'
-import { openai } from '@ai-sdk/openai'
+import { Elysia, sse } from "elysia"; // [!code ++]
+import { streamText } from "ai";
+import { openai } from "@ai-sdk/openai";
 
-new Elysia().get('/', () => {
-    const stream = streamText({
-        model: openai('gpt-5'),
-        system: 'You are Yae Miko from Genshin Impact',
-        prompt: 'Hi! How are you doing?'
-    })
+new Elysia().get("/", () => {
+  const stream = streamText({
+    model: openai("gpt-5"),
+    system: "You are Yae Miko from Genshin Impact",
+    prompt: "Hi! How are you doing?",
+  });
 
-    // Each chunk will be sent as a Server Sent Event
-    return sse(stream.textStream) // [!code ++]
+  // Each chunk will be sent as a Server Sent Event
+  return sse(stream.textStream); // [!code ++]
 
-    // UI Message Stream is also supported
-    return sse(stream.toUIMessageStream()) // [!code ++]
-})
+  // UI Message Stream is also supported
+  return sse(stream.toUIMessageStream()); // [!code ++]
+});
 ```
 
 ## As Response
@@ -7013,22 +6969,22 @@ new Elysia().get('/', () => {
 If you don't need a type-safety of the stream for further usage with [Eden](/eden/overview), you can return the stream directly as a response.
 
 ```ts
-import { Elysia } from 'elysia'
-import { ai } from 'ai'
-import { openai } from '@ai-sdk/openai'
+import { Elysia } from "elysia";
+import { ai } from "ai";
+import { openai } from "@ai-sdk/openai";
 
-new Elysia().get('/', () => {
-    const stream = streamText({
-        model: openai('gpt-5'),
-        system: 'You are Yae Miko from Genshin Impact',
-        prompt: 'Hi! How are you doing?'
-    })
+new Elysia().get("/", () => {
+  const stream = streamText({
+    model: openai("gpt-5"),
+    system: "You are Yae Miko from Genshin Impact",
+    prompt: "Hi! How are you doing?",
+  });
 
-    return stream.toTextStreamResponse() // [!code ++]
+  return stream.toTextStreamResponse(); // [!code ++]
 
-    // UI Message Stream Response will use SSE
-    return stream.toUIMessageStreamResponse() // [!code ++]
-})
+  // UI Message Stream Response will use SSE
+  return stream.toUIMessageStreamResponse(); // [!code ++]
+});
 ```
 
 ## Manual Streaming
@@ -7036,27 +6992,28 @@ new Elysia().get('/', () => {
 If you want to have more control over the streaming, you can use a generator function to yield the chunks manually.
 
 ```ts
-import { Elysia, sse } from 'elysia'
-import { ai } from 'ai'
-import { openai } from '@ai-sdk/openai'
+import { Elysia, sse } from "elysia";
+import { ai } from "ai";
+import { openai } from "@ai-sdk/openai";
 
-new Elysia().get('/', async function* () {
-    const stream = streamText({
-        model: openai('gpt-5'),
-        system: 'You are Yae Miko from Genshin Impact',
-        prompt: 'Hi! How are you doing?'
-    })
+new Elysia().get("/", async function* () {
+  const stream = streamText({
+    model: openai("gpt-5"),
+    system: "You are Yae Miko from Genshin Impact",
+    prompt: "Hi! How are you doing?",
+  });
 
-    for await (const data of stream.textStream) // [!code ++]
-        yield sse({ // [!code ++]
-            data, // [!code ++]
-            event: 'message' // [!code ++]
-        }) // [!code ++]
-
+  for await (const data of stream.textStream) // [!code ++]
     yield sse({
-        event: 'done'
-    })
-})
+      // [!code ++]
+      data, // [!code ++]
+      event: "message", // [!code ++]
+    }); // [!code ++]
+
+  yield sse({
+    event: "done",
+  });
+});
 ```
 
 ## Fetch
@@ -7064,41 +7021,41 @@ new Elysia().get('/', async function* () {
 If AI SDK doesn't support model you're using, you can still use the `fetch` function to make requests to the AI SDKs and stream the response directly.
 
 ```ts
-import { Elysia, fetch } from 'elysia'
+import { Elysia, fetch } from "elysia";
 
-new Elysia().get('/', () => {
-    return fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+new Elysia().get("/", () => {
+  return fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-5",
+      stream: true,
+      messages: [
+        {
+          role: "system",
+          content: "You are Yae Miko from Genshin Impact",
         },
-        body: JSON.stringify({
-            model: 'gpt-5',
-            stream: true,
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are Yae Miko from Genshin Impact'
-                },
-                { role: 'user', content: 'Hi! How are you doing?' }
-            ]
-        })
-    })
-})
+        { role: "user", content: "Hi! How are you doing?" },
+      ],
+    }),
+  });
+});
 ```
 
 Elysia will proxy fetch response with streaming support automatically.
 
-***
+---
 
 For additional information, please refer to [AI SDK documentation](https://ai-sdk.dev/docs/introduction)
 
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/astro.md'
----
+
+## url: 'https://elysiajs.com/integrations/astro.md'
 
 # Integration with Astro
 
@@ -7108,12 +7065,12 @@ With [Astro Endpoint](https://docs.astro.build/en/core-concepts/endpoints/), we 
 
 ```javascript
 // astro.config.mjs
-import { defineConfig } from 'astro/config'
+import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-    output: 'server' // [!code ++]
-})
+  output: "server", // [!code ++]
+});
 ```
 
 2. Create **pages/\[...slugs].ts**
@@ -7122,20 +7079,20 @@ export default defineConfig({
 
 ```typescript
 // pages/[...slugs].ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .get('/api', () => 'hi')
-    .post('/api', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+  .get("/api", () => "hi")
+  .post("/api", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  });
 
-const handle = ({ request }: { request: Request }) => app.handle(request) // [!code ++]
+const handle = ({ request }: { request: Request }) => app.handle(request); // [!code ++]
 
-export const GET = handle // [!code ++]
-export const POST = handle // [!code ++]
+export const GET = handle; // [!code ++]
+export const POST = handle; // [!code ++]
 ```
 
 Elysia will work normally as expected because of WinterCG compliance.
@@ -7158,20 +7115,20 @@ For example, if you place Elysia server in **pages/api/\[...slugs].ts**, you nee
 
 ```typescript
 // pages/api/[...slugs].ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia({ prefix: '/api' }) // [!code ++]
-    .get('/', () => 'hi')
-    .post('/', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+const app = new Elysia({ prefix: "/api" }) // [!code ++]
+  .get("/", () => "hi")
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  });
 
-const handle = ({ request }: { request: Request }) => app.handle(request) // [!code ++]
+const handle = ({ request }: { request: Request }) => app.handle(request); // [!code ++]
 
-export const GET = handle // [!code ++]
-export const POST = handle // [!code ++]
+export const GET = handle; // [!code ++]
+export const POST = handle; // [!code ++]
 ```
 
 This will ensure that Elysia routing will work properly in any location you place it.
@@ -7179,8 +7136,8 @@ This will ensure that Elysia routing will work properly in any location you plac
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/cloudflare-worker.md'
----
+
+## url: 'https://elysiajs.com/integrations/cloudflare-worker.md'
 
 # Cloudflare Worker Experimental
 
@@ -7195,15 +7152,15 @@ wrangler init elysia-on-cloudflare
 2. Then add Cloudflare Adapter to your Elysia app, and make sure to call `.compile()` before exporting the app.
 
 ```ts
-import { Elysia } from 'elysia'
-import { CloudflareAdapter } from 'elysia/adapter/cloudflare-worker' // [!code ++]
+import { Elysia } from "elysia";
+import { CloudflareAdapter } from "elysia/adapter/cloudflare-worker"; // [!code ++]
 
 export default new Elysia({
-	adapter: CloudflareAdapter // [!code ++]
+  adapter: CloudflareAdapter, // [!code ++]
 })
-	.get('/', () => 'Hello Cloudflare Worker!')
-	// This is required to make Elysia work on Cloudflare Worker
-	.compile() // [!code ++]
+  .get("/", () => "Hello Cloudflare Worker!")
+  // This is required to make Elysia work on Cloudflare Worker
+  .compile(); // [!code ++]
 ```
 
 3. Make sure to have `compatibility_date` set to at least `2025-06-01` in your wrangler config
@@ -7212,10 +7169,10 @@ export default new Elysia({
 
 ```jsonc [wrangler.jsonc]
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
- 	"name": "elysia-on-cloudflare",
-	"main": "src/index.ts",
-	"compatibility_date": "2025-06-01" // [!code ++]
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "elysia-on-cloudflare",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-06-01", // [!code ++]
 }
 ```
 
@@ -7247,12 +7204,12 @@ Here are some known limitations of using Elysia on Cloudflare Worker:
 4. You can't inline a value due to 3.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	// This will throw error
-    .get('/', 'Hello Elysia')
-    .listen(3000)
+  // This will throw error
+  .get("/", "Hello Elysia")
+  .listen(3000);
 ```
 
 ## Static File
@@ -7265,11 +7222,11 @@ Add the following to your wrangler config:
 
 ```jsonc [wrangler.jsonc]
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
- 	"name": "elysia-on-cloudflare",
-	"main": "src/index.ts",
-	"compatibility_date": "2025-06-01",
-	"assets": { "directory": "public" } // [!code ++]
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "elysia-on-cloudflare",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-06-01",
+  "assets": { "directory": "public" }, // [!code ++]
 }
 ```
 
@@ -7299,23 +7256,23 @@ For example, if you have a folder structure like this:
 
 Then you should be able to access your static file from the following path:
 
-* **http://localhost:8787/kyuukurarin.mp4**
-* **http://localhost:8787/static/mika.webp**
+- **http://localhost:8787/kyuukurarin.mp4**
+- **http://localhost:8787/static/mika.webp**
 
 ## Binding
 
 You can use a Cloudflare Workers binding by importing env from `cloudflare:workers`.
 
 ```ts
-import { Elysia } from 'elysia'
-import { CloudflareAdapter } from 'elysia/adapter/cloudflare-worker'
-import { env } from 'cloudflare:workers' // [!code ++]
+import { Elysia } from "elysia";
+import { CloudflareAdapter } from "elysia/adapter/cloudflare-worker";
+import { env } from "cloudflare:workers"; // [!code ++]
 
 export default new Elysia({
-	adapter: CloudflareAdapter
+  adapter: CloudflareAdapter,
 })
-	.get('/', () => `Hello ${await env.KV.get('my-key')}`) // [!code ++]
-	.compile()
+  .get("/", () => `Hello ${await env.KV.get("my-key")}`) // [!code ++]
+  .compile();
 ```
 
 See [Cloudflare Workers: Binding](https://developers.cloudflare.com/workers/runtime-apis/bindings/#importing-env-as-a-global) for more information about binding.
@@ -7329,13 +7286,13 @@ This is no longer necessary as [Cloudflare now supports Function compilation dur
 As of Elysia 1.4.7, you can now use Ahead of Time Compilation with Cloudflare Worker, and drop the `aot: false` flag.
 
 ```ts
-import { Elysia } from 'elysia'
-import { CloudflareAdapter } from 'elysia/adapter/cloudflare-worker' // [!code ++]
+import { Elysia } from "elysia";
+import { CloudflareAdapter } from "elysia/adapter/cloudflare-worker"; // [!code ++]
 
 export default new Elysia({
-	aot: false, // [!code --]
-	adapter: CloudflareAdapter // [!code ++]
-})
+  aot: false, // [!code --]
+  adapter: CloudflareAdapter, // [!code ++]
+});
 ```
 
 Otherwise, you can still use `aot: false` if you don't want Ahead of Time Compilation but we recommend you to use it for better performance, and accurate plugin encapsulation.
@@ -7343,8 +7300,8 @@ Otherwise, you can still use `aot: false` if you don't want Ahead of Time Compil
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/deno.md'
----
+
+## url: 'https://elysiajs.com/integrations/deno.md'
 
 # Integration with Deno
 
@@ -7353,13 +7310,11 @@ Elysia is built on top of Web Standard Request/Response, allowing us to run Elys
 To run Elysia on Deno, wrap `Elysia.fetch` in `Deno.serve`
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.get('/', () => 'Hello Elysia')
-	.listen(3000) // [!code --]
+const app = new Elysia().get("/", () => "Hello Elysia").listen(3000); // [!code --]
 
-Deno.serve(app.fetch) // [!code ++]
+Deno.serve(app.fetch); // [!code ++]
 ```
 
 Then you can run the server with `deno serve`:
@@ -7375,15 +7330,15 @@ This is all you need to run Elysia on Deno.
 You can specify the port number in `Deno.serve`.
 
 ```ts
-Deno.serve(app.fetch) // [!code --]
-Deno.serve({ port:8787 }, app.fetch) // [!code ++]
+Deno.serve(app.fetch); // [!code --]
+Deno.serve({ port: 8787 }, app.fetch); // [!code ++]
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/drizzle.md'
----
+
+## url: 'https://elysiajs.com/integrations/drizzle.md'
 
 # Drizzle
 
@@ -7441,7 +7396,7 @@ We may use `overrides` field in `package.json` to pin the version of `@sinclair/
 ```json
 {
   "overrides": {
-  	"@sinclair/typebox": "0.32.4"
+    "@sinclair/typebox": "0.32.4"
   }
 }
 ```
@@ -7453,33 +7408,26 @@ Assuming we have a `user` table in our codebase as follows:
 ::: code-group
 
 ```ts [src/database/schema.ts]
-import {
-    pgTable,
-    varchar,
-    timestamp
-} from 'drizzle-orm/pg-core'
+import { pgTable, varchar, timestamp } from "drizzle-orm/pg-core";
 
-import { createId } from '@paralleldrive/cuid2'
+import { createId } from "@paralleldrive/cuid2";
 
-export const user = pgTable(
-    'user',
-    {
-        id: varchar('id')
-            .$defaultFn(() => createId())
-            .primaryKey(),
-        username: varchar('username').notNull().unique(),
-        password: varchar('password').notNull(),
-        email: varchar('email').notNull().unique(),
-        salt: varchar('salt', { length: 64 }).notNull(),
-        createdAt: timestamp('created_at').defaultNow().notNull(),
-    }
-)
+export const user = pgTable("user", {
+  id: varchar("id")
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  username: varchar("username").notNull().unique(),
+  password: varchar("password").notNull(),
+  email: varchar("email").notNull().unique(),
+  salt: varchar("salt", { length: 64 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
 
 export const table = {
-	user
-} as const
+  user,
+} as const;
 
-export type Table = typeof table
+export type Table = typeof table;
 ```
 
 :::
@@ -7491,24 +7439,24 @@ We may convert the `user` table into TypeBox models by using `drizzle-typebox`:
 ::: code-group
 
 ```ts [src/index.ts]
-import { t } from 'elysia'
-import { createInsertSchema } from 'drizzle-typebox'
-import { table } from './database/schema'
+import { t } from "elysia";
+import { createInsertSchema } from "drizzle-typebox";
+import { table } from "./database/schema";
 
 const _createUser = createInsertSchema(table.user, {
-	// Replace email with Elysia's email type
-	email: t.String({ format: 'email' })
-})
+  // Replace email with Elysia's email type
+  email: t.String({ format: "email" }),
+});
 
-new Elysia()
-	.post('/sign-up', ({ body }) => {
-		// Create a new user
-	}, {
-		body: t.Omit(
-			_createUser,
-			['id', 'salt', 'createdAt']
-		)
-	})
+new Elysia().post(
+  "/sign-up",
+  ({ body }) => {
+    // Create a new user
+  },
+  {
+    body: t.Omit(_createUser, ["id", "salt", "createdAt"]),
+  },
+);
 ```
 
 :::
@@ -7524,28 +7472,25 @@ If we nested a type from drizzle-typebox into Elysia schema, it will cause an in
 To prevent this, we need to **explicitly define a type between `drizzle-typebox` and `Elysia`** schema:
 
 ```ts
-import { t } from 'elysia'
-import { createInsertSchema } from 'drizzle-typebox'
+import { t } from "elysia";
+import { createInsertSchema } from "drizzle-typebox";
 
-import { table } from './database/schema'
+import { table } from "./database/schema";
 
 const _createUser = createInsertSchema(table.user, {
-	email: t.String({ format: 'email' })
-})
+  email: t.String({ format: "email" }),
+});
 
 // ✅ This works, by referencing the type from `drizzle-typebox`
-const createUser = t.Omit(
-	_createUser,
-	['id', 'salt', 'createdAt']
-)
+const createUser = t.Omit(_createUser, ["id", "salt", "createdAt"]);
 
 // ❌ This will cause an infinite loop of type instantiation
 const createUser = t.Omit(
-	createInsertSchema(table.user, {
-		email: t.String({ format: 'email' })
-	}),
-	['id', 'salt', 'createdAt']
-)
+  createInsertSchema(table.user, {
+    email: t.String({ format: "email" }),
+  }),
+  ["id", "salt", "createdAt"],
+);
 ```
 
 Always declare a variable for `drizzle-typebox` and reference it if you want to use Elysia type
@@ -7564,78 +7509,70 @@ We recommend using these utility functions **(copy as-is)** to simplify the proc
  * @see https://elysiajs.com/recipe/drizzle.html#utility
  */
 
-import { Kind, type TObject } from '@sinclair/typebox'
+import { Kind, type TObject } from "@sinclair/typebox";
 import {
-    createInsertSchema,
-    createSelectSchema,
-    BuildSchema,
-} from 'drizzle-typebox'
+  createInsertSchema,
+  createSelectSchema,
+  BuildSchema,
+} from "drizzle-typebox";
 
-import { table } from './schema'
-import type { Table } from 'drizzle-orm'
+import { table } from "./schema";
+import type { Table } from "drizzle-orm";
 
 type Spread<
-    T extends TObject | Table,
-    Mode extends 'select' | 'insert' | undefined,
+  T extends TObject | Table,
+  Mode extends "select" | "insert" | undefined,
 > =
-    T extends TObject<infer Fields>
-        ? {
-              [K in keyof Fields]: Fields[K]
-          }
-        : T extends Table
-          ? Mode extends 'select'
-              ? BuildSchema<
-                    'select',
-                    T['_']['columns'],
-                    undefined
-                >['properties']
-              : Mode extends 'insert'
-                ? BuildSchema<
-                      'insert',
-                      T['_']['columns'],
-                      undefined
-                  >['properties']
-                : {}
+  T extends TObject<infer Fields>
+    ? {
+        [K in keyof Fields]: Fields[K];
+      }
+    : T extends Table
+      ? Mode extends "select"
+        ? BuildSchema<"select", T["_"]["columns"], undefined>["properties"]
+        : Mode extends "insert"
+          ? BuildSchema<"insert", T["_"]["columns"], undefined>["properties"]
           : {}
+      : {};
 
 /**
  * Spread a Drizzle schema into a plain object
  */
 export const spread = <
-    T extends TObject | Table,
-    Mode extends 'select' | 'insert' | undefined,
+  T extends TObject | Table,
+  Mode extends "select" | "insert" | undefined,
 >(
-    schema: T,
-    mode?: Mode,
+  schema: T,
+  mode?: Mode,
 ): Spread<T, Mode> => {
-    const newSchema: Record<string, unknown> = {}
-    let table
+  const newSchema: Record<string, unknown> = {};
+  let table;
 
-    switch (mode) {
-        case 'insert':
-        case 'select':
-            if (Kind in schema) {
-                table = schema
-                break
-            }
+  switch (mode) {
+    case "insert":
+    case "select":
+      if (Kind in schema) {
+        table = schema;
+        break;
+      }
 
-            table =
-                mode === 'insert'
-                    ? createInsertSchema(schema)
-                    : createSelectSchema(schema)
+      table =
+        mode === "insert"
+          ? createInsertSchema(schema)
+          : createSelectSchema(schema);
 
-            break
+      break;
 
-        default:
-            if (!(Kind in schema)) throw new Error('Expect a schema')
-            table = schema
-    }
+    default:
+      if (!(Kind in schema)) throw new Error("Expect a schema");
+      table = schema;
+  }
 
-    for (const key of Object.keys(table.properties))
-        newSchema[key] = table.properties[key]
+  for (const key of Object.keys(table.properties))
+    newSchema[key] = table.properties[key];
 
-    return newSchema as any
-}
+  return newSchema as any;
+};
 
 /**
  * Spread a Drizzle Table into a plain object
@@ -7645,21 +7582,21 @@ export const spread = <
  * If `mode` is undefined, the schema will be spread as is, models will need to be refined manually
  */
 export const spreads = <
-    T extends Record<string, TObject | Table>,
-    Mode extends 'select' | 'insert' | undefined,
+  T extends Record<string, TObject | Table>,
+  Mode extends "select" | "insert" | undefined,
 >(
-    models: T,
-    mode?: Mode,
+  models: T,
+  mode?: Mode,
 ): {
-    [K in keyof T]: Spread<T[K], Mode>
+  [K in keyof T]: Spread<T[K], Mode>;
 } => {
-    const newSchema: Record<string, unknown> = {}
-    const keys = Object.keys(models)
+  const newSchema: Record<string, unknown> = {};
+  const keys = Object.keys(models);
 
-    for (const key of keys) newSchema[key] = spread(models[key], mode)
+  for (const key of keys) newSchema[key] = spread(models[key], mode);
 
-    return newSchema as any
-}
+  return newSchema as any;
+};
 ```
 
 :::
@@ -7668,21 +7605,18 @@ This utility function will convert Drizzle schema into a plain object, which can
 
 ```ts
 // ✅ Using spread utility function
-const user = spread(table.user, 'insert')
+const user = spread(table.user, "insert");
 
 const createUser = t.Object({
-	id: user.id, // { type: 'string' }
-	username: user.username, // { type: 'string' }
-	password: user.password // { type: 'string' }
-})
+  id: user.id, // { type: 'string' }
+  username: user.username, // { type: 'string' }
+  password: user.password, // { type: 'string' }
+});
 
 // ⚠️ Using t.Pick
-const _createUser = createInsertSchema(table.user)
+const _createUser = createInsertSchema(table.user);
 
-const createUser = t.Pick(
-	_createUser,
-	['id', 'username', 'password']
-)
+const createUser = t.Pick(_createUser, ["id", "username", "password"]);
 ```
 
 ### Table Singleton
@@ -7692,17 +7626,23 @@ We recommend using a singleton pattern to store the table schema, this will allo
 ::: code-group
 
 ```ts [src/database/model.ts]
-import { table } from './schema'
-import { spreads } from './utils'
+import { table } from "./schema";
+import { spreads } from "./utils";
 
 export const db = {
-	insert: spreads({
-		user: table.user,
-	}, 'insert'),
-	select: spreads({
-		user: table.user,
-	}, 'select')
-} as const
+  insert: spreads(
+    {
+      user: table.user,
+    },
+    "insert",
+  ),
+  select: spreads(
+    {
+      user: table.user,
+    },
+    "select",
+  ),
+} as const;
 ```
 
 :::
@@ -7712,21 +7652,24 @@ This will allow us to access the table schema from anywhere in the codebase:
 ::: code-group
 
 ```ts [src/index.ts]
-import { Elysia, t } from 'elysia'
-import { db } from './database/model'
+import { Elysia, t } from "elysia";
+import { db } from "./database/model";
 
-const { user } = db.insert
+const { user } = db.insert;
 
-new Elysia()
-	.post('/sign-up', ({ body }) => {
-		// Create a new user
-	}, {
-		body: t.Object({
-			id: user.username,
-			username: user.username,
-			password: user.password
-		})
-	})
+new Elysia().post(
+  "/sign-up",
+  ({ body }) => {
+    // Create a new user
+  },
+  {
+    body: t.Object({
+      id: user.username,
+      username: user.username,
+      password: user.password,
+    }),
+  },
+);
 ```
 
 :::
@@ -7738,24 +7681,30 @@ If type refinement is needed, you may use `createInsertSchema` and `createSelect
 ::: code-group
 
 ```ts [src/database/model.ts]
-import { t } from 'elysia'
-import { createInsertSchema, createSelectSchema } from 'drizzle-typebox'
+import { t } from "elysia";
+import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 
-import { table } from './schema'
-import { spreads } from './utils'
+import { table } from "./schema";
+import { spreads } from "./utils";
 
 export const db = {
-	insert: spreads({
-		user: createInsertSchema(table.user, {
-			email: t.String({ format: 'email' })
-		}),
-	}, 'insert'),
-	select: spreads({
-		user: createSelectSchema(table.user, {
-			email: t.String({ format: 'email' })
-		})
-	}, 'select')
-} as const
+  insert: spreads(
+    {
+      user: createInsertSchema(table.user, {
+        email: t.String({ format: "email" }),
+      }),
+    },
+    "insert",
+  ),
+  select: spreads(
+    {
+      user: createSelectSchema(table.user, {
+        email: t.String({ format: "email" }),
+      }),
+    },
+    "select",
+  ),
+} as const;
 ```
 
 :::
@@ -7764,15 +7713,15 @@ In the code above, we refine a `user.email` schema to include a `format` propert
 
 The `spread` utility function will skip a refined schema, so you can use it as is.
 
-***
+---
 
 For more information, please refer to the [Drizzle ORM](https://orm.drizzle.team) and [Drizzle TypeBox](https://orm.drizzle.team/docs/typebox) documentation.
 
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/expo.md'
----
+
+## url: 'https://elysiajs.com/integrations/expo.md'
 
 # Integration with Expo
 
@@ -7785,18 +7734,16 @@ Starting from Expo SDK 50, and App Router v3, Expo allows us to create API route
 ::: code-group
 
 ```typescript [app/[...slugs]+api.ts]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-    .get('/', 'hello Expo')
-    .post('/', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+const app = new Elysia().get("/", "hello Expo").post("/", ({ body }) => body, {
+  body: t.Object({
+    name: t.String(),
+  }),
+});
 
-export const GET = app.fetch // [!code ++]
-export const POST = app.fetch // [!code ++]
+export const GET = app.fetch; // [!code ++]
+export const POST = app.fetch; // [!code ++]
 ```
 
 :::
@@ -7812,18 +7759,18 @@ For example, if you place Elysia server in **app/api/\[...slugs]+api.ts**, you n
 ::: code-group
 
 ```typescript [app/api/[...slugs]+api.ts]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia({ prefix: '/api' }) // [!code ++]
-    .get('/', 'Hello Expo')
-    .post('/', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+const app = new Elysia({ prefix: "/api" }) // [!code ++]
+  .get("/", "Hello Expo")
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  });
 
-export const GET = app.fetch
-export const POST = app.fetch
+export const GET = app.fetch;
+export const POST = app.fetch;
 ```
 
 :::
@@ -7839,24 +7786,20 @@ We can add [Eden](/eden/overview) for **end-to-end type safety** similar to tRPC
 ::: code-group
 
 ```typescript [app/[...slugs]+api.ts]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.get('/', 'Hello Nextjs')
-	.post(
-		'/user',
-		({ body }) => body,
-		{
-			body: treaty.schema('User', {
-				name: 'string'
-			})
-		}
-	)
+  .get("/", "Hello Nextjs")
+  .post("/user", ({ body }) => body, {
+    body: treaty.schema("User", {
+      name: "string",
+    }),
+  });
 
-export type app = typeof app // [!code ++]
+export type app = typeof app; // [!code ++]
 
-export const GET = app.fetch
-export const POST = app.fetch
+export const GET = app.fetch;
+export const POST = app.fetch;
 ```
 
 :::
@@ -7866,10 +7809,10 @@ export const POST = app.fetch
 ::: code-group
 
 ```typescript [lib/eden.ts]
-import { treaty } from '@elysiajs/eden'
-import type { app } from '../app/[...slugs]+api'
+import { treaty } from "@elysiajs/eden";
+import type { app } from "../app/[...slugs]+api";
 
-export const api = treaty<app>('localhost:3000/api')
+export const api = treaty<app>("localhost:3000/api");
 ```
 
 :::
@@ -7879,12 +7822,12 @@ export const api = treaty<app>('localhost:3000/api')
 ::: code-group
 
 ```tsx [app/page.tsx]
-import { api } from '../lib/eden'
+import { api } from "../lib/eden";
 
 export default async function Page() {
-	const message = await api.get()
+  const message = await api.get();
 
-	return <h1>Hello, {message}</h1>
+  return <h1>Hello, {message}</h1>;
 }
 ```
 
@@ -7904,15 +7847,15 @@ You may use the Expo function adapter provided by Expo to deploy your Edge Funct
 
 Currently Expo support the following adapter:
 
-* [Express](https://docs.expo.dev/router/reference/api-routes/#express)
-* [Netlify](https://docs.expo.dev/router/reference/api-routes/#netlify)
-* [Vercel](https://docs.expo.dev/router/reference/api-routes/#vercel)
+- [Express](https://docs.expo.dev/router/reference/api-routes/#express)
+- [Netlify](https://docs.expo.dev/router/reference/api-routes/#netlify)
+- [Vercel](https://docs.expo.dev/router/reference/api-routes/#vercel)
 
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/netlify.md'
----
+
+## url: 'https://elysiajs.com/integrations/netlify.md'
 
 # Integration with Netlify Edge Function
 
@@ -7925,12 +7868,12 @@ To create a function at **/hello**, you would need to create file at `netlify/ed
 ::: code-group
 
 ```typescript [netlify/edge-functions/hello.ts]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-export const config = { path: '/hello' } // [!code ++]
+export const config = { path: "/hello" }; // [!code ++]
 
-export default new Elysia({ prefix: '/hello' }) // [!code ++]
-	.get('/', () => 'Hello Elysia')
+export default new Elysia({ prefix: "/hello" }) // [!code ++]
+  .get("/", () => "Hello Elysia");
 ```
 
 :::
@@ -7956,8 +7899,8 @@ For an additional information, please refers to [Netlify Edge Function documenta
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/nextjs.md'
----
+
+## url: 'https://elysiajs.com/integrations/nextjs.md'
 
 # Integration with Next.js
 
@@ -7970,18 +7913,18 @@ With Next.js App Router, we can run Elysia on Next.js routes.
 ::: code-group
 
 ```typescript [app/api/[[...slugs]]/route.ts]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia({ prefix: '/api' })
-    .get('/', 'Hello Nextjs')
-    .post('/', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+const app = new Elysia({ prefix: "/api" })
+  .get("/", "Hello Nextjs")
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  });
 
-export const GET = app.fetch // [!code ++]
-export const POST = app.fetch // [!code ++]
+export const GET = app.fetch; // [!code ++]
+export const POST = app.fetch; // [!code ++]
 ```
 
 :::
@@ -8001,18 +7944,18 @@ For example, if you place Elysia server in **app/user/\[\[...slugs]]/route.ts**,
 ::: code-group
 
 ```typescript [app/user/[[...slugs]]/route.ts]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia({ prefix: '/user' }) // [!code ++]
-	.get('/', 'Hello Nextjs')
-    .post('/', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+const app = new Elysia({ prefix: "/user" }) // [!code ++]
+  .get("/", "Hello Nextjs")
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  });
 
-export const GET = app.fetch
-export const POST = app.fetch
+export const GET = app.fetch;
+export const POST = app.fetch;
 ```
 
 :::
@@ -8035,22 +7978,18 @@ To start, we need to do the following steps:
 ::: code-group
 
 ```typescript [app/api/[[...slugs]]/route.ts]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-export const app = new Elysia({ prefix: '/api' }) // [!code ++]
-	.get('/', 'Hello Nextjs')
-	.post(
-		'/user',
-		({ body }) => body,
-		{
-			body: treaty.schema('User', {
-				name: 'string'
-			})
-		}
-	)
+export const app = new Elysia({ prefix: "/api" }) // [!code ++]
+  .get("/", "Hello Nextjs")
+  .post("/user", ({ body }) => body, {
+    body: treaty.schema("User", {
+      name: "string",
+    }),
+  });
 
-export const GET = app.fetch
-export const POST = app.fetch
+export const GET = app.fetch;
+export const POST = app.fetch;
 ```
 
 :::
@@ -8060,14 +7999,14 @@ export const POST = app.fetch
 ::: code-group
 
 ```typescript [lib/eden.ts]
-import { treaty } from '@elysiajs/eden'
-import type { app } from '../app/api/[[...slugs]]/route'
+import { treaty } from "@elysiajs/eden";
+import type { app } from "../app/api/[[...slugs]]/route";
 
 // .api to enter /api prefix
 export const api =
-  typeof process !== 'undefined'
+  typeof process !== "undefined"
     ? treaty(app).api
-    : treaty<typeof app>('localhost:3000').api
+    : treaty<typeof app>("localhost:3000").api;
 ```
 
 :::
@@ -8077,12 +8016,12 @@ export const api =
 ::: code-group
 
 ```tsx [app/page.tsx]
-import { api } from '../lib/eden'
+import { api } from "../lib/eden";
 
 export default async function Page() {
-	const message = await api.get()
+  const message = await api.get();
 
-	return <h1>Hello, {message}</h1>
+  return <h1>Hello, {message}</h1>;
 }
 ```
 
@@ -8095,8 +8034,8 @@ Please refer to [Next.js Route Handlers](https://nextjs.org/docs/app/building-yo
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/node.md'
----
+
+## url: 'https://elysiajs.com/integrations/node.md'
 
 # Integration with Node.js
 
@@ -8127,12 +8066,12 @@ yarn add elysia @elysiajs/node
 Then apply node adapter to your main Elysia instance.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { node } from '@elysiajs/node' // [!code ++]
+import { Elysia } from "elysia";
+import { node } from "@elysiajs/node"; // [!code ++]
 
 const app = new Elysia({ adapter: node() }) // [!code ++]
-	.get('/', () => 'Hello Elysia')
-	.listen(3000)
+  .get("/", () => "Hello Elysia")
+  .listen(3000);
 ```
 
 This is all you need to run Elysia on Node.js.
@@ -8167,19 +8106,19 @@ Then open your `package.json` file and add the following scripts:
 
 ```json
 {
-   	"scripts": {
-  		"dev": "tsx watch src/index.ts",
-    	"build": "tsc src/index.ts --outDir dist",
-  		"start": "NODE_ENV=production node dist/index.js"
-   	}
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc src/index.ts --outDir dist",
+    "start": "NODE_ENV=production node dist/index.js"
+  }
 }
 ```
 
 These scripts refer to the different stages of developing an application:
 
-* **dev** - Start Elysia in development mode with auto-reload on code change.
-* **build** - Build the application for production usage.
-* **start** - Start an Elysia production server.
+- **dev** - Start Elysia in development mode with auto-reload on code change.
+- **build** - Build the application for production usage.
+- **start** - Start an Elysia production server.
 
 Make sure to create `tsconfig.json`
 
@@ -8191,9 +8130,9 @@ Don't forget to update `tsconfig.json` to include `compilerOptions.strict` to `t
 
 ```json
 {
-   	"compilerOptions": {
-  		"strict": true
-   	}
+  "compilerOptions": {
+    "strict": true
+  }
 }
 ```
 
@@ -8202,8 +8141,8 @@ This will give the hot reload, JSX support to run Elysia with the similar experi
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/nuxt.md'
----
+
+## url: 'https://elysiajs.com/integrations/nuxt.md'
 
 # Integration with Nuxt
 
@@ -8220,38 +8159,39 @@ bun add -d nuxt-elysia
 
 ```ts
 export default defineNuxtConfig({
-    modules: [ // [!code ++]
-        'nuxt-elysia' // [!code ++]
-    ] // [!code ++]
-})
+  modules: [
+    // [!code ++]
+    "nuxt-elysia", // [!code ++]
+  ], // [!code ++]
+});
 ```
 
 3. Create `api.ts` in the project root:
 
 ```typescript [api.ts]
-export default () => new Elysia() // [!code ++]
-  .get('/hello', () => ({ message: 'Hello world!' })) // [!code ++]
+export default () =>
+  new Elysia() // [!code ++]
+    .get("/hello", () => ({ message: "Hello world!" })); // [!code ++]
 ```
 
 4. Use Eden Treaty in your Nuxt app:
 
 ```vue
 <template>
-    <div>
-        <p>{{ data.message }}</p>
-    </div>
+  <div>
+    <p>{{ data.message }}</p>
+  </div>
 </template>
 <script setup lang="ts">
-const { $api } = useNuxtApp()
+const { $api } = useNuxtApp();
 
 const { data } = await useAsyncData(async () => {
-    const { data, error } = await $api.hello.get()
+  const { data, error } = await $api.hello.get();
 
-    if (error)
-        throw new Error('Failed to call API')
+  if (error) throw new Error("Failed to call API");
 
-    return data
-})
+  return data;
+});
 </script>
 ```
 
@@ -8263,10 +8203,10 @@ By default, Elysia will be mounted on **/\_api** but we can customize it with `n
 
 ```ts
 export default defineNuxtConfig({
-	nuxtElysia: {
-		path: '/api' // [!code ++]
-	}
-})
+  nuxtElysia: {
+    path: "/api", // [!code ++]
+  },
+});
 ```
 
 This will mount Elysia on **/api** instead of **/\_api**.
@@ -8276,8 +8216,8 @@ For more configuration, please refer to [nuxt-elysia](https://github.com/tkesgar
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/prisma.md'
----
+
+## url: 'https://elysiajs.com/integrations/prisma.md'
 
 # Prisma
 
@@ -8375,8 +8315,8 @@ Each model will have its own file, and the models will be named based on the Pri
 
 For example:
 
-* `User` model will be generated to `generated/prismabox/User.ts`
-* `Post` model will be generated to `generated/prismabox/Post.ts`
+- `User` model will be generated to `generated/prismabox/User.ts`
+- `Post` model will be generated to `generated/prismabox/Post.ts`
 
 ## Using generated models
 
@@ -8385,63 +8325,63 @@ Then we can import the generated models in our Elysia application:
 ::: code-group
 
 ```ts [src/index.ts]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-import { PrismaClient } from '../generated/prisma' // [!code ++]
-import { UserPlain, UserPlainInputCreate } from '../generated/prismabox/User' // [!code ++]
+import { PrismaClient } from "../generated/prisma"; // [!code ++]
+import { UserPlain, UserPlainInputCreate } from "../generated/prismabox/User"; // [!code ++]
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const app = new Elysia()
-    .put(
-        '/',
-        async ({ body }) =>
-            prisma.user.create({
-                data: body
-            }),
-        {
-            body: UserPlainInputCreate, // [!code ++]
-            response: UserPlain // [!code ++]
-        }
-    )
-    .get(
-        '/id/:id',
-        async ({ params: { id }, status }) => {
-            const user = await prisma.user.findUnique({
-                where: { id }
-            })
+  .put(
+    "/",
+    async ({ body }) =>
+      prisma.user.create({
+        data: body,
+      }),
+    {
+      body: UserPlainInputCreate, // [!code ++]
+      response: UserPlain, // [!code ++]
+    },
+  )
+  .get(
+    "/id/:id",
+    async ({ params: { id }, status }) => {
+      const user = await prisma.user.findUnique({
+        where: { id },
+      });
 
-            if (!user) return status(404, 'User not found')
+      if (!user) return status(404, "User not found");
 
-            return user
-        },
-        {
-            response: {
-                200: UserPlain, // [!code ++]
-                404: t.String() // [!code ++]
-            }
-        }
-    )
-    .listen(3000)
+      return user;
+    },
+    {
+      response: {
+        200: UserPlain, // [!code ++]
+        404: t.String(), // [!code ++]
+      },
+    },
+  )
+  .listen(3000);
 
 console.log(
-    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-)
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
 ```
 
 :::
 
 This allows us to reuse the database schema in Elysia validation models.
 
-***
+---
 
 For more information, please refer to the [Prisma](https://prisma.io), and [Prismabox](https://github.com/m1212e/prismabox) documentation.
 
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/sveltekit.md'
----
+
+## url: 'https://elysiajs.com/integrations/sveltekit.md'
 
 # Integration with SvelteKit
 
@@ -8453,21 +8393,21 @@ With SvelteKit, you can run Elysia on server routes.
 
 ```typescript
 // src/routes/[...slugs]/+server.ts
-import { Elysia, t } from 'elysia';
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .get('/', 'hello SvelteKit')
-    .post('/', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+  .get("/", "hello SvelteKit")
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  });
 
 interface WithRequest {
-	request: Request
+  request: Request;
 }
 
-export const fallback = ({ request }: WithRequest) => app.handle(request) // [!code ++]
+export const fallback = ({ request }: WithRequest) => app.handle(request); // [!code ++]
 ```
 
 You can treat the Elysia server as a normal SvelteKit server route.
@@ -8480,19 +8420,19 @@ For example, if you place Elysia server in **src/routes/api/\[...slugs]/+server.
 
 ```typescript twoslash
 // src/routes/api/[...slugs]/+server.ts
-import { Elysia, t } from 'elysia';
+import { Elysia, t } from "elysia";
 
-const app = new Elysia({ prefix: '/api' }) // [!code ++]
-    .get('/', () => 'hi')
-    .post('/', ({ body }) => body, {
-        body: t.Object({
-            name: t.String()
-        })
-    })
+const app = new Elysia({ prefix: "/api" }) // [!code ++]
+  .get("/", () => "hi")
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  });
 
-type RequestHandler = (v: { request: Request }) => Response | Promise<Response>
+type RequestHandler = (v: { request: Request }) => Response | Promise<Response>;
 
-export const fallback: RequestHandler = ({ request }) => app.handle(request)
+export const fallback: RequestHandler = ({ request }) => app.handle(request);
 ```
 
 This will ensure that Elysia routing will work properly in any location you place it.
@@ -8502,8 +8442,8 @@ Please refer to [SvelteKit Routing](https://kit.svelte.dev/docs/routing#server) 
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/tanstack-start.md'
----
+
+## url: 'https://elysiajs.com/integrations/tanstack-start.md'
 
 # Integration with Tanstack Start
 
@@ -8516,25 +8456,25 @@ Elysia can runs inside Tanstack Start server routes.
 ::: code-group
 
 ```typescript [src/routes/api.$.ts]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-import { createFileRoute } from '@tanstack/react-router'
-import { createIsomorphicFn } from '@tanstack/react-start'
+import { createFileRoute } from "@tanstack/react-router";
+import { createIsomorphicFn } from "@tanstack/react-start";
 
 const app = new Elysia({
-	prefix: '/api' // [!code ++]
-}).get('/', 'Hello Elysia!')
+  prefix: "/api", // [!code ++]
+}).get("/", "Hello Elysia!");
 
-const handle = ({ request }: { request: Request }) => app.fetch(request) // [!code ++]
+const handle = ({ request }: { request: Request }) => app.fetch(request); // [!code ++]
 
-export const Route = createFileRoute('/api/$')({
-	server: {
-		handlers: {
-			GET: handle, // [!code ++]
-			POST: handle // [!code ++]
-		}
-	}
-})
+export const Route = createFileRoute("/api/$")({
+  server: {
+    handlers: {
+      GET: handle, // [!code ++]
+      POST: handle, // [!code ++]
+    },
+  },
+});
 ```
 
 :::
@@ -8550,30 +8490,30 @@ We can add [Eden](/eden/overview.html) for **end-to-end type safety** similar to
 ::: code-group
 
 ```typescript [src/routes/api.$.ts]
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden' // [!code ++]
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden"; // [!code ++]
 
-import { createFileRoute } from '@tanstack/react-router'
-import { createIsomorphicFn } from '@tanstack/react-start'
+import { createFileRoute } from "@tanstack/react-router";
+import { createIsomorphicFn } from "@tanstack/react-start";
 
 const app = new Elysia({
-	prefix: '/api'
-}).get('/', 'Hello Elysia!')
+  prefix: "/api",
+}).get("/", "Hello Elysia!");
 
-const handle = ({ request }: { request: Request }) => app.fetch(request)
+const handle = ({ request }: { request: Request }) => app.fetch(request);
 
-export const Route = createFileRoute('/api/$')({
-	server: {
-		handlers: {
-			GET: handle,
-			POST: handle
-		}
-	}
-})
+export const Route = createFileRoute("/api/$")({
+  server: {
+    handlers: {
+      GET: handle,
+      POST: handle,
+    },
+  },
+});
 
 export const getTreaty = createIsomorphicFn() // [!code ++]
-	.server(() => treaty(app).api) // [!code ++]
-	.client(() => treaty<typeof app>('localhost:3000').api) // [!code ++]
+  .server(() => treaty(app).api) // [!code ++]
+  .client(() => treaty<typeof app>("localhost:3000").api); // [!code ++]
 ```
 
 :::
@@ -8592,19 +8532,22 @@ Tanstack Start support **Loader** to fetch data before rendering the component.
 ::: code-group
 
 ```tsx [src/routes/index.tsx]
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-import { getTreaty } from './api.$' // [!code ++]
+import { getTreaty } from "./api.$"; // [!code ++]
 
-export const Route = createFileRoute('/a')({
-	component: App,
-	loader: () => getTreaty().get().then((res) => res.data) // [!code ++]
-})
+export const Route = createFileRoute("/a")({
+  component: App,
+  loader: () =>
+    getTreaty()
+      .get()
+      .then((res) => res.data), // [!code ++]
+});
 
 function App() {
-	const data = Route.useLoaderData() // [!code ++]
+  const data = Route.useLoaderData(); // [!code ++]
 
-	return data
+  return data;
 }
 ```
 
@@ -8621,22 +8564,23 @@ We can also use React Query to interact with Elysia server on client.
 ::: code-group
 
 ```tsx [src/routes/index.tsx]
-import { createFileRoute } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 
-import { getTreaty } from './api.$' // [!code ++]
+import { getTreaty } from "./api.$"; // [!code ++]
 
-export const Route = createFileRoute('/a')({
-	component: App
-})
+export const Route = createFileRoute("/a")({
+  component: App,
+});
 
 function App() {
-	const { data: response } = useQuery({ // [!code ++]
-		queryKey: ['get'], // [!code ++]
-		queryFn: () => getTreaty().get() // [!code ++]
-	}) // [!code ++]
+  const { data: response } = useQuery({
+    // [!code ++]
+    queryKey: ["get"], // [!code ++]
+    queryFn: () => getTreaty().get(), // [!code ++]
+  }); // [!code ++]
 
-	return response?.data
+  return response?.data;
 }
 ```
 
@@ -8644,15 +8588,15 @@ function App() {
 
 This can works with any React Query features like caching, pagination, infinite query, etc.
 
-***
+---
 
 Please visit [Tanstack Start Documentation](https://tanstack.com/start) for more information about Tanstack Start.
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial.md'
----
+
+## url: 'https://elysiajs.com/tutorial.md'
 
 # Welcome to Elysia
 
@@ -8660,7 +8604,7 @@ It's great to have you here! This playground is will help you get started with E
 
 Unlike traditional backend framework, **Elysia can also run in a browser** as well! Although it doesn't support all features, it's a perfect environment for learning and experimentation.
 
-You can check out the API docs by clicking  on the left sidebar.
+You can check out the API docs by clicking on the left sidebar.
 
 ## What is Elysia
 
@@ -8698,12 +8642,12 @@ Feels free to look around the code editor and preview section to get familiar wi
 You can change the response by changing the content inside the `.get` method from `'Hello World!'` to `'Hello Elysia!'`.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', 'Hello World!') // [!code --]
-	.get('/', 'Hello Elysia!') // [!code ++]
-	.listen(3000)
+  .get("/", "Hello World!") // [!code --]
+  .get("/", "Hello Elysia!") // [!code ++]
+  .listen(3000);
 ```
 
 This would make Elysia response with `"Hello Elysia!"` when you access `/`.
@@ -8711,8 +8655,8 @@ This would make Elysia response with `"Hello Elysia!"` when you access `/`.
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/jwt.md'
----
+
+## url: 'https://elysiajs.com/plugins/jwt.md'
 
 # JWT Plugin
 
@@ -8729,62 +8673,60 @@ Then use it:
 ::: code-group
 
 ```typescript [cookie]
-import { Elysia } from 'elysia'
-import { jwt } from '@elysiajs/jwt'
+import { Elysia } from "elysia";
+import { jwt } from "@elysiajs/jwt";
 
 const app = new Elysia()
-    .use(
-        jwt({
-            name: 'jwt',
-            secret: 'Fischl von Luftschloss Narfidort'
-        })
-    )
-    .get('/sign/:name', async ({ jwt, params: { name }, cookie: { auth } }) => {
-    	const value = await jwt.sign({ name })
+  .use(
+    jwt({
+      name: "jwt",
+      secret: "Fischl von Luftschloss Narfidort",
+    }),
+  )
+  .get("/sign/:name", async ({ jwt, params: { name }, cookie: { auth } }) => {
+    const value = await jwt.sign({ name });
 
-        auth.set({
-            value,
-            httpOnly: true,
-            maxAge: 7 * 86400,
-            path: '/profile',
-        })
+    auth.set({
+      value,
+      httpOnly: true,
+      maxAge: 7 * 86400,
+      path: "/profile",
+    });
 
-        return `Sign in as ${value}`
-    })
-    .get('/profile', async ({ jwt, status, cookie: { auth } }) => {
-        const profile = await jwt.verify(auth.value)
+    return `Sign in as ${value}`;
+  })
+  .get("/profile", async ({ jwt, status, cookie: { auth } }) => {
+    const profile = await jwt.verify(auth.value);
 
-        if (!profile)
-            return status(401, 'Unauthorized')
+    if (!profile) return status(401, "Unauthorized");
 
-        return `Hello ${profile.name}`
-    })
-    .listen(3000)
+    return `Hello ${profile.name}`;
+  })
+  .listen(3000);
 ```
 
 ```typescript [headers]
-import { Elysia } from 'elysia'
-import { jwt } from '@elysiajs/jwt'
+import { Elysia } from "elysia";
+import { jwt } from "@elysiajs/jwt";
 
 const app = new Elysia()
-    .use(
-        jwt({
-            name: 'jwt',
-            secret: 'Fischl von Luftschloss Narfidort'
-        })
-    )
-    .get('/sign/:name', ({ jwt, params: { name } }) => {
-    	return jwt.sign({ name })
-    })
-    .get('/profile', async ({ jwt, error, headers: { authorization } }) => {
-        const profile = await jwt.verify(authorization)
+  .use(
+    jwt({
+      name: "jwt",
+      secret: "Fischl von Luftschloss Narfidort",
+    }),
+  )
+  .get("/sign/:name", ({ jwt, params: { name } }) => {
+    return jwt.sign({ name });
+  })
+  .get("/profile", async ({ jwt, error, headers: { authorization } }) => {
+    const profile = await jwt.verify(authorization);
 
-        if (!profile)
-            return status(401, 'Unauthorized')
+    if (!profile) return status(401, "Unauthorized");
 
-        return `Hello ${profile.name}`
-    })
-    .listen(3000)
+    return `Hello ${profile.name}`;
+  })
+  .listen(3000);
 ```
 
 :::
@@ -8803,15 +8745,15 @@ For example, `jwt` function will be registered with a custom name.
 
 ```typescript
 app
-    .use(
-        jwt({
-            name: 'myJWTNamespace',
-            secret: process.env.JWT_SECRETS!
-        })
-    )
-    .get('/sign/:name', ({ myJWTNamespace, params }) => {
-        return myJWTNamespace.sign(params)
-    })
+  .use(
+    jwt({
+      name: "myJWTNamespace",
+      secret: process.env.JWT_SECRETS!,
+    }),
+  )
+  .get("/sign/:name", ({ myJWTNamespace, params }) => {
+    return myJWTNamespace.sign(params);
+  });
 ```
 
 Because some might need to use multiple `jwt` with different configs in a single server, explicitly registering the JWT function with a different name is needed.
@@ -8824,7 +8766,7 @@ The private key to sign JWT payload with.
 
 Type strict validation for JWT payload.
 
-***
+---
 
 Below is a config that extends from [cookie](https://npmjs.com/package/cookie)
 
@@ -8964,14 +8906,14 @@ By default, the config is passed to `setCookie` and inherits its value.
 
 ```typescript
 const app = new Elysia()
-    .use(
-        jwt({
-            name: 'jwt',
-            secret: 'kunikuzushi',
-            exp: '7d'
-        })
-    )
-    .get('/sign/:name', async ({ jwt, params }) => jwt.sign(params))
+  .use(
+    jwt({
+      name: "jwt",
+      secret: "kunikuzushi",
+      exp: "7d",
+    }),
+  )
+  .get("/sign/:name", async ({ jwt, params }) => jwt.sign(params));
 ```
 
 This will sign JWT with an expiration date of the next 7 days.
@@ -8979,8 +8921,8 @@ This will sign JWT with an expiration date of the next 7 days.
 ---
 
 ---
-url: 'https://elysiajs.com/key-concept.md'
----
+
+## url: 'https://elysiajs.com/key-concept.md'
 
 # Key Concept&#x20;
 
@@ -8995,18 +8937,18 @@ Elysia lifecycle methods are **encapsulated** to its own instance only.
 Which means if you create a new instance, it will not share the lifecycle methods with others.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const profile = new Elysia()
-	.onBeforeHandle(({ cookie }) => {
-		throwIfNotSignIn(cookie)
-	})
-	.get('/profile', () => 'Hi there!')
+  .onBeforeHandle(({ cookie }) => {
+    throwIfNotSignIn(cookie);
+  })
+  .get("/profile", () => "Hi there!");
 
 const app = new Elysia()
-	.use(profile)
-	// ⚠️ This will NOT have sign in check
-	.patch('/rename', ({ body }) => updateProfile(body))
+  .use(profile)
+  // ⚠️ This will NOT have sign in check
+  .patch("/rename", ({ body }) => updateProfile(body));
 ```
 
 In this example, the `isSignIn` check will only apply to `profile` but not `app`.
@@ -9018,21 +8960,21 @@ In this example, the `isSignIn` check will only apply to `profile` but not `app`
 To **"export"** the lifecycle to other instances, you must add specify the scope.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const profile = new Elysia()
-	.onBeforeHandle(
-		{ as: 'global' }, // [!code ++]
-		({ cookie }) => {
-			throwIfNotSignIn(cookie)
-		}
-	)
-	.get('/profile', () => 'Hi there!')
+  .onBeforeHandle(
+    { as: "global" }, // [!code ++]
+    ({ cookie }) => {
+      throwIfNotSignIn(cookie);
+    },
+  )
+  .get("/profile", () => "Hi there!");
 
 const app = new Elysia()
-	.use(profile)
-	// This has sign in check
-	.patch('/rename', ({ body }) => updateProfile(body))
+  .use(profile)
+  // This has sign in check
+  .patch("/rename", ({ body }) => updateProfile(body));
 ```
 
 Casting lifecycle to **"global"** will export lifecycle to **every instance**.
@@ -9046,14 +8988,14 @@ Elysia code should **ALWAYS** use method chaining.
 This is **important to ensure type safety**.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .state('build', 1)
-    // Store is strictly typed // [!code ++]
-    .get('/', ({ store: { build } }) => build)
-                        // ^?
-    .listen(3000)
+  .state("build", 1)
+  // Store is strictly typed // [!code ++]
+  .get("/", ({ store: { build } }) => build)
+  // ^?
+  .listen(3000);
 ```
 
 In the code above, **state** returns a new **ElysiaInstance** type, adding a typed `build` property.
@@ -9066,15 +9008,15 @@ Without using method chaining, Elysia doesn't save these new types, leading to n
 
 ```typescript twoslash
 // @errors: 2339
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
+const app = new Elysia();
 
-app.state('build', 1)
+app.state("build", 1);
 
-app.get('/', ({ store: { build } }) => build)
+app.get("/", ({ store: { build } }) => build);
 
-app.listen(3000)
+app.listen(3000);
 ```
 
 We recommend to **always use method chaining** to provide an accurate type inference.
@@ -9090,29 +9032,20 @@ It's important that some methods, like **lifecycle** or **routes**, should only 
 To prevent this, Elysia can deduplicate lifecycle with **an unique identifier**.
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 // `name` is an unique identifier
-const ip = new Elysia({ name: 'ip' }) // [!code ++]
-	.derive(
-		{ as: 'global' },
-		({ server, request }) => ({
-			ip: server?.requestIP(request)
-		})
-	)
-	.get('/ip', ({ ip }) => ip)
+const ip = new Elysia({ name: "ip" }) // [!code ++]
+  .derive({ as: "global" }, ({ server, request }) => ({
+    ip: server?.requestIP(request),
+  }))
+  .get("/ip", ({ ip }) => ip);
 
-const router1 = new Elysia()
-	.use(ip)
-	.get('/ip-1', ({ ip }) => ip)
+const router1 = new Elysia().use(ip).get("/ip-1", ({ ip }) => ip);
 
-const router2 = new Elysia()
-	.use(ip)
-	.get('/ip-2', ({ ip }) => ip)
+const router2 = new Elysia().use(ip).get("/ip-2", ({ ip }) => ip);
 
-const server = new Elysia()
-	.use(router1)
-	.use(router2)
+const server = new Elysia().use(router1).use(router2);
 ```
 
 Adding the `name` property to the instance will make it a unique identifier prevent it from being called multiple times.
@@ -9127,15 +9060,13 @@ But if you don't apply the plugin to another instance, it will not be able to in
 
 ```typescript twoslash
 // @errors: 2339
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const child = new Elysia()
-    // ❌ 'a' is missing
-    .get('/', ({ a }) => a)
+  // ❌ 'a' is missing
+  .get("/", ({ a }) => a);
 
-const main = new Elysia()
-    .decorate('a', 'a')
-    .use(child)
+const main = new Elysia().decorate("a", "a").use(child);
 ```
 
 Elysia introduces the **Service Locator** pattern to counteract this.
@@ -9144,25 +9075,21 @@ By simply provide the plugin reference for Elysia to find the service to add typ
 
 ```typescript twoslash
 // @errors: 2339
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const setup = new Elysia({ name: 'setup' })
-    .decorate('a', 'a')
+const setup = new Elysia({ name: "setup" }).decorate("a", "a");
 
 // Without 'setup', type will be missing
-const error = new Elysia()
-    .get('/', ({ a }) => a)
+const error = new Elysia().get("/", ({ a }) => a);
 
 // With `setup`, type will be inferred
 const child = new Elysia()
-    .use(setup) // [!code ++]
-    .get('/', ({ a }) => a)
-    //           ^?
-
-
+  .use(setup) // [!code ++]
+  .get("/", ({ a }) => a);
+//           ^?
 
 // ---cut-after---
-console.log()
+console.log();
 ```
 
 This is equivalent to TypeScript's **type import**, where you import the type without actually importing the code to run.
@@ -9178,17 +9105,17 @@ Because event will only apply to routes **after** it is registered.
 If you put the onError before plugin, plugin will not inherit the onError event.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
- 	.onBeforeHandle(() => {
-        console.log('1')
-    })
-	.get('/', () => 'hi')
-    .onBeforeHandle(() => {
-        console.log('2')
-    })
-    .listen(3000)
+  .onBeforeHandle(() => {
+    console.log("1");
+  })
+  .get("/", () => "hi")
+  .onBeforeHandle(() => {
+    console.log("2");
+  })
+  .listen(3000);
 ```
 
 Console should log the following:
@@ -9206,19 +9133,15 @@ Learn more about this in [order of code](/essential/life-cycle.html#order-of-cod
 Elysia has a complex type system that allows you to infer types from the instance.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.post('/', ({ body }) => body, {
-                // ^?
+const app = new Elysia().post("/", ({ body }) => body, {
+  // ^?
 
-
-
-
-		body: t.Object({
-			name: t.String()
-		})
-	})
+  body: t.Object({
+    name: t.String(),
+  }),
+});
 ```
 
 You should **always use an inline function** to provide an accurate type inference.
@@ -9226,20 +9149,19 @@ You should **always use an inline function** to provide an accurate type inferen
 If you need to apply a separate function, eg. MVC's controller pattern, it's recommended to destructure properties from inline function to prevent unnecessary type inference as follows:
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 abstract class Controller {
-	static greet({ name }: { name: string }) {
-		return 'hello ' + name
-	}
+  static greet({ name }: { name: string }) {
+    return "hello " + name;
+  }
 }
 
-const app = new Elysia()
-	.post('/', ({ body }) => Controller.greet(body), {
-		body: t.Object({
-			name: t.String()
-		})
-	})
+const app = new Elysia().post("/", ({ body }) => Controller.greet(body), {
+  body: t.Object({
+    name: t.String(),
+  }),
+});
 ```
 
 See [Best practice: MVC Controller](/essential/best-practice.html#controller).
@@ -9249,13 +9171,13 @@ See [Best practice: MVC Controller](/essential/best-practice.html#controller).
 We can get a type definitions of every Elysia/TypeBox's type by accessing `static` property as follows:
 
 ```ts twoslash
-import { t } from 'elysia'
+import { t } from "elysia";
 
 const MyType = t.Object({
-	hello: t.Literal('Elysia')
-})
+  hello: t.Literal("Elysia"),
+});
 
-type MyType = typeof MyType.static
+type MyType = typeof MyType.static;
 //    ^?
 ```
 
@@ -9263,18 +9185,18 @@ This allows Elysia to infer and provide type automatically, reducing the need to
 
 A single Elysia/TypeBox schema can be used for:
 
-* Runtime validation
-* Data coercion
-* TypeScript type
-* OpenAPI schema
+- Runtime validation
+- Data coercion
+- TypeScript type
+- OpenAPI schema
 
 This allows us to make a schema as a **single source of truth**.
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/getting-started/life-cycle.md'
----
+
+## url: 'https://elysiajs.com/tutorial/getting-started/life-cycle.md'
 
 # Lifecycle
 
@@ -9282,33 +9204,36 @@ Lifecycle **hook** is function that executed on a specific event during the requ
 
 They allow you to run custom logic at the certain point
 
-* request - when a request is received
-* beforeHandle - before executing a handler
-* afterResponse - after a response is sent, etc.
-* error - when an error occurs
+- request - when a request is received
+- beforeHandle - before executing a handler
+- afterResponse - after a response is sent, etc.
+- error - when an error occurs
 
 This can be useful for tasks like logging, authentication, etc.
 
 To register a lifecycle hook, you can pass it to 3rd argument of a route method:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/1', () => 'Hello Elysia!')
-	.get('/auth', () => {
-		console.log('This is executed after "beforeHandle"')
+  .get("/1", () => "Hello Elysia!")
+  .get(
+    "/auth",
+    () => {
+      console.log('This is executed after "beforeHandle"');
 
-		return 'Oh you are lucky!'
-	}, {
-		beforeHandle({ request, status }) {
-			console.log('This is executed before handler')
+      return "Oh you are lucky!";
+    },
+    {
+      beforeHandle({ request, status }) {
+        console.log("This is executed before handler");
 
-			if(Math.random() <= 0.5)
-				return status(418)
-		}
-	})
-	.get('/2', () => 'Hello Elysia!')
+        if (Math.random() <= 0.5) return status(418);
+      },
+    },
+  )
+  .get("/2", () => "Hello Elysia!");
 ```
 
 When `beforeHandle` returns a value, it will skip the handler and return the value instead.
@@ -9334,24 +9259,27 @@ To use a local hook, you can inline hook into a route handler:
 
 ```typescript
 // Similar to previous code snippet
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/1', () => 'Hello Elysia!')
-	.get('/auth', () => {
-		console.log('Run after "beforeHandle"')
+  .get("/1", () => "Hello Elysia!")
+  .get(
+    "/auth",
+    () => {
+      console.log('Run after "beforeHandle"');
 
-		return 'Oh you are lucky!'
-	}, {
-		// This is a Local Hook
-		beforeHandle({ request, status }) {
-			console.log('Run before handler')
+      return "Oh you are lucky!";
+    },
+    {
+      // This is a Local Hook
+      beforeHandle({ request, status }) {
+        console.log("Run before handler");
 
-			if(Math.random() <= 0.5)
-				return status(418)
-		}
-	})
-	.get('/2', () => 'Hello Elysia!')
+        if (Math.random() <= 0.5) return status(418);
+      },
+    },
+  )
+  .get("/2", () => "Hello Elysia!");
 ```
 
 ## Interceptor Hook
@@ -9361,24 +9289,23 @@ Register hook into every **handler that came after the hook is called** for the 
 To add an interceptor hook, you can use `.on` followed by a lifecycle event:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/1', () => 'Hello Elysia!')
-	.onBeforeHandle(({ request, status }) => {
-		console.log('This is executed before handler')
+  .get("/1", () => "Hello Elysia!")
+  .onBeforeHandle(({ request, status }) => {
+    console.log("This is executed before handler");
 
-		if(Math.random() <= 0.5)
-			return status(418)
-	})
-	// "beforeHandle" is applied
-	.get('/auth', () => {
-		console.log('This is executed after "beforeHandle"')
+    if (Math.random() <= 0.5) return status(418);
+  })
+  // "beforeHandle" is applied
+  .get("/auth", () => {
+    console.log('This is executed after "beforeHandle"');
 
-		return 'Oh you are lucky!'
-	})
-	// "beforeHandle" is also applied
-	.get('/2', () => 'Hello Elysia!')
+    return "Oh you are lucky!";
+  })
+  // "beforeHandle" is also applied
+  .get("/2", () => "Hello Elysia!");
 ```
 
 Unlike Local Hook, Interceptor Hook will add the hook to every route that came after the hook is registered.
@@ -9392,26 +9319,26 @@ Let's put 2 types of hooks into practice.
 We can use `beforeHandle` to intercept the request before it reaches the handler, and return a response with `status` method.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.onBeforeHandle(({ query: { name }, status }) => {
-		if(!name) return status(401)
-	})
-	.get('/auth', ({ query: { name = 'anon' } }) => {
-		return `Hello ${name}!`
-	})
-	.get('/profile', ({ query: { name = 'anon' } }) => {
-		return `Hello ${name}!`
-	})
-	.listen(3000)
+  .onBeforeHandle(({ query: { name }, status }) => {
+    if (!name) return status(401);
+  })
+  .get("/auth", ({ query: { name = "anon" } }) => {
+    return `Hello ${name}!`;
+  })
+  .get("/profile", ({ query: { name = "anon" } }) => {
+    return `Hello ${name}!`;
+  })
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/essential/life-cycle.md'
----
+
+## url: 'https://elysiajs.com/essential/life-cycle.md'
 
 # Lifecycle&#x20;
 
@@ -9456,18 +9383,18 @@ A local hook is executed on a specific route.
 To use a local hook, you can inline hook into a route handler:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { isHtml } from '@elysiajs/html'
+import { Elysia } from "elysia";
+import { isHtml } from "@elysiajs/html";
 
 new Elysia()
-    .get('/', () => '<h1>Hello World</h1>', {
-        afterHandle({ responseValue, set }) {
-            if (isHtml(responseValue))
-                set.headers['Content-Type'] = 'text/html; charset=utf8'
-        }
-    })
-    .get('/hi', () => '<h1>Hello World</h1>')
-    .listen(3000)
+  .get("/", () => "<h1>Hello World</h1>", {
+    afterHandle({ responseValue, set }) {
+      if (isHtml(responseValue))
+        set.headers["Content-Type"] = "text/html; charset=utf8";
+    },
+  })
+  .get("/hi", () => "<h1>Hello World</h1>")
+  .listen(3000);
 ```
 
 The response should be listed as follows:
@@ -9484,24 +9411,24 @@ Register hook into every handler **of the current instance** that came after.
 To add an interceptor hook, you can use `.on` followed by a lifecycle event in camelCase:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { isHtml } from '@elysiajs/html'
+import { Elysia } from "elysia";
+import { isHtml } from "@elysiajs/html";
 
 new Elysia()
-    .get('/none', () => '<h1>Hello World</h1>')
-    .onAfterHandle(({ responseValue, set }) => {
-        if (isHtml(responseValue))
-            set.headers['Content-Type'] = 'text/html; charset=utf8'
-    })
-    .get('/', () => '<h1>Hello World</h1>')
-    .get('/hi', () => '<h1>Hello World</h1>')
-    .listen(3000)
+  .get("/none", () => "<h1>Hello World</h1>")
+  .onAfterHandle(({ responseValue, set }) => {
+    if (isHtml(responseValue))
+      set.headers["Content-Type"] = "text/html; charset=utf8";
+  })
+  .get("/", () => "<h1>Hello World</h1>")
+  .get("/hi", () => "<h1>Hello World</h1>")
+  .listen(3000);
 ```
 
 The response should be listed as follows:
 
-| Path  | Content-Type             |
-| ----- | ------------------------ |
+| Path  | Content-Type                 |
+| ----- | ---------------------------- |
 | /none | text/**plain**; charset=utf8 |
 | /     | text/**html**; charset=utf8  |
 | /hi   | text/**html**; charset=utf8  |
@@ -9515,17 +9442,17 @@ Event will only apply to routes **after** it is registered.
 If you put the `onError` before plugin, plugin will not inherit the `onError` event.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
- 	.onBeforeHandle(() => {
-        console.log('1')
-    })
-	.get('/', () => 'hi')
-    .onBeforeHandle(() => {
-        console.log('2')
-    })
-    .listen(3000)
+  .onBeforeHandle(() => {
+    console.log("1");
+  })
+  .get("/", () => "hi")
+  .onBeforeHandle(() => {
+    console.log("2");
+  })
+  .listen(3000);
 ```
 
 Console should log the following:
@@ -9539,17 +9466,17 @@ Notice that it doesn't log **2**, because the event is registered after the rout
 This also applies to the plugin.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.onBeforeHandle(() => {
-		console.log('1')
-	})
-	.use(someRouter)
-	.onBeforeHandle(() => {
-		console.log('2')
-	})
-	.listen(3000)
+  .onBeforeHandle(() => {
+    console.log("1");
+  })
+  .use(someRouter)
+  .onBeforeHandle(() => {
+    console.log("2");
+  })
+  .listen(3000);
 ```
 
 In this example, only **1** will be logged because the event is registered after the plugin.
@@ -9563,25 +9490,25 @@ The first lifecycle event to get executed for every new request is received.
 
 As `onRequest` is designed to provide only the most crucial context to reduce overhead, it is recommended to use in the following scenarios:
 
-* Caching
-* Rate Limiter / IP/Region Lock
-* Analytic
-* Provide custom header, eg. CORS
+- Caching
+- Rate Limiter / IP/Region Lock
+- Analytic
+- Provide custom header, eg. CORS
 
 #### Example
 
 Below is a pseudocode to enforce rate-limits on a certain IP address.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .use(rateLimiter)
-    .onRequest(({ rateLimiter, ip, set, status }) => {
-        if (rateLimiter.check(ip)) return status(420, 'Enhance your calm')
-    })
-    .get('/', () => 'hi')
-    .listen(3000)
+  .use(rateLimiter)
+  .onRequest(({ rateLimiter, ip, set, status }) => {
+    if (rateLimiter.check(ip)) return status(420, "Enhance your calm");
+  })
+  .get("/", () => "hi")
+  .listen(3000);
 ```
 
 If a value is returned from `onRequest`, it will be used as the response and the rest of the lifecycle will be skipped.
@@ -9591,9 +9518,9 @@ If a value is returned from `onRequest`, it will be used as the response and the
 Context's `onRequest` is typed as `PreContext`, a minimal representation of `Context` with the attribute on the following:
 request: `Request`
 
-* set: `Set`
-* store
-* decorators
+- set: `Set`
+- store
+- decorators
 
 Context doesn't provide `derived` value because derive is based on `onTransform` event.
 
@@ -9605,10 +9532,10 @@ A function to parse body, the return value will be append to `Context.body`, if 
 
 By default, Elysia will parse the body with content-type of:
 
-* `text/plain`
-* `application/json`
-* `multipart/form-data`
-* `application/x-www-form-urlencoded`
+- `text/plain`
+- `application/json`
+- `multipart/form-data`
+- `application/x-www-form-urlencoded`
 
 It's recommended to use the `onParse` event to provide a custom body parser that Elysia doesn't provide.
 
@@ -9617,11 +9544,11 @@ It's recommended to use the `onParse` event to provide a custom body parser that
 Below is an example code to retrieve value based on custom headers.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia().onParse(({ request, contentType }) => {
-    if (contentType === 'application/custom-type') return request.text()
-})
+  if (contentType === "application/custom-type") return request.text();
+});
 ```
 
 The returned value will be assigned to `Context.body`. If not, Elysia will continue iterating through additional parser functions from **onParse** stack until either body is assigned or all parsers have been executed.
@@ -9630,7 +9557,7 @@ The returned value will be assigned to `Context.body`. If not, Elysia will conti
 
 `onParse` Context is extends from `Context` with additional properties of the following:
 
-* contentType: Content-Type header of the request
+- contentType: Content-Type header of the request
 
 All of the context is based on normal context and can be used like normal context in route handler.
 
@@ -9643,24 +9570,24 @@ Elysia is able to determine that body function by reading `body`.
 Take a look at this example:
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia().post('/', ({ body }) => body, {
-    body: t.Object({
-        username: t.String(),
-        password: t.String()
-    })
-})
+new Elysia().post("/", ({ body }) => body, {
+  body: t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
 ```
 
 Elysia read the body schema and found that, the type is entirely an object, so it's likely that the body will be JSON. Elysia then picks the JSON body parser function ahead of time and tries to parse the body.
 
 Here's a criteria that Elysia uses to pick up type of body parser
 
-* `application/json`: body typed as `t.Object`
-* `multipart/form-data`: body typed as `t.Object`, and is 1 level deep with `t.File`
-* `application/x-www-form-urlencoded`: body typed as `t.URLEncoded`
-* `text/plain`: other primitive type
+- `application/json`: body typed as `t.Object`
+- `multipart/form-data`: body typed as `t.Object`, and is 1 level deep with `t.File`
+- `application/x-www-form-urlencoded`: body typed as `t.URLEncoded`
+- `text/plain`: other primitive type
 
 This allows Elysia to optimize body parser ahead of time, and reduce overhead in compile time.
 
@@ -9669,12 +9596,12 @@ This allows Elysia to optimize body parser ahead of time, and reduce overhead in
 However, in some scenario if Elysia fails to pick the correct body parser function, we can explicitly tell Elysia to use a certain function by specifying `type`.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia().post('/', ({ body }) => body, {
-    // Short form of application/json
-    parse: 'json'
-})
+new Elysia().post("/", ({ body }) => body, {
+  // Short form of application/json
+  parse: "json",
+});
 ```
 
 This allows us to control Elysia behavior for picking body parser function to fit our needs in a complex scenario.
@@ -9708,16 +9635,11 @@ This is because Web Standard Request can be parsed only once.
 Both Elysia and the third-party library both has its own body parser, so you can skip body parsing on Elysia side by specifying `parse: 'none'`
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.post(
-		'/',
-		({ request }) => library.handle(request),
-		{
-			parse: 'none'
-		}
-	)
+new Elysia().post("/", ({ request }) => library.handle(request), {
+  parse: "none",
+});
 ```
 
 ### Custom Parser
@@ -9725,15 +9647,15 @@ new Elysia()
 You can provide register a custom parser with `parser`:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .parser('custom', ({ request, contentType }) => {
-        if (contentType === 'application/elysia') return request.text()
-    })
-    .post('/', ({ body }) => body, {
-        parse: ['custom', 'json']
-    })
+  .parser("custom", ({ request, contentType }) => {
+    if (contentType === "application/elysia") return request.text();
+  })
+  .post("/", ({ body }) => body, {
+    parse: ["custom", "json"],
+  });
 ```
 
 ## Transform
@@ -9742,28 +9664,28 @@ Executed just before **Validation** process, designed to mutate context to confo
 
 It's recommended to use transform for the following:
 
-* Mutate existing context to conform with validation.
-* `derive` is based on `onTransform` with support for providing type.
+- Mutate existing context to conform with validation.
+- `derive` is based on `onTransform` with support for providing type.
 
 #### Example
 
 Below is an example of using transform to mutate params to be numeric values.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .get('/id/:id', ({ params: { id } }) => id, {
-        params: t.Object({
-            id: t.Number()
-        }),
-        transform({ params }) {
-            const id = +params.id
+  .get("/id/:id", ({ params: { id } }) => id, {
+    params: t.Object({
+      id: t.Number(),
+    }),
+    transform({ params }) {
+      const id = +params.id;
 
-            if (!Number.isNaN(id)) params.id = id
-        }
-    })
-    .listen(3000)
+      if (!Number.isNaN(id)) params.id = id;
+    },
+  })
+  .listen(3000);
 ```
 
 ## Derive
@@ -9773,17 +9695,17 @@ Append new value to context directly **before validation**. It's stored in the s
 Unlike **state** and **decorate** that assigned value before the server started. **derive** assigns a property when each request happens. This allows us to extract a piece of information into a property instead.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .derive(({ headers }) => {
-        const auth = headers['Authorization']
+  .derive(({ headers }) => {
+    const auth = headers["Authorization"];
 
-        return {
-            bearer: auth?.startsWith('Bearer ') ? auth.slice(7) : null
-        }
-    })
-    .get('/', ({ bearer }) => bearer)
+    return {
+      bearer: auth?.startsWith("Bearer ") ? auth.slice(7) : null,
+    };
+  })
+  .get("/", ({ bearer }) => bearer);
 ```
 
 Because **derive** is assigned once a new request starts, **derive** can access Request properties like **headers**, **query**, **body** where **store**, and **decorate** can't.
@@ -9801,17 +9723,17 @@ Resolve is similar to derive but execute after validation. This make resolve mor
 `derive` and `transform` are stored in the same queue.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .onTransform(() => {
-        console.log(1)
-    })
-    .derive(() => {
-        console.log(2)
+  .onTransform(() => {
+    console.log(1);
+  })
+  .derive(() => {
+    console.log(2);
 
-        return {}
-    })
+    return {};
+  });
 ```
 
 The console should log as the following:
@@ -9831,24 +9753,24 @@ If a value is returned, the route handler will be skipped.
 
 It's recommended to use Before Handle in the following situations:
 
-* Restricted access check: authorization, user sign-in
-* Custom request requirement over data structure
+- Restricted access check: authorization, user sign-in
+- Custom request requirement over data structure
 
 #### Example
 
 Below is an example of using the before handle to check for user sign-in.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { validateSession } from './user'
+import { Elysia } from "elysia";
+import { validateSession } from "./user";
 
 new Elysia()
-    .get('/', () => 'hi', {
-        beforeHandle({ set, cookie: { session }, status }) {
-            if (!validateSession(session.value)) return status(401)
-        }
-    })
-    .listen(3000)
+  .get("/", () => "hi", {
+    beforeHandle({ set, cookie: { session }, status }) {
+      if (!validateSession(session.value)) return status(401);
+    },
+  })
+  .listen(3000);
 ```
 
 The response should be listed as follows:
@@ -9863,25 +9785,25 @@ The response should be listed as follows:
 When we need to apply the same before handle to multiple routes, we can use `guard` to apply the same before handle to multiple routes.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { signUp, signIn, validateSession, isUserExists } from './user'
+import { Elysia } from "elysia";
+import { signUp, signIn, validateSession, isUserExists } from "./user";
 
 new Elysia()
-    .guard(
-        {
-            beforeHandle({ set, cookie: { session }, status }) {
-                if (!validateSession(session.value)) return status(401)
-            }
-        },
-        (app) =>
-            app
-                .get('/user/:id', ({ body }) => signUp(body))
-                .post('/profile', ({ body }) => signIn(body), {
-                    beforeHandle: isUserExists
-                })
-    )
-    .get('/', () => 'hi')
-    .listen(3000)
+  .guard(
+    {
+      beforeHandle({ set, cookie: { session }, status }) {
+        if (!validateSession(session.value)) return status(401);
+      },
+    },
+    (app) =>
+      app
+        .get("/user/:id", ({ body }) => signUp(body))
+        .post("/profile", ({ body }) => signIn(body), {
+          beforeHandle: isUserExists,
+        }),
+  )
+  .get("/", () => "hi")
+  .listen(3000);
 ```
 
 ## Resolve
@@ -9891,44 +9813,44 @@ Append new value to context **after validation**. It's stored in the same stack 
 Resolve syntax is identical to [derive](#derive), below is an example of retrieving a bearer header from the Authorization plugin.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .guard(
-        {
-            headers: t.Object({
-                authorization: t.TemplateLiteral('Bearer ${string}')
-            })
-        },
-        (app) =>
-            app
-                .resolve(({ headers: { authorization } }) => {
-                    return {
-                        bearer: authorization.split(' ')[1]
-                    }
-                })
-                .get('/', ({ bearer }) => bearer)
-    )
-    .listen(3000)
+  .guard(
+    {
+      headers: t.Object({
+        authorization: t.TemplateLiteral("Bearer ${string}"),
+      }),
+    },
+    (app) =>
+      app
+        .resolve(({ headers: { authorization } }) => {
+          return {
+            bearer: authorization.split(" ")[1],
+          };
+        })
+        .get("/", ({ bearer }) => bearer),
+  )
+  .listen(3000);
 ```
 
 Using `resolve` and `onBeforeHandle` is stored in the same queue.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .onBeforeHandle(() => {
-        console.log(1)
-    })
-    .resolve(() => {
-        console.log(2)
+  .onBeforeHandle(() => {
+    console.log(1);
+  })
+  .resolve(() => {
+    console.log(2);
 
-        return {}
-    })
-    .onBeforeHandle(() => {
-        console.log(3)
-    })
+    return {};
+  })
+  .onBeforeHandle(() => {
+    console.log(3);
+  });
 ```
 
 The console should log as the following:
@@ -9946,22 +9868,22 @@ Same as **derive**, properties which assigned by **resolve** is unique and not s
 As resolve is not available in local hook, it's recommended to use guard to encapsulate the **resolve** event.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { isSignIn, findUserById } from './user'
+import { Elysia } from "elysia";
+import { isSignIn, findUserById } from "./user";
 
 new Elysia()
-    .guard(
-        {
-            beforeHandle: isSignIn
-        },
-        (app) =>
-            app
-                .resolve(({ cookie: { session } }) => ({
-                    userId: findUserById(session.value)
-                }))
-                .get('/profile', ({ userId }) => userId)
-    )
-    .listen(3000)
+  .guard(
+    {
+      beforeHandle: isSignIn,
+    },
+    (app) =>
+      app
+        .resolve(({ cookie: { session } }) => ({
+          userId: findUserById(session.value),
+        }))
+        .get("/profile", ({ userId }) => userId),
+  )
+  .listen(3000);
 ```
 
 ## After Handle
@@ -9970,26 +9892,26 @@ Execute after the main handler, for mapping a returned value of **before handle*
 
 It's recommended to use After Handle in the following situations:
 
-* Transform requests into a new value, eg. Compression, Event Stream
-* Add custom headers based on the response value, eg. **Content-Type**
+- Transform requests into a new value, eg. Compression, Event Stream
+- Add custom headers based on the response value, eg. **Content-Type**
 
 #### Example
 
 Below is an example of using the after handle to add HTML content type to response headers.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { isHtml } from '@elysiajs/html'
+import { Elysia } from "elysia";
+import { isHtml } from "@elysiajs/html";
 
 new Elysia()
-    .get('/', () => '<h1>Hello World</h1>', {
-        afterHandle({ response, set }) {
-            if (isHtml(response))
-                set.headers['content-type'] = 'text/html; charset=utf8'
-        }
-    })
-    .get('/hi', () => '<h1>Hello World</h1>')
-    .listen(3000)
+  .get("/", () => "<h1>Hello World</h1>", {
+    afterHandle({ response, set }) {
+      if (isHtml(response))
+        set.headers["content-type"] = "text/html; charset=utf8";
+    },
+  })
+  .get("/hi", () => "<h1>Hello World</h1>")
+  .listen(3000);
 ```
 
 The response should be listed as follows:
@@ -10006,20 +9928,20 @@ If a value is returned After Handle will use a return value as a new response va
 The above example could be rewritten as the following:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { isHtml } from '@elysiajs/html'
+import { Elysia } from "elysia";
+import { isHtml } from "@elysiajs/html";
 
 new Elysia()
-    .get('/', () => '<h1>Hello World</h1>', {
-        afterHandle({ response, set }) {
-            if (isHtml(response)) {
-                set.headers['content-type'] = 'text/html; charset=utf8'
-                return new Response(response)
-            }
-        }
-    })
-    .get('/hi', () => '<h1>Hello World</h1>')
-    .listen(3000)
+  .get("/", () => "<h1>Hello World</h1>", {
+    afterHandle({ response, set }) {
+      if (isHtml(response)) {
+        set.headers["content-type"] = "text/html; charset=utf8";
+        return new Response(response);
+      }
+    },
+  })
+  .get("/hi", () => "<h1>Hello World</h1>")
+  .listen(3000);
 ```
 
 Unlike **beforeHandle**, after a value is returned from **afterHandle**, the iteration of afterHandle **will **NOT** be skipped.**
@@ -10036,39 +9958,39 @@ Executed just after **"afterHandle"**, designed to provide custom response mappi
 
 It's recommended to use transform for the following:
 
-* Compression
-* Map value into a Web Standard Response
+- Compression
+- Map value into a Web Standard Response
 
 #### Example
 
 Below is an example of using mapResponse to provide Response compression.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const encoder = new TextEncoder()
+const encoder = new TextEncoder();
 
 new Elysia()
-    .mapResponse(({ responseValue, set }) => {
-        const isJson = typeof response === 'object'
+  .mapResponse(({ responseValue, set }) => {
+    const isJson = typeof response === "object";
 
-        const text = isJson
-            ? JSON.stringify(responseValue)
-            : (responseValue?.toString() ?? '')
+    const text = isJson
+      ? JSON.stringify(responseValue)
+      : (responseValue?.toString() ?? "");
 
-        set.headers['Content-Encoding'] = 'gzip'
+    set.headers["Content-Encoding"] = "gzip";
 
-        return new Response(Bun.gzipSync(encoder.encode(text)), {
-            headers: {
-                'Content-Type': `${
-                    isJson ? 'application/json' : 'text/plain'
-                }; charset=utf-8`
-            }
-        })
-    })
-    .get('/text', () => 'mapResponse')
-    .get('/json', () => ({ map: 'response' }))
-    .listen(3000)
+    return new Response(Bun.gzipSync(encoder.encode(text)), {
+      headers: {
+        "Content-Type": `${
+          isJson ? "application/json" : "text/plain"
+        }; charset=utf-8`,
+      },
+    });
+  })
+  .get("/text", () => "mapResponse")
+  .get("/json", () => ({ map: "response" }))
+  .listen(3000);
 ```
 
 Like **parse** and **beforeHandle**, after a value is returned, the next iteration of **mapResponse** will be skipped.
@@ -10081,26 +10003,26 @@ Designed for error handling. It will be executed when an error is thrown in any 
 
 It's recommended to use on Error in the following situations:
 
-* providing a custom error message
-* fail-safe handling, an error handler, or retrying a request
-* logging and analytics
+- providing a custom error message
+- fail-safe handling, an error handler, or retrying a request
+- logging and analytics
 
 #### Example
 
 Elysia catches all the errors thrown in the handler, classifies the error code, and pipes them to `onError` middleware.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .onError(({ error }) => {
-        return new Response(error.toString())
-    })
-    .get('/', () => {
-        throw new Error('Server is during maintenance')
+  .onError(({ error }) => {
+    return new Response(error.toString());
+  })
+  .get("/", () => {
+    throw new Error("Server is during maintenance");
 
-        return 'unreachable'
-    })
+    return "unreachable";
+  });
 ```
 
 With `onError` we can catch and transform the error into a custom error message.
@@ -10114,37 +10036,37 @@ It's important that `onError` must be called before the handler we want to apply
 For example, returning custom 404 messages:
 
 ```typescript
-import { Elysia, NotFoundError } from 'elysia'
+import { Elysia, NotFoundError } from "elysia";
 
 new Elysia()
-    .onError(({ code, status, set }) => {
-        if (code === 'NOT_FOUND') return status(404, 'Not Found :(')
-    })
-    .post('/', () => {
-        throw new NotFoundError()
-    })
-    .listen(3000)
+  .onError(({ code, status, set }) => {
+    if (code === "NOT_FOUND") return status(404, "Not Found :(");
+  })
+  .post("/", () => {
+    throw new NotFoundError();
+  })
+  .listen(3000);
 ```
 
 ### Context
 
 `onError` Context is extends from `Context` with additional properties of the following:
 
-* **error**: A value that was thrown
-* **code**: *Error Code*
+- **error**: A value that was thrown
+- **code**: _Error Code_
 
 ### Error Code
 
 Elysia error code consists of:
 
-* **NOT\_FOUND**
-* **PARSE**
-* **VALIDATION**
-* **INTERNAL\_SERVER\_ERROR**
-* **INVALID\_COOKIE\_SIGNATURE**
-* **INVALID\_FILE\_TYPE**
-* **UNKNOWN**
-* **number** (based on HTTP Status)
+- **NOT_FOUND**
+- **PARSE**
+- **VALIDATION**
+- **INTERNAL_SERVER_ERROR**
+- **INVALID_COOKIE_SIGNATURE**
+- **INVALID_FILE_TYPE**
+- **UNKNOWN**
+- **number** (based on HTTP Status)
 
 By default, the thrown error code is `UNKNOWN`.
 
@@ -10157,18 +10079,18 @@ If no error response is returned, the error will be returned using `error.name`.
 Same as others life-cycle, we provide an error into an [scope](/essential/plugin.html#scope) using guard:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/', () => 'Hello', {
-        beforeHandle({ set, request: { headers }, error }) {
-            if (!isSignIn(headers)) throw error(401)
-        },
-        error() {
-            return 'Handled'
-        }
-    })
-    .listen(3000)
+  .get("/", () => "Hello", {
+    beforeHandle({ set, request: { headers }, error }) {
+      if (!isSignIn(headers)) throw error(401);
+    },
+    error() {
+      return "Handled";
+    },
+  })
+  .listen(3000);
 ```
 
 ## After Response
@@ -10177,21 +10099,21 @@ Executed after the response sent to the client.
 
 It's recommended to use **After Response** in the following situations:
 
-* Clean up response
-* Logging and analytics
+- Clean up response
+- Logging and analytics
 
 #### Example
 
 Below is an example of using the response handle to check for user sign-in.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .onAfterResponse(() => {
-        console.log('Response', performance.now())
-    })
-    .listen(3000)
+  .onAfterResponse(() => {
+    console.log("Response", performance.now());
+  })
+  .listen(3000);
 ```
 
 Console should log as the following:
@@ -10207,14 +10129,14 @@ Response 0.0002
 Similar to [Map Response](#map-resonse), `afterResponse` also accept a `responseValue` value.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.onAfterResponse(({ responseValue }) => {
-		console.log(responseValue)
-	})
-	.get('/', () => 'Hello')
-	.listen(3000)
+  .onAfterResponse(({ responseValue }) => {
+    console.log(responseValue);
+  })
+  .get("/", () => "Hello")
+  .listen(3000);
 ```
 
 `response` from `onAfterResponse`, is not a Web-Standard's `Response` but is a value that is returned from the handler.
@@ -10222,21 +10144,21 @@ new Elysia()
 To get a headers, and status returned from the handler, we can access `set` from the context.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.onAfterResponse(({ set }) => {
-		console.log(set.status, set.headers)
-	})
-	.get('/', () => 'Hello')
-	.listen(3000)
+  .onAfterResponse(({ set }) => {
+    console.log(set.status, set.headers);
+  })
+  .get("/", () => "Hello")
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/patterns/macro.md'
----
+
+## url: 'https://elysiajs.com/tutorial/patterns/macro.md'
 
 # Macro
 
@@ -10245,18 +10167,18 @@ A reusable route options.
 Imagine we have an authentication check like this:
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post('/user', ({ body }) => body, {
-		cookie: t.Object({
-			session: t.String()
-		}),
-		beforeHandle({ cookie: { session } }) {
-			if(!session.value) throw 'Unauthorized'
-		}
-	})
-	.listen(3000)
+  .post("/user", ({ body }) => body, {
+    cookie: t.Object({
+      session: t.String(),
+    }),
+    beforeHandle({ cookie: { session } }) {
+      if (!session.value) throw "Unauthorized";
+    },
+  })
+  .listen(3000);
 ```
 
 If we have multiple routes that require authentication, we have to repeat the same options over and over again.
@@ -10264,22 +10186,22 @@ If we have multiple routes that require authentication, we have to repeat the sa
 Instead, we can use a macro to reuse route options:
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.macro('auth', {
-		cookie: t.Object({
-			session: t.String()
-		}),
-		// psuedo auth check
-		beforeHandle({ cookie: { session }, status }) {
-			if(!session.value) return status(401)
-		}
-	})
-	.post('/user', ({ body }) => body, {
-		auth: true // [!code ++]
-	})
-	.listen(3000)
+  .macro("auth", {
+    cookie: t.Object({
+      session: t.String(),
+    }),
+    // psuedo auth check
+    beforeHandle({ cookie: { session }, status }) {
+      if (!session.value) return status(401);
+    },
+  })
+  .post("/user", ({ body }) => body, {
+    auth: true, // [!code ++]
+  })
+  .listen(3000);
 ```
 
 **auth** will then inline both **cookie**, and **beforeHandle** to the route.
@@ -10292,9 +10214,10 @@ Let's define a macro to check if a body is a fibonacci number:
 
 ```typescript
 function isFibonacci(n: number) {
-	let a = 0, b = 1
-	while(b < n) [a, b] = [b, a + b]
-	return b === n || n === 0
+  let a = 0,
+    b = 1;
+  while (b < n) [a, b] = [b, a + b];
+  return b === n || n === 0;
 }
 ```
 
@@ -10304,37 +10227,37 @@ function isFibonacci(n: number) {
 2. To short-circuit the request, we can use `status` function to return early.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 function isPerfectSquare(x: number) {
-    const s = Math.floor(Math.sqrt(x))
-    return s * s === x
+  const s = Math.floor(Math.sqrt(x));
+  return s * s === x;
 }
 
 function isFibonacci(n: number) {
-    if (n < 0) return false
+  if (n < 0) return false;
 
-    return isPerfectSquare(5 * n * n + 4) || isPerfectSquare(5 * n * n - 4)
+  return isPerfectSquare(5 * n * n + 4) || isPerfectSquare(5 * n * n - 4);
 }
 
 new Elysia()
-    .macro('isFibonacci', {
-		body: t.Number(),
-        beforeHandle({ body, status }) {
-            if(!isFibonacci(body)) return status(418)
-        }
-    })
-	.post('/', ({ body }) => body, {
-		isFibonacci: true
-	})
-    .listen(3000)
+  .macro("isFibonacci", {
+    body: t.Number(),
+    beforeHandle({ body, status }) {
+      if (!isFibonacci(body)) return status(418);
+    },
+  })
+  .post("/", ({ body }) => body, {
+    isFibonacci: true,
+  })
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/macro.md'
----
+
+## url: 'https://elysiajs.com/patterns/macro.md'
 
 # Macro&#x20;
 
@@ -10343,22 +10266,19 @@ Macro is similar to a function that have a control over the lifecycle event, sch
 Once defined, it will be available in hook and can be activated by adding the property.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const plugin = new Elysia({ name: 'plugin' })
-    .macro({
-        hi: (word: string) => ({
-            beforeHandle() {
-                console.log(word)
-            }
-        })
-    })
+const plugin = new Elysia({ name: "plugin" }).macro({
+  hi: (word: string) => ({
+    beforeHandle() {
+      console.log(word);
+    },
+  }),
+});
 
-const app = new Elysia()
-    .use(plugin)
-    .get('/', () => 'hi', {
-        hi: 'Elysia' // [!code ++]
-    })
+const app = new Elysia().use(plugin).get("/", () => "hi", {
+  hi: "Elysia", // [!code ++]
+});
 ```
 
 Accessing the path should log **"Elysia"** as the results.
@@ -10370,29 +10290,28 @@ Starting from Elysia 1.2.10, each property in the macro object can be a function
 If the property is an object, it will be translated to a function that accept a boolean parameter, and will be executed if the parameter is true.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-export const auth = new Elysia()
-    .macro({
-    	// This property shorthand
-    	isAuth: {
-      		resolve: () => ({
-      			user: 'saltyaom'
-      		})
-        },
-        // is equivalent to
-        isAuth(enabled: boolean) {
-        	if(!enabled) return
+export const auth = new Elysia().macro({
+  // This property shorthand
+  isAuth: {
+    resolve: () => ({
+      user: "saltyaom",
+    }),
+  },
+  // is equivalent to
+  isAuth(enabled: boolean) {
+    if (!enabled) return;
 
-        	return {
-				resolve() {
-					return {
-						user
-					}
-				}
-         	}
-        }
-    })
+    return {
+      resolve() {
+        return {
+          user,
+        };
+      },
+    };
+  },
+});
 ```
 
 ## API
@@ -10406,48 +10325,44 @@ We then assigned **hi** to **"Elysia"**, the value was then sent back to the **h
 Which is an equivalent of pushing function to **beforeHandle** as the following:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-    .get('/', () => 'hi', {
-        beforeHandle() {
-            console.log('Elysia')
-        }
-    })
+const app = new Elysia().get("/", () => "hi", {
+  beforeHandle() {
+    console.log("Elysia");
+  },
+});
 ```
 
 **macro** shine when a logic is more complex than accepting a new function, for example creating an authorization layer for each route.
 
 ```typescript twoslash
 // @filename: auth.ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-export const auth = new Elysia()
-    .macro({
-    	isAuth: {
-      		resolve() {
-     			return {
-         			user: 'saltyaom'
-          		}
-      		}
-        },
-        role(role: 'admin' | 'user') {
-        	return {}
-        }
-    })
+export const auth = new Elysia().macro({
+  isAuth: {
+    resolve() {
+      return {
+        user: "saltyaom",
+      };
+    },
+  },
+  role(role: "admin" | "user") {
+    return {};
+  },
+});
 
 // @filename: index.ts
 // ---cut---
-import { Elysia } from 'elysia'
-import { auth } from './auth'
+import { Elysia } from "elysia";
+import { auth } from "./auth";
 
-const app = new Elysia()
-    .use(auth)
-    .get('/', ({ user }) => user, {
-                          // ^?
-        isAuth: true,
-        role: 'admin'
-    })
+const app = new Elysia().use(auth).get("/", ({ user }) => user, {
+  // ^?
+  isAuth: true,
+  role: "admin",
+});
 ```
 
 Macro can also register a new property to the context, allowing us to access the value directly from the context.
@@ -10461,29 +10376,29 @@ The field can accept anything ranging from string to function, allowing us to cr
 You add a property to the context by returning an object with a [**resolve**](/essential/life-cycle.html#resolve) function.
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.macro({
-		user: (enabled: true) => ({
-			resolve: () => ({
-				user: 'Pardofelis'
-			})
-		})
-	})
-	.get('/', ({ user }) => user, {
-                          // ^?
-		user: true
-	})
+  .macro({
+    user: (enabled: true) => ({
+      resolve: () => ({
+        user: "Pardofelis",
+      }),
+    }),
+  })
+  .get("/", ({ user }) => user, {
+    // ^?
+    user: true,
+  });
 ```
 
 In the example above, we add a new property **user** to the context by returning an object with a **resolve** function.
 
 Here's an example that macro resolve could be useful:
 
-* perform authentication and add user to the context
-* run an additional database query and add data to the context
-* add a new property to the context
+- perform authentication and add user to the context
+- run an additional database query and add data to the context
+- add a new property to the context
 
 ### Macro extension with resolve
 
@@ -10492,19 +10407,19 @@ Due to TypeScript limitation, macro that extends other macro cannot infer type i
 We provide a named single macro as a workaround to this limitation.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 new Elysia()
-	.macro('user', {
-		resolve: () => ({
-			user: 'lilith' as const
-		})
-	})
-	.macro('user2', {
-		user: true,
-		resolve: ({ user }) => {
-		//           ^?
-		}
-	})
+  .macro("user", {
+    resolve: () => ({
+      user: "lilith" as const,
+    }),
+  })
+  .macro("user2", {
+    user: true,
+    resolve: ({ user }) => {
+      //           ^?
+    },
+  });
 ```
 
 ## Schema
@@ -10512,24 +10427,24 @@ new Elysia()
 You can define a custom schema for your macro, to make sure that the route using the macro is passing the correct type.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.macro({
-		withFriends: {
-			body: t.Object({
-				friends: t.Tuple([t.Literal('Fouco'), t.Literal('Sartre')])
-			})
-		}
-	})
-	.post('/', ({ body }) => body.friends, {
-//                                  ^?
+  .macro({
+    withFriends: {
+      body: t.Object({
+        friends: t.Tuple([t.Literal("Fouco"), t.Literal("Sartre")]),
+      }),
+    },
+  })
+  .post("/", ({ body }) => body.friends, {
+    //                                  ^?
 
-		body: t.Object({
-			name: t.Literal('Lilith')
-		}),
-		withFriends: true
-	})
+    body: t.Object({
+      name: t.Literal("Lilith"),
+    }),
+    withFriends: true,
+  });
 ```
 
 Macro with schema will automatically validate and infer type to ensure type safety, and it can co-exist with existing schema as well.
@@ -10543,17 +10458,16 @@ Similar to [Macro extension with resolve](#macro-extension-with-resolve),
 Macro schema also support type inference for **lifecycle within the same macro** **BUT** only with named single macro due to TypeScript limitation.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.macro('withFriends', {
-		body: t.Object({
-			friends: t.Tuple([t.Literal('Fouco'), t.Literal('Sartre')])
-		}),
-		beforeHandle({ body: { friends } }) {
-//                             ^?
-		}
-	})
+new Elysia().macro("withFriends", {
+  body: t.Object({
+    friends: t.Tuple([t.Literal("Fouco"), t.Literal("Sartre")]),
+  }),
+  beforeHandle({ body: { friends } }) {
+    //                             ^?
+  },
+});
 ```
 
 If you want to use lifecycle type inference within the same macro, you might want to use a named single macro instead of multiple stacked macro
@@ -10565,34 +10479,32 @@ If you want to use lifecycle type inference within the same macro, you might wan
 Macro can extends other macro, allowing you to build upon existing one.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.macro({
-		sartre: {
-			body: t.Object({
-				sartre: t.Literal('Sartre')
-			})
-		},
-		fouco: {
-			body: t.Object({
-				fouco: t.Literal('Fouco')
-			})
-		},
-		lilith: {
-			fouco: true,
-			sartre: true,
-			body: t.Object({
-				lilith: t.Literal('Lilith')
-			})
-		}
-	})
-	.post('/', ({ body }) => body, {
-//                            ^?
-		lilith: true
-	})
-
-
+  .macro({
+    sartre: {
+      body: t.Object({
+        sartre: t.Literal("Sartre"),
+      }),
+    },
+    fouco: {
+      body: t.Object({
+        fouco: t.Literal("Fouco"),
+      }),
+    },
+    lilith: {
+      fouco: true,
+      sartre: true,
+      body: t.Object({
+        lilith: t.Literal("Lilith"),
+      }),
+    },
+  })
+  .post("/", ({ body }) => body, {
+    //                            ^?
+    lilith: true,
+  });
 
 // ---cut-after---
 //
@@ -10607,17 +10519,16 @@ Macro will automatically deduplicate the lifecycle event, ensuring that each lif
 By default, Elysia will use the property value as the seed, but you can override it by providing a custom seed.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.macro({
-		sartre: (role: string) => ({
-			seed: role, // [!code ++]
-			body: t.Object({
-				sartre: t.Literal('Sartre')
-			})
-		})
-	})
+new Elysia().macro({
+  sartre: (role: string) => ({
+    seed: role, // [!code ++]
+    body: t.Object({
+      sartre: t.Literal("Sartre"),
+    }),
+  }),
+});
 ```
 
 However, if you evert accidentally create a circular dependency, Elysia have a limit stack of 16 to prevent infinite loop in both runtime and type inference.
@@ -10627,8 +10538,8 @@ If the route already has OpenAPI detail, it will merge the detail together but p
 ---
 
 ---
-url: 'https://elysiajs.com/migrate/from-express.md'
----
+
+## url: 'https://elysiajs.com/migrate/from-express.md'
 
 # From Express to Elysia
 
@@ -10649,44 +10560,39 @@ Express and Elysia have similar routing syntax, using `app.get()` and `app.post(
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
+import express from "express";
 
-const app = express()
+const app = express();
 
-app.get('/', (req, res) => {
-    res.send('Hello World')
-})
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
-app.post('/id/:id', (req, res) => {
-    res.status(201).send(req.params.id)
-})
+app.post("/id/:id", (req, res) => {
+  res.status(201).send(req.params.id);
+});
 
-app.listen(3000)
+app.listen(3000);
 ```
 
 :::
-
 
 > Express use `req` and `res` as request and response objects
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .post(
-    	'/id/:id',
-     	({ status, params: { id } }) => {
-      		return status(201, id)
-      	}
-    )
-    .listen(3000)
+  .get("/", "Hello World")
+  .post("/id/:id", ({ status, params: { id } }) => {
+    return status(201, id);
+  })
+  .listen(3000);
 ```
 
 :::
-
 
 > Elysia use a single `context` and returns the response directly
 
@@ -10701,43 +10607,40 @@ Both has a simliar property for accessing input parameters like `headers`, `quer
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
+import express from "express";
 
-const app = express()
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
-app.post('/user', (req, res) => {
-    const limit = req.query.limit
-    const name = req.body.name
-    const auth = req.headers.authorization
+app.post("/user", (req, res) => {
+  const limit = req.query.limit;
+  const name = req.body.name;
+  const auth = req.headers.authorization;
 
-    res.json({ limit, name, auth })
-})
+  res.json({ limit, name, auth });
+});
 ```
 
 :::
-
 
 > Express needs `express.json()` middleware to parse JSON body
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.post('/user', (ctx) => {
-	    const limit = ctx.query.limit
-	    const name = ctx.body.name
-	    const auth = ctx.headers.authorization
+const app = new Elysia().post("/user", (ctx) => {
+  const limit = ctx.query.limit;
+  const name = ctx.body.name;
+  const auth = ctx.headers.authorization;
 
-	    return { limit, name, auth }
-	})
+  return { limit, name, auth };
+});
 ```
 
 :::
-
 
 > Elysia parse JSON, URL-encoded data, and formdata by default
 
@@ -10748,38 +10651,34 @@ Express use a dedicated `express.Router()` for declaring a sub router while Elys
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
+import express from "express";
 
-const subRouter = express.Router()
+const subRouter = express.Router();
 
-subRouter.get('/user', (req, res) => {
-	res.send('Hello User')
-})
+subRouter.get("/user", (req, res) => {
+  res.send("Hello User");
+});
 
-const app = express()
+const app = express();
 
-app.use('/api', subRouter)
+app.use("/api", subRouter);
 ```
 
 :::
-
 
 > Express use `express.Router()` to create a sub router
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia({ prefix: '/api' })
-	.get('/user', 'Hello User')
+const subRouter = new Elysia({ prefix: "/api" }).get("/user", "Hello User");
 
-const app = new Elysia()
-	.use(subRouter)
+const app = new Elysia().use(subRouter);
 ```
 
 :::
-
 
 > Elysia treat every instances as a component
 
@@ -10790,107 +10689,107 @@ Elysia has a built-in support for request validation using TypeBox sounds type s
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
-import { z } from 'zod'
+import express from "express";
+import { z } from "zod";
 
-const app = express()
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
 const paramSchema = z.object({
-	id: z.coerce.number()
-})
+  id: z.coerce.number(),
+});
 
 const bodySchema = z.object({
-	name: z.string()
-})
+  name: z.string(),
+});
 
-app.patch('/user/:id', (req, res) => {
-	const params = paramSchema.safeParse(req.params)
-	if (!params.success)
-		return res.status(422).json(result.error)
+app.patch("/user/:id", (req, res) => {
+  const params = paramSchema.safeParse(req.params);
+  if (!params.success) return res.status(422).json(result.error);
 
-	const body = bodySchema.safeParse(req.body)
-	if (!body.success)
-		return res.status(422).json(result.error)
+  const body = bodySchema.safeParse(req.body);
+  if (!body.success) return res.status(422).json(result.error);
 
-	res.json({
-		params: params.id.data,
-		body: body.data
-	})
-})
+  res.json({
+    params: params.id.data,
+    body: body.data,
+  });
+});
 ```
 
 :::
-
 
 > Express require external validation library like `zod` or `joi` to validate request body
 
 ::: code-group
 
 ```ts twoslash [Elysia TypeBox]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-//                           ^?
-		params,
-		body
-//   ^?
-	}),
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    //                           ^?
+    params,
+    body,
+    //   ^?
+  }),
 
-
-
-	{
-		params: t.Object({
-			id: t.Number()
-		}),
-		body: t.Object({
-			name: t.String()
-		})
-	})
+  {
+    params: t.Object({
+      id: t.Number(),
+    }),
+    body: t.Object({
+      name: t.String(),
+    }),
+  },
+);
 ```
 
 ```ts twoslash [Elysia Zod]
-import { Elysia } from 'elysia'
-import { z } from 'zod'
+import { Elysia } from "elysia";
+import { z } from "zod";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: z.object({
-			id: z.number()
-		}),
-		body: z.object({
-			name: z.string()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: z.object({
+      id: z.number(),
+    }),
+    body: z.object({
+      name: z.string(),
+    }),
+  },
+);
 ```
 
 ```ts twoslash [Elysia Valibot]
-import { Elysia } from 'elysia'
-import * as v from 'valibot'
+import { Elysia } from "elysia";
+import * as v from "valibot";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: v.object({
-			id: v.number()
-		}),
-		body: v.object({
-			name: v.string()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: v.object({
+      id: v.number(),
+    }),
+    body: v.object({
+      name: v.string(),
+    }),
+  },
+);
 ```
 
 :::
-
 
 > Elysia use TypeBox for validation, and coerce type automatically. While supporting various validation library like Zod, Valibot with the same syntax as well.
 
@@ -10901,55 +10800,47 @@ Express use an external library `multer` to handle file upload, while Elysia has
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
-import multer from 'multer'
-import { fileTypeFromFile } from 'file-type'
-import path from 'path'
+import express from "express";
+import multer from "multer";
+import { fileTypeFromFile } from "file-type";
+import path from "path";
 
-const app = express()
-const upload = multer({ dest: 'uploads/' })
+const app = express();
+const upload = multer({ dest: "uploads/" });
 
-app.post('/upload', upload.single('image'), async (req, res) => {
-	const file = req.file
+app.post("/upload", upload.single("image"), async (req, res) => {
+  const file = req.file;
 
-	if (!file)
-		return res
-			.status(422)
-			.send('No file uploaded')
+  if (!file) return res.status(422).send("No file uploaded");
 
-	const type = await fileTypeFromFile(file.path)
-	if (!type || !type.mime.startsWith('image/'))
-		return res
-			.status(422)
-			.send('File is not a valid image')
+  const type = await fileTypeFromFile(file.path);
+  if (!type || !type.mime.startsWith("image/"))
+    return res.status(422).send("File is not a valid image");
 
-	const filePath = path.resolve(file.path)
-	res.sendFile(filePath)
-})
+  const filePath = path.resolve(file.path);
+  res.sendFile(filePath);
+});
 ```
 
 :::
-
 
 > Express needs `express.json()` middleware to parse JSON body
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.post('/upload', ({ body }) => body.file, {
-		body: t.Object({
-			file: t.File({
-				type: 'image'
-			})
-		})
-	})
+const app = new Elysia().post("/upload", ({ body }) => body.file, {
+  body: t.Object({
+    file: t.File({
+      type: "image",
+    }),
+  }),
+});
 ```
 
 :::
-
 
 > Elysia handle file, and mimetype validation declaratively
 
@@ -10971,59 +10862,55 @@ While Express has a single flow for request pipeline in order, Elysia can interc
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
+import express from "express";
 
-const app = express()
+const app = express();
 
 // Global middleware
 app.use((req, res, next) => {
-	console.log(`${req.method} ${req.url}`)
-	next()
-})
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 app.get(
-	'/protected',
-	// Route-specific middleware
-	(req, res, next) => {
-	  	const token = req.headers.authorization
+  "/protected",
+  // Route-specific middleware
+  (req, res, next) => {
+    const token = req.headers.authorization;
 
-	  	if (!token)
-	   		return res.status(401).send('Unauthorized')
+    if (!token) return res.status(401).send("Unauthorized");
 
-	  	next()
-	},
-	(req, res) => {
-  		res.send('Protected route')
-	}
-)
+    next();
+  },
+  (req, res) => {
+    res.send("Protected route");
+  },
+);
 ```
 
 :::
-
 
 > Express use a single queue-based order for middleware which execute in order
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	// Global middleware
-	.onRequest(({ method, path }) => {
-		console.log(`${method} ${path}`)
-	})
-	// Route-specific middleware
-	.get('/protected', () => 'protected', {
-		beforeHandle({ status, headers }) {
-  			if (!headers.authorizaton)
-     			return status(401)
-		}
-	})
+  // Global middleware
+  .onRequest(({ method, path }) => {
+    console.log(`${method} ${path}`);
+  })
+  // Route-specific middleware
+  .get("/protected", () => "protected", {
+    beforeHandle({ status, headers }) {
+      if (!headers.authorizaton) return status(401);
+    },
+  });
 ```
 
 :::
-
 
 > Elysia use a specific event interceptor for each point in the request pipeline
 
@@ -11039,88 +10926,83 @@ For example, you can customize context in a **type safe** manner using [derive](
 
 ```ts twoslash [Express]
 // @errors: 2339
-import express from 'express'
-import type { Request, Response } from 'express'
+import express from "express";
+import type { Request, Response } from "express";
 
-const app = express()
+const app = express();
 
 const getVersion = (req: Request, res: Response, next: Function) => {
-	// @ts-ignore
-    req.version = 2
+  // @ts-ignore
+  req.version = 2;
 
-	next()
-}
+  next();
+};
 
-app.get('/version', getVersion, (req, res) => {
-	res.send(req.version)
-	//            ^?
-})
+app.get("/version", getVersion, (req, res) => {
+  res.send(req.version);
+  //            ^?
+});
 
 const authenticate = (req: Request, res: Response, next: Function) => {
-  	const token = req.headers.authorization
+  const token = req.headers.authorization;
 
-  	if (!token)
-   		return res.status(401).send('Unauthorized')
+  if (!token) return res.status(401).send("Unauthorized");
 
-	// @ts-ignore
-    req.token = token.split(' ')[1]
+  // @ts-ignore
+  req.token = token.split(" ")[1];
 
-	next()
-}
+  next();
+};
 
-app.get('/token', getVersion, authenticate, (req, res) => {
-	req.version
-	//  ^?
+app.get("/token", getVersion, authenticate, (req, res) => {
+  req.version;
+  //  ^?
 
-  	res.send(req.token)
-   //            ^?
-})
+  res.send(req.token);
+  //            ^?
+});
 ```
 
 :::
-
 
 > Express use a single queue-based order for middleware which execute in order
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.decorate('version', 2)
-	.get('/version', ({ version }) => version)
-	.resolve(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
+  .decorate("version", 2)
+  .get("/version", ({ version }) => version)
+  .resolve(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
 
-		return {
-			token: authorization.split(' ')[1]
-		}
-	})
-	.get('/token', ({ token, version }) => {
-		version
-		//  ^?
+    return {
+      token: authorization.split(" ")[1],
+    };
+  })
+  .get("/token", ({ token, version }) => {
+    version;
+    //  ^?
 
-
-		return token
-		//       ^?
-	})
+    return token;
+    //       ^?
+  });
 ```
 
 :::
-
 
 > Elysia use a specific event interceptor for each point in the request pipeline
 
 While Express can, use `declare module` to extend the `Request` interface, it is globally available and doesn't have sounds type safety, and doesn't garantee that the property is available in all request handlers.
 
 ```ts
-declare module 'express' {
-  	interface Request {
-    	version: number
-  		token: string
-  	}
+declare module "express" {
+  interface Request {
+    version: number;
+    token: string;
+  }
 }
 ```
 
@@ -11134,39 +11016,37 @@ Express use a function to return a plugin to define a reusable route-specific mi
 
 ```ts twoslash [Express]
 const findUser = (authorization?: string) => {
-	return {
-		name: 'Jane Doe',
-		role: 'admin' as const
-	}
-}
+  return {
+    name: "Jane Doe",
+    role: "admin" as const,
+  };
+};
 // ---cut---
 // @errors: 2339
-import express from 'express'
-import type { Request, Response } from 'express'
+import express from "express";
+import type { Request, Response } from "express";
 
-const app = express()
+const app = express();
 
-const role = (role: 'user' | 'admin') =>
-	(req: Request, res: Response, next: Function) => {
-	  	const user = findUser(req.headers.authorization)
+const role =
+  (role: "user" | "admin") => (req: Request, res: Response, next: Function) => {
+    const user = findUser(req.headers.authorization);
 
-	  	if (user.role !== role)
-	   		return res.status(401).send('Unauthorized')
+    if (user.role !== role) return res.status(401).send("Unauthorized");
 
-		// @ts-ignore
-	    req.user = user
+    // @ts-ignore
+    req.user = user;
 
-		next()
-	}
+    next();
+  };
 
-app.get('/token', role('admin'), (req, res) => {
-  	res.send(req.user)
-   //            ^?
-})
+app.get("/token", role("admin"), (req, res) => {
+  res.send(req.user);
+  //            ^?
+});
 ```
 
 :::
-
 
 > Express use a function callback to accept custom argument for middleware
 
@@ -11174,37 +11054,35 @@ app.get('/token', role('admin'), (req, res) => {
 
 ```ts twoslash [Elysia]
 const findUser = (authorization?: string) => {
-	return {
-		name: 'Jane Doe',
-		role: 'admin' as const
-	}
-}
+  return {
+    name: "Jane Doe",
+    role: "admin" as const,
+  };
+};
 // ---cut---
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.macro({
-		role: (role: 'user' | 'admin') => ({
-			resolve({ status, headers: { authorization } }) {
-				const user = findUser(authorization)
+  .macro({
+    role: (role: "user" | "admin") => ({
+      resolve({ status, headers: { authorization } }) {
+        const user = findUser(authorization);
 
-				if(user.role !== role)
-					return status(401)
+        if (user.role !== role) return status(401);
 
-				return {
-					user
-				}
-			}
-		})
-	})
-	.get('/token', ({ user }) => user, {
-	//                 ^?
-		role: 'admin'
-	})
+        return {
+          user,
+        };
+      },
+    }),
+  })
+  .get("/token", ({ user }) => user, {
+    //                 ^?
+    role: "admin",
+  });
 ```
 
 :::
-
 
 > Elysia use macro to pass custom argument to custom middleware
 
@@ -11215,94 +11093,93 @@ Express use a single error handler for all routes, while Elysia provides a more 
 ::: code-group
 
 ```ts
-import express from 'express'
+import express from "express";
 
-const app = express()
+const app = express();
 
 class CustomError extends Error {
-	constructor(message: string) {
-		super(message)
-		this.name = 'CustomError'
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
 }
 
 // global error handler
 app.use((error, req, res, next) => {
-	if(error instanceof CustomError) {
-		res.status(500).json({
-			message: 'Something went wrong!',
-			error
-		})
-	}
-})
+  if (error instanceof CustomError) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error,
+    });
+  }
+});
 
 // route-specific error handler
-app.get('/error', (req, res) => {
-	throw new CustomError('oh uh')
-})
+app.get("/error", (req, res) => {
+  throw new CustomError("oh uh");
+});
 ```
 
 :::
-
 
 > Express use middleware to handle error, a single error handler for all routes
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class CustomError extends Error {
-	// Optional: custom HTTP status code
-	status = 500
+  // Optional: custom HTTP status code
+  status = 500;
 
-	constructor(message: string) {
-		super(message)
-		this.name = 'CustomError'
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
 
-	// Optional: what should be sent to the client
-	toResponse() {
-		return {
-			message: "If you're seeing this, our dev forgot to handle this error",
-			error: this
-		}
-	}
+  // Optional: what should be sent to the client
+  toResponse() {
+    return {
+      message: "If you're seeing this, our dev forgot to handle this error",
+      error: this,
+    };
+  }
 }
 
 const app = new Elysia()
-	// Optional: register custom error class
-	.error({
-		CUSTOM: CustomError,
-	})
-	// Global error handler
-	.onError(({ error, code }) => {
-		if(code === 'CUSTOM')
-		// ^?
+  // Optional: register custom error class
+  .error({
+    CUSTOM: CustomError,
+  })
+  // Global error handler
+  .onError(({ error, code }) => {
+    if (code === "CUSTOM")
+      // ^?
 
-
-
-
-			return {
-				message: 'Something went wrong!',
-				error
-			}
-	})
-	.get('/error', () => {
-		throw new CustomError('oh uh')
-	}, {
-		// Optional: route specific error handler
-		error({ error }) {
-			return {
-				message: 'Only for this route!',
-				error
-			}
-		}
-	})
+      return {
+        message: "Something went wrong!",
+        error,
+      };
+  })
+  .get(
+    "/error",
+    () => {
+      throw new CustomError("oh uh");
+    },
+    {
+      // Optional: route specific error handler
+      error({ error }) {
+        return {
+          message: "Only for this route!",
+          error,
+        };
+      },
+    },
+  );
 ```
 
 :::
-
 
 > Elysia provide more granular control over error handling, and scoping mechanism
 
@@ -11323,81 +11200,76 @@ Express middleware is registered globally, while Elysia give you a control over 
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
+import express from "express";
 
-const app = express()
+const app = express();
 
-app.get('/', (req, res) => {
-	res.send('Hello World')
-})
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
-const subRouter = express.Router()
+const subRouter = express.Router();
 
 subRouter.use((req, res, next) => {
-	const token = req.headers.authorization
+  const token = req.headers.authorization;
 
-	if (!token)
-		return res.status(401).send('Unauthorized')
+  if (!token) return res.status(401).send("Unauthorized");
 
-	next()
-})
+  next();
+});
 
-app.use(subRouter)
+app.use(subRouter);
 
 // has side-effect from subRouter
-app.get('/side-effect', (req, res) => {
-	res.send('hi')
-})
-
+app.get("/side-effect", (req, res) => {
+  res.send("hi");
+});
 ```
 
 :::
-
 
 > Express doesn't handle side-effect of middleware, and requires a prefix to separate the side-effect
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia()
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
+const subRouter = new Elysia().onBeforeHandle(
+  ({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  },
+);
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .use(subRouter)
-    // doesn't have side-effect from subRouter
-    .get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  // doesn't have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 :::
-
 
 > Elysia encapsulate a side-effect into a plugin
 
 By default, Elysia will encapsulate lifecycle events and context to the instance that is used, so that the side-effect of a plugin will not affect parent instance unless explicitly stated.
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const subRouter = new Elysia()
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
-	// Scoped to parent instance but not beyond
-	.as('scoped') // [!code ++]
+  .onBeforeHandle(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  })
+  // Scoped to parent instance but not beyond
+  .as("scoped"); // [!code ++]
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .use(subRouter)
-    // [!code ++]
-    // now have side-effect from subRouter
-    .get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  // [!code ++]
+  // now have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 Elysia offers 3 type of scoping mechanism:
@@ -11422,51 +11294,48 @@ Express use an external library `cookie-parser` to parse cookies, while Elysia h
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
-import cookieParser from 'cookie-parser'
+import express from "express";
+import cookieParser from "cookie-parser";
 
-const app = express()
+const app = express();
 
-app.use(cookieParser('secret'))
+app.use(cookieParser("secret"));
 
-app.get('/', function (req, res) {
-	req.cookies.name
-	req.signedCookies.name
+app.get("/", function (req, res) {
+  req.cookies.name;
+  req.signedCookies.name;
 
-	res.cookie('name', 'value', {
-		signed: true,
-		maxAge: 1000 * 60 * 60 * 24
-	})
-})
+  res.cookie("name", "value", {
+    signed: true,
+    maxAge: 1000 * 60 * 60 * 24,
+  });
+});
 ```
 
 :::
-
 
 > Express use `cookie-parser` to parse cookies
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia({
-	cookie: {
-		secret: 'secret'
-	}
-})
-	.get('/', ({ cookie: { name } }) => {
-		// signature verification is handle automatically
-		name.value
+  cookie: {
+    secret: "secret",
+  },
+}).get("/", ({ cookie: { name } }) => {
+  // signature verification is handle automatically
+  name.value;
 
-		// cookie signature is signed automatically
-		name.value = 'value'
-		name.maxAge = 1000 * 60 * 60 * 24
-	})
+  // cookie signature is signed automatically
+  name.value = "value";
+  name.maxAge = 1000 * 60 * 60 * 24;
+});
 ```
 
 :::
-
 
 > Elysia use signal-based approach to handle cookies
 
@@ -11477,93 +11346,91 @@ Express require a separate configuration for OpenAPI, validation, and type safet
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
+import express from "express";
 
-import swaggerUi from 'swagger-ui-express'
+import swaggerUi from "swagger-ui-express";
 
-const app = express()
-app.use(express.json())
+const app = express();
+app.use(express.json());
 
-app.post('/users', (req, res) => {
-	// TODO: validate request body
-	res.status(201).json(req.body)
-})
+app.post("/users", (req, res) => {
+  // TODO: validate request body
+  res.status(201).json(req.body);
+});
 
 const swaggerSpec = {
-	openapi: '3.0.0',
-	info: {
-		title: 'My API',
-		version: '1.0.0'
-	},
-	paths: {
-		'/users': {
-			post: {
-				summary: 'Create user',
-				requestBody: {
-					content: {
-						'application/json': {
-							schema: {
-								type: 'object',
-								properties: {
-									name: {
-										type: 'string',
-										description: 'First name only'
-									},
-									age: { type: 'integer' }
-								},
-								required: ['name', 'age']
-							}
-						}
-					}
-				},
-				responses: {
-					'201': {
-						description: 'User created'
-					}
-				}
-			}
-		}
-	}
-}
+  openapi: "3.0.0",
+  info: {
+    title: "My API",
+    version: "1.0.0",
+  },
+  paths: {
+    "/users": {
+      post: {
+        summary: "Create user",
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string",
+                    description: "First name only",
+                  },
+                  age: { type: "integer" },
+                },
+                required: ["name", "age"],
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "User created",
+          },
+        },
+      },
+    },
+  },
+};
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 ```
 
 :::
-
 
 > Express requires a separate configuration for OpenAPI, validation, and type safety
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi' // [!code ++]
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi"; // [!code ++]
 
 const app = new Elysia()
-	.use(openapi()) // [!code ++]
-	.model({
-		user: t.Array(
-			t.Object({
-				name: t.String(),
-				age: t.Number()
-			})
-		)
-	})
-	.post('/users', ({ body }) => body, {
-	//                  ^?
-		body: 'user',
-		response: {
-			201: 'user'
-		},
-		detail: {
-			summary: 'Create user'
-		}
-	})
+  .use(openapi()) // [!code ++]
+  .model({
+    user: t.Array(
+      t.Object({
+        name: t.String(),
+        age: t.Number(),
+      }),
+    ),
+  })
+  .post("/users", ({ body }) => body, {
+    //                  ^?
+    body: "user",
+    response: {
+      201: "user",
+    },
+    detail: {
+      summary: "Create user",
+    },
+  });
 ```
 
 :::
-
 
 > Elysia use a schema as a single source of truth
 
@@ -11578,76 +11445,71 @@ Express use a single `supertest` library to test the application, while Elysia i
 ::: code-group
 
 ```ts [Express]
-import express from 'express'
-import request from 'supertest'
-import { describe, it, expect } from 'vitest'
+import express from "express";
+import request from "supertest";
+import { describe, it, expect } from "vitest";
 
-const app = express()
+const app = express();
 
-app.get('/', (req, res) => {
-	res.send('Hello World')
-})
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const res = await request(app).get('/')
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const res = await request(app).get("/");
 
-		expect(res.status).toBe(200)
-		expect(res.text).toBe('Hello World')
-	})
-})
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("Hello World");
+  });
+});
 ```
 
 :::
-
 
 > Express use `supertest` library to test the application
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
-import { describe, it, expect } from 'vitest'
+import { Elysia } from "elysia";
+import { describe, it, expect } from "vitest";
 
-const app = new Elysia()
-	.get('/', 'Hello World')
+const app = new Elysia().get("/", "Hello World");
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const res = await app.handle(
-			new Request('http://localhost')
-		)
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const res = await app.handle(new Request("http://localhost"));
 
-		expect(res.status).toBe(200)
-		expect(await res.text()).toBe('Hello World')
-	})
-})
+    expect(res.status).toBe(200);
+    expect(await res.text()).toBe("Hello World");
+  });
+});
 ```
 
 :::
-
 
 > Elysia use Web Standard API to handle request and response
 
 Alternatively, Elysia also offers a helper library called [Eden](/eden/overview) for End-to-end type safety, allowing us to test with auto-completion, and full type safety.
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
-import { describe, expect, it } from 'bun:test'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
+import { describe, expect, it } from "bun:test";
 
-const app = new Elysia().get('/hello', 'Hello World')
-const api = treaty(app)
+const app = new Elysia().get("/hello", "Hello World");
+const api = treaty(app);
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const { data, error, status } = await api.hello.get()
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const { data, error, status } = await api.hello.get();
 
-		expect(status).toBe(200)
-		expect(data).toBe('Hello World')
-		//      ^?
-	})
-})
+    expect(status).toBe(200);
+    expect(data).toBe("Hello World");
+    //      ^?
+  });
+});
 ```
 
 ## End-to-end type safety
@@ -11657,53 +11519,36 @@ Elysia offers a built-in support for **end-to-end type safety** without code gen
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-	.post('/mirror', ({ body }) => body, {
-		body: t.Object({
-			message: t.String()
-		})
-	})
+const app = new Elysia().post("/mirror", ({ body }) => body, {
+  body: t.Object({
+    message: t.String(),
+  }),
+});
 
-const api = treaty(app)
+const api = treaty(app);
 
 const { data, error } = await api.mirror.post({
-	message: 'Hello World'
-})
+  message: "Hello World",
+});
 
-if(error)
-	throw error
-	//     ^?
+if (error) throw error;
+//     ^?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.log(data)
+console.log(data);
 //          ^?
 
-
-
 // ---cut-after---
-console.log('ok')
+console.log("ok");
 ```
 
 :::
 
 If end-to-end type safety is important for you then Elysia is the right choice.
 
-***
+---
 
 Elysia offers a more ergonomic and developer-friendly experience with a focus on performance, type safety, and simplicity while Express is a popular web framework for Node.js, but it has some limitations when it comes to performance and simplicity.
 
@@ -11714,8 +11559,8 @@ Alternatively, if you are coming from a different framework, you can check out:
 ---
 
 ---
-url: 'https://elysiajs.com/migrate/from-fastify.md'
----
+
+## url: 'https://elysiajs.com/migrate/from-fastify.md'
 
 # From Fastify to Elysia
 
@@ -11736,44 +11581,39 @@ Fastify and Elysia has similar routing syntax, using `app.get()` and `app.post()
 ::: code-group
 
 ```ts [Fastify]
-import fastify from 'fastify'
+import fastify from "fastify";
 
-const app = fastify()
+const app = fastify();
 
-app.get('/', (request, reply) => {
-    res.send('Hello World')
-})
+app.get("/", (request, reply) => {
+  res.send("Hello World");
+});
 
-app.post('/id/:id', (request, reply) => {
-    reply.status(201).send(req.params.id)
-})
+app.post("/id/:id", (request, reply) => {
+  reply.status(201).send(req.params.id);
+});
 
-app.listen({ port: 3000 })
+app.listen({ port: 3000 });
 ```
 
 :::
-
 
 > Fastify use `request` and `reply` as request and response objects
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .post(
-    	'/id/:id',
-     	({ status, params: { id } }) => {
-      		return status(201, id)
-      	}
-    )
-    .listen(3000)
+  .get("/", "Hello World")
+  .post("/id/:id", ({ status, params: { id } }) => {
+    return status(201, id);
+  })
+  .listen(3000);
 ```
 
 :::
-
 
 > Elysia use a single `context` and returns the response directly
 
@@ -11788,41 +11628,38 @@ Both has a simliar property for accessing input parameters like `headers`, `quer
 ::: code-group
 
 ```ts [Fastify]
-import fastify from 'fastify'
+import fastify from "fastify";
 
-const app = fastify()
+const app = fastify();
 
-app.post('/user', (request, reply) => {
-    const limit = request.query.limit
-    const name = request.body.name
-    const auth = request.headers.authorization
+app.post("/user", (request, reply) => {
+  const limit = request.query.limit;
+  const name = request.body.name;
+  const auth = request.headers.authorization;
 
-    reply.send({ limit, name, auth })
-})
+  reply.send({ limit, name, auth });
+});
 ```
 
 :::
-
 
 > Fastify parse data and put it into `request` object
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.post('/user', (ctx) => {
-	    const limit = ctx.query.limit
-	    const name = ctx.body.name
-	    const auth = ctx.headers.authorization
+const app = new Elysia().post("/user", (ctx) => {
+  const limit = ctx.query.limit;
+  const name = ctx.body.name;
+  const auth = ctx.headers.authorization;
 
-	    return { limit, name, auth }
-	})
+  return { limit, name, auth };
+});
 ```
 
 :::
-
 
 > Elysia parse data and put it into `context` object
 
@@ -11833,40 +11670,36 @@ Fastify use a function callback to define a subrouter while Elysia treats every 
 ::: code-group
 
 ```ts [Fastify]
-import fastify, { FastifyPluginCallback } from 'fastify'
+import fastify, { FastifyPluginCallback } from "fastify";
 
 const subRouter: FastifyPluginCallback = (app, opts, done) => {
-	app.get('/user', (request, reply) => {
-		reply.send('Hello User')
-	})
-}
+  app.get("/user", (request, reply) => {
+    reply.send("Hello User");
+  });
+};
 
-const app = fastify()
+const app = fastify();
 
 app.register(subRouter, {
-	prefix: '/api'
-})
+  prefix: "/api",
+});
 ```
 
 :::
-
 
 > Fastify use a function callback to declare a sub router
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia({ prefix: '/api' })
-	.get('/user', 'Hello User')
+const subRouter = new Elysia({ prefix: "/api" }).get("/user", "Hello User");
 
-const app = new Elysia()
-	.use(subRouter)
+const app = new Elysia().use(subRouter);
 ```
 
 :::
-
 
 > Elysia treat every instances as a component
 
@@ -11923,69 +11756,73 @@ app.patch(
 
 :::
 
-
 > Fastify use JSON Schema for validation
 
 ::: code-group
 
 ```ts twoslash [Elysia TypeBox]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: t.Object({
-			id: t.Number()
-		}),
-		body: t.Object({
-			name: t.String()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: t.Object({
+      id: t.Number(),
+    }),
+    body: t.Object({
+      name: t.String(),
+    }),
+  },
+);
 ```
 
 ```ts twoslash [Elysia Zod]
-import { Elysia } from 'elysia'
-import { z } from 'zod'
+import { Elysia } from "elysia";
+import { z } from "zod";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: z.object({
-			id: z.number()
-		}),
-		body: z.object({
-			name: z.string()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: z.object({
+      id: z.number(),
+    }),
+    body: z.object({
+      name: z.string(),
+    }),
+  },
+);
 ```
 
 ```ts twoslash [Elysia Valibot]
-import { Elysia } from 'elysia'
-import * as v from 'zod'
+import { Elysia } from "elysia";
+import * as v from "zod";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: v.object({
-			id: v.number()
-		}),
-		body: v.object({
-			name: v.string()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: v.object({
+      id: v.number(),
+    }),
+    body: v.object({
+      name: v.string(),
+    }),
+  },
+);
 ```
 
 :::
-
 
 > Elysia use TypeBox for validation, and coerce type automatically. While supporting various validation library like Zod, Valibot with the same syntax as well.
 
@@ -12002,65 +11839,62 @@ However, Fastify doesn't offers a straight forward way for file validation, eg. 
 ::: code-group
 
 ```ts [Fastify]
-import fastify from 'fastify'
-import multipart from '@fastify/multipart'
+import fastify from "fastify";
+import multipart from "@fastify/multipart";
 
-import { fileTypeFromBuffer } from 'file-type'
+import { fileTypeFromBuffer } from "file-type";
 
-const app = fastify()
+const app = fastify();
 app.register(multipart, {
-	attachFieldsToBody: 'keyValues'
-})
+  attachFieldsToBody: "keyValues",
+});
 
 app.post(
-	'/upload',
-	{
-		schema: {
-			body: {
-				type: 'object',
-				properties: {
-					file: { type: 'object' }
-				},
-				required: ['file']
-			}
-		}
-	},
-	async (req, res) => {
-		const file = req.body.file
-		if (!file) return res.status(422).send('No file uploaded')
+  "/upload",
+  {
+    schema: {
+      body: {
+        type: "object",
+        properties: {
+          file: { type: "object" },
+        },
+        required: ["file"],
+      },
+    },
+  },
+  async (req, res) => {
+    const file = req.body.file;
+    if (!file) return res.status(422).send("No file uploaded");
 
-		const type = await fileTypeFromBuffer(file)
-		if (!type || !type.mime.startsWith('image/'))
-			return res.status(422).send('File is not a valid image')
+    const type = await fileTypeFromBuffer(file);
+    if (!type || !type.mime.startsWith("image/"))
+      return res.status(422).send("File is not a valid image");
 
-		res.header('Content-Type', type.mime)
-		res.send(file)
-	}
-)
+    res.header("Content-Type", type.mime);
+    res.send(file);
+  },
+);
 ```
 
 :::
-
 
 > Fastift use `fastify-multipart` to handle file upload, and fake `type: object` to allow Buffer
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.post('/upload', ({ body }) => body.file, {
-		body: t.Object({
-			file: t.File({
-				type: 'image'
-			})
-		})
-	})
+const app = new Elysia().post("/upload", ({ body }) => body.file, {
+  body: t.Object({
+    file: t.File({
+      type: "image",
+    }),
+  }),
+});
 ```
 
 :::
-
 
 > Elysia handle file, and mimetype validation using `t.File`
 
@@ -12088,61 +11922,58 @@ Both also has somewhat similar syntax for intercepting the request and response 
 ::: code-group
 
 ```ts [Fastify]
-import fastify from 'fastify'
+import fastify from "fastify";
 
-const app = fastify()
+const app = fastify();
 
 // Global middleware
-app.addHook('onRequest', (request, reply, done) => {
-	console.log(`${request.method} ${request.url}`)
+app.addHook("onRequest", (request, reply, done) => {
+  console.log(`${request.method} ${request.url}`);
 
-	done()
-})
+  done();
+});
 
 app.get(
-	'/protected',
-	{
-		// Route-specific middleware
-		preHandler(request, reply, done) {
-			const token = request.headers.authorization
+  "/protected",
+  {
+    // Route-specific middleware
+    preHandler(request, reply, done) {
+      const token = request.headers.authorization;
 
-			if (!token) reply.status(401).send('Unauthorized')
+      if (!token) reply.status(401).send("Unauthorized");
 
-			done()
-		}
-	},
-	(request, reply) => {
-		reply.send('Protected route')
-	}
-)
+      done();
+    },
+  },
+  (request, reply) => {
+    reply.send("Protected route");
+  },
+);
 ```
 
 :::
-
 
 > Fastify use `addHook` to register a middleware, and requires you to call `done` to continue the lifecycle event
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	// Global middleware
-	.onRequest(({ method, path }) => {
-		console.log(`${method} ${path}`)
-	})
-	// Route-specific middleware
-	.get('/protected', () => 'protected', {
-		beforeHandle({ status, headers }) {
-  			if (!headers.authorizaton)
-     			return status(401)
-		}
-	})
+  // Global middleware
+  .onRequest(({ method, path }) => {
+    console.log(`${method} ${path}`);
+  })
+  // Route-specific middleware
+  .get("/protected", () => "protected", {
+    beforeHandle({ status, headers }) {
+      if (!headers.authorizaton) return status(401);
+    },
+  });
 ```
 
 :::
-
 
 > Elysia detects the lifecycle event automatically, and doesn't require you to call `done` to continue the lifecycle event
 
@@ -12156,89 +11987,85 @@ For example, you can customize context in a **type safe** manner using [derive](
 
 ```ts twoslash [Fastify]
 // @errors: 2339
-import fastify from 'fastify'
+import fastify from "fastify";
 
-const app = fastify()
+const app = fastify();
 
-app.decorateRequest('version', 2)
+app.decorateRequest("version", 2);
 
-app.get('/version', (req, res) => {
-	res.send(req.version)
-	//            ^?
-})
+app.get("/version", (req, res) => {
+  res.send(req.version);
+  //            ^?
+});
 
 app.get(
-	'/token',
-	{
-		preHandler(req, res, done) {
-			const token = req.headers.authorization
+  "/token",
+  {
+    preHandler(req, res, done) {
+      const token = req.headers.authorization;
 
-			if (!token) return res.status(401).send('Unauthorized')
+      if (!token) return res.status(401).send("Unauthorized");
 
-			// @ts-ignore
-			req.token = token.split(' ')[1]
+      // @ts-ignore
+      req.token = token.split(" ")[1];
 
-			done()
-		}
-	},
-	(req, res) => {
-		req.version
-		//  ^?
+      done();
+    },
+  },
+  (req, res) => {
+    req.version;
+    //  ^?
 
-		res.send(req.token)
-		//            ^?
-	}
-)
+    res.send(req.token);
+    //            ^?
+  },
+);
 
 app.listen({
-	port: 3000
-})
+  port: 3000,
+});
 ```
 
 :::
-
 
 > Fastify use `decorateRequest` but doesn't offers sounds type safety
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.decorate('version', 2)
-	.get('/version', ({ version }) => version)
-	.resolve(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
+  .decorate("version", 2)
+  .get("/version", ({ version }) => version)
+  .resolve(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
 
-		return {
-			token: authorization.split(' ')[1]
-		}
-	})
-	.get('/token', ({ token, version }) => {
-		version
-		//  ^?
+    return {
+      token: authorization.split(" ")[1],
+    };
+  })
+  .get("/token", ({ token, version }) => {
+    version;
+    //  ^?
 
-
-		return token
-		//       ^?
-	})
+    return token;
+    //       ^?
+  });
 ```
 
 :::
-
 
 > Elysia use `decorate` to extend the context, and `resolve` to add custom properties to the context
 
 While Fastify can, use `declare module` to extend the `FastifyRequest` interface, it is globally available and doesn't have sounds type safety, and doesn't garantee that the property is available in all request handlers.
 
 ```ts
-declare module 'fastify' {
-  	interface FastifyRequest {
-    	version: number
-  		token: string
-  	}
+declare module "fastify" {
+  interface FastifyRequest {
+    version: number;
+    token: string;
+  }
 }
 ```
 
@@ -12252,45 +12079,44 @@ Fastify use a function to return Fastify plugin to define a named middleware, wh
 
 ```ts twoslash [Fastify]
 const findUser = (authorization?: string) => {
-	return {
-		name: 'Jane Doe',
-		role: 'admin' as const
-	}
-}
+  return {
+    name: "Jane Doe",
+    role: "admin" as const,
+  };
+};
 // ---cut---
 // @errors: 2339
-import fastify from 'fastify'
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import fastify from "fastify";
+import type { FastifyRequest, FastifyReply } from "fastify";
 
-const app = fastify()
+const app = fastify();
 
 const role =
-	(role: 'user' | 'admin') =>
-	(request: FastifyRequest, reply: FastifyReply, next: Function) => {
-		const user = findUser(request.headers.authorization)
+  (role: "user" | "admin") =>
+  (request: FastifyRequest, reply: FastifyReply, next: Function) => {
+    const user = findUser(request.headers.authorization);
 
-		if (user.role !== role) return reply.status(401).send('Unauthorized')
+    if (user.role !== role) return reply.status(401).send("Unauthorized");
 
-		// @ts-ignore
-		request.user = user
+    // @ts-ignore
+    request.user = user;
 
-		next()
-	}
+    next();
+  };
 
 app.get(
-	'/token',
-	{
-		preHandler: role('admin')
-	},
-	(request, reply) => {
-		reply.send(request.user)
-		//            ^?
-	}
-)
+  "/token",
+  {
+    preHandler: role("admin"),
+  },
+  (request, reply) => {
+    reply.send(request.user);
+    //            ^?
+  },
+);
 ```
 
 :::
-
 
 > Fastify use a function callback to accept custom argument for middleware
 
@@ -12298,37 +12124,35 @@ app.get(
 
 ```ts twoslash [Elysia]
 const findUser = (authorization?: string) => {
-	return {
-		name: 'Jane Doe',
-		role: 'admin' as const
-	}
-}
+  return {
+    name: "Jane Doe",
+    role: "admin" as const,
+  };
+};
 // ---cut---
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.macro({
-		role: (role: 'user' | 'admin') => ({
-			resolve({ status, headers: { authorization } }) {
-				const user = findUser(authorization)
+  .macro({
+    role: (role: "user" | "admin") => ({
+      resolve({ status, headers: { authorization } }) {
+        const user = findUser(authorization);
 
-				if(user.role !== role)
-					return status(401)
+        if (user.role !== role) return status(401);
 
-				return {
-					user
-				}
-			}
-		})
-	})
-	.get('/token', ({ user }) => user, {
-	//                 ^?
-		role: 'admin'
-	})
+        return {
+          user,
+        };
+      },
+    }),
+  })
+  .get("/token", ({ user }) => user, {
+    //                 ^?
+    role: "admin",
+  });
 ```
 
 :::
-
 
 > Elysia use macro to pass custom argument to custom middleware
 
@@ -12341,104 +12165,103 @@ Both Fastify and Elysia offers a lifecycle event to handle error.
 ::: code-group
 
 ```ts
-import fastify from 'fastify'
+import fastify from "fastify";
 
-const app = fastify()
+const app = fastify();
 
 class CustomError extends Error {
-	constructor(message: string) {
-		super(message)
-		this.name = 'CustomError'
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
 }
 
 // global error handler
 app.setErrorHandler((error, request, reply) => {
-	if (error instanceof CustomError)
-		reply.status(500).send({
-			message: 'Something went wrong!',
-			error
-		})
-})
+  if (error instanceof CustomError)
+    reply.status(500).send({
+      message: "Something went wrong!",
+      error,
+    });
+});
 
 app.get(
-	'/error',
-	{
-		// route-specific error handler
-		errorHandler(error, request, reply) {
-			reply.send({
-				message: 'Only for this route!',
-				error
-			})
-		}
-	},
-	(request, reply) => {
-		throw new CustomError('oh uh')
-	}
-)
+  "/error",
+  {
+    // route-specific error handler
+    errorHandler(error, request, reply) {
+      reply.send({
+        message: "Only for this route!",
+        error,
+      });
+    },
+  },
+  (request, reply) => {
+    throw new CustomError("oh uh");
+  },
+);
 ```
 
 :::
-
 
 > Fastify use `setErrorHandler` for global error handler, and `errorHandler` for route-specific error handler
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class CustomError extends Error {
-	// Optional: custom HTTP status code
-	status = 500
+  // Optional: custom HTTP status code
+  status = 500;
 
-	constructor(message: string) {
-		super(message)
-		this.name = 'CustomError'
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
 
-	// Optional: what should be sent to the client
-	toResponse() {
-		return {
-			message: "If you're seeing this, our dev forgot to handle this error",
-			error: this
-		}
-	}
+  // Optional: what should be sent to the client
+  toResponse() {
+    return {
+      message: "If you're seeing this, our dev forgot to handle this error",
+      error: this,
+    };
+  }
 }
 
 const app = new Elysia()
-	// Optional: register custom error class
-	.error({
-		CUSTOM: CustomError,
-	})
-	// Global error handler
-	.onError(({ error, code }) => {
-		if(code === 'CUSTOM')
-		// ^?
+  // Optional: register custom error class
+  .error({
+    CUSTOM: CustomError,
+  })
+  // Global error handler
+  .onError(({ error, code }) => {
+    if (code === "CUSTOM")
+      // ^?
 
-
-
-
-			return {
-				message: 'Something went wrong!',
-				error
-			}
-	})
-	.get('/error', () => {
-		throw new CustomError('oh uh')
-	}, {
-		// Optional: route specific error handler
-		error({ error }) {
-			return {
-				message: 'Only for this route!',
-				error
-			}
-		}
-	})
+      return {
+        message: "Something went wrong!",
+        error,
+      };
+  })
+  .get(
+    "/error",
+    () => {
+      throw new CustomError("oh uh");
+    },
+    {
+      // Optional: route specific error handler
+      error({ error }) {
+        return {
+          message: "Only for this route!",
+          error,
+        };
+      },
+    },
+  );
 ```
 
 :::
-
 
 > Elysia offers a custom error code, a shorthand for status and `toResponse` for mapping error to a response.
 
@@ -12458,52 +12281,50 @@ Fastify encapsulate plugin side-effect, while Elysia give you a control over sid
 ::: code-group
 
 ```ts [Fastify]
-import fastify from 'fastify'
-import type { FastifyPluginCallback } from 'fastify'
+import fastify from "fastify";
+import type { FastifyPluginCallback } from "fastify";
 
 const subRouter: FastifyPluginCallback = (app, opts, done) => {
-	app.addHook('preHandler', (request, reply) => {
-		if (!request.headers.authorization?.startsWith('Bearer '))
-			reply.code(401).send({ error: 'Unauthorized' })
-	})
+  app.addHook("preHandler", (request, reply) => {
+    if (!request.headers.authorization?.startsWith("Bearer "))
+      reply.code(401).send({ error: "Unauthorized" });
+  });
 
-	done()
-}
+  done();
+};
 
 const app = fastify()
-	.get('/', (request, reply) => {
-		reply.send('Hello World')
-	})
-	.register(subRouter)
-	// doesn't have side-effect from subRouter
-	.get('/side-effect', () => 'hi')
+  .get("/", (request, reply) => {
+    reply.send("Hello World");
+  })
+  .register(subRouter)
+  // doesn't have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 :::
-
 
 > Fastify encapsulate side-effect of a plugin
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia()
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
+const subRouter = new Elysia().onBeforeHandle(
+  ({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  },
+);
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .use(subRouter)
-    // doesn't have side-effect from subRouter
-    .get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  // doesn't have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 :::
-
 
 > Elysia encapsulate side-effect of a plugin unless explicitly stated
 
@@ -12512,22 +12333,21 @@ Both has a encapsulate mechanism of a plugin to prevent side-effect.
 However, Elysia can explicitly stated which plugin should have side-effect by declaring a scoped while Fastify always encapsulate it.
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const subRouter = new Elysia()
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
-	// Scoped to parent instance but not beyond
-	.as('scoped') // [!code ++]
+  .onBeforeHandle(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  })
+  // Scoped to parent instance but not beyond
+  .as("scoped"); // [!code ++]
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .use(subRouter)
-    // [!code ++]
-    // now have side-effect from subRouter
-    .get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  // [!code ++]
+  // now have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 Elysia offers 3 type of scoping mechanism:
@@ -12536,7 +12356,7 @@ Elysia offers 3 type of scoping mechanism:
 2. **scoped** - Scoped side-effect to the parent instance but not beyond
 3. **global** - Affects every instances
 
-***
+---
 
 As Fastify doesn't offers a scoping mechanism, we need to either:
 
@@ -12546,66 +12366,65 @@ As Fastify doesn't offers a scoping mechanism, we need to either:
 However, this can caused a duplicated side-effect if not handled carefully.
 
 ```ts
-import fastify from 'fastify'
+import fastify from "fastify";
 import type {
-	FastifyRequest,
-	FastifyReply,
-	FastifyPluginCallback
-} from 'fastify'
+  FastifyRequest,
+  FastifyReply,
+  FastifyPluginCallback,
+} from "fastify";
 
 const log = (request: FastifyRequest, reply: FastifyReply, done: Function) => {
-	console.log('Middleware executed')
+  console.log("Middleware executed");
 
-	done()
-}
+  done();
+};
 
-const app = fastify()
+const app = fastify();
 
-app.addHook('onRequest', log)
-app.get('/main', (request, reply) => {
-	reply.send('Hello from main!')
-})
+app.addHook("onRequest", log);
+app.get("/main", (request, reply) => {
+  reply.send("Hello from main!");
+});
 
 const subRouter: FastifyPluginCallback = (app, opts, done) => {
-	app.addHook('onRequest', log)
+  app.addHook("onRequest", log);
 
-	// This would log twice
-	app.get('/sub', (request, reply) => {
-		return reply.send('Hello from sub router!')
-	})
+  // This would log twice
+  app.get("/sub", (request, reply) => {
+    return reply.send("Hello from sub router!");
+  });
 
-	done()
-}
+  done();
+};
 
 app.register(subRouter, {
-	prefix: '/sub'
-})
+  prefix: "/sub",
+});
 
 app.listen({
-	port: 3000
-})
+  port: 3000,
+});
 ```
 
 In this scenario, Elysia offers a plugin deduplication mechanism to prevent duplicated side-effect.
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia({ name: 'subRouter' }) // [!code ++]
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
-	.as('scoped')
+const subRouter = new Elysia({ name: "subRouter" }) // [!code ++]
+  .onBeforeHandle(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  })
+  .as("scoped");
 
 const app = new Elysia()
-	.get('/', 'Hello World')
-	.use(subRouter)
-	.use(subRouter) // [!code ++]
-	.use(subRouter) // [!code ++]
-	.use(subRouter) // [!code ++]
-	// side-effect only called once
-	.get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  .use(subRouter) // [!code ++]
+  .use(subRouter) // [!code ++]
+  .use(subRouter) // [!code ++]
+  // side-effect only called once
+  .get("/side-effect", () => "hi");
 ```
 
 By using a unique `name`, Elysia will apply the plugin only once, and will not cause duplicated side-effect.
@@ -12617,53 +12436,50 @@ Fastify use `@fastify/cookie` to parse cookies, while Elysia has a built-in supp
 ::: code-group
 
 ```ts [Fastify]
-import fastify from 'fastify'
-import cookie from '@fastify/cookie'
+import fastify from "fastify";
+import cookie from "@fastify/cookie";
 
-const app = fastify()
+const app = fastify();
 
 app.use(cookie, {
-	secret: 'secret',
-	hook: 'onRequest'
-})
+  secret: "secret",
+  hook: "onRequest",
+});
 
-app.get('/', function (request, reply) {
-	request.unsignCookie(request.cookies.name)
+app.get("/", function (request, reply) {
+  request.unsignCookie(request.cookies.name);
 
-	reply.setCookie('name', 'value', {
-      	path: '/',
-      	signed: true
-    })
-})
+  reply.setCookie("name", "value", {
+    path: "/",
+    signed: true,
+  });
+});
 ```
 
 :::
-
 
 > Fastify use `unsignCookie` to verify the cookie signature, and `setCookie` to set the cookie
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia({
-	cookie: {
-		secret: 'secret'
-	}
-})
-	.get('/', ({ cookie: { name } }) => {
-		// signature verification is handle automatically
-		name.value
+  cookie: {
+    secret: "secret",
+  },
+}).get("/", ({ cookie: { name } }) => {
+  // signature verification is handle automatically
+  name.value;
 
-		// cookie signature is signed automatically
-		name.value = 'value'
-		name.maxAge = 1000 * 60 * 60 * 24
-	})
+  // cookie signature is signed automatically
+  name.value = "value";
+  name.maxAge = 1000 * 60 * 60 * 24;
+});
 ```
 
 :::
-
 
 > Elysia use a signal-based approach to handle cookies, and signature verification is handle automatically
 
@@ -12674,90 +12490,88 @@ Both offers OpenAPI documentation using Swagger, however Elysia default to Scala
 ::: code-group
 
 ```ts [Fastify]
-import fastify from 'fastify'
-import swagger from '@fastify/swagger'
+import fastify from "fastify";
+import swagger from "@fastify/swagger";
 
-const app = fastify()
+const app = fastify();
 app.register(swagger, {
-	openapi: '3.0.0',
-	info: {
-		title: 'My API',
-		version: '1.0.0'
-	}
-})
+  openapi: "3.0.0",
+  info: {
+    title: "My API",
+    version: "1.0.0",
+  },
+});
 
 app.addSchema({
-	$id: 'user',
-	type: 'object',
-	properties: {
-		name: {
-			type: 'string',
-			description: 'First name only'
-		},
-		age: { type: 'integer' }
-	},
-	required: ['name', 'age']
-})
+  $id: "user",
+  type: "object",
+  properties: {
+    name: {
+      type: "string",
+      description: "First name only",
+    },
+    age: { type: "integer" },
+  },
+  required: ["name", "age"],
+});
 
 app.post(
-	'/users',
-	{
-		schema: {
-			summary: 'Create user',
-			body: {
-				$ref: 'user#'
-			},
-			response: {
-				'201': {
-					$ref: 'user#'
-				}
-			}
-		}
-	},
-	(req, res) => {
-		res.status(201).send(req.body)
-	}
-)
+  "/users",
+  {
+    schema: {
+      summary: "Create user",
+      body: {
+        $ref: "user#",
+      },
+      response: {
+        "201": {
+          $ref: "user#",
+        },
+      },
+    },
+  },
+  (req, res) => {
+    res.status(201).send(req.body);
+  },
+);
 
-await fastify.ready()
-fastify.swagger()
+await fastify.ready();
+fastify.swagger();
 ```
 
 :::
-
 
 > Fastify use `@fastify/swagger` for OpenAPI documentation using Swagger
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi' // [!code ++]
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi"; // [!code ++]
 
 const app = new Elysia()
-	.use(openapi()) // [!code ++]
-	.model({
-		user: t.Array(
-			t.Object({
-				name: t.String(),
-				age: t.Number()
-			})
-		)
-	})
-	.post('/users', ({ body }) => body, {
-	//                  ^?
-		body: 'user',
-		response: {
-			201: 'user'
-		},
-		detail: {
-			summary: 'Create user'
-		}
-	})
+  .use(openapi()) // [!code ++]
+  .model({
+    user: t.Array(
+      t.Object({
+        name: t.String(),
+        age: t.Number(),
+      }),
+    ),
+  })
+  .post("/users", ({ body }) => body, {
+    //                  ^?
+    body: "user",
+    response: {
+      201: "user",
+    },
+    detail: {
+      summary: "Create user",
+    },
+  });
 ```
 
 :::
-
 
 > Elysia use `@elysiajs/swagger` for OpenAPI documentation using Scalar by default, or optionally Swagger
 
@@ -12770,85 +12584,80 @@ Fastify has a built-in support for testing using `fastify.inject()` to **simulat
 ::: code-group
 
 ```ts [Fastify]
-import fastify from 'fastify'
-import request from 'supertest'
-import { describe, it, expect } from 'vitest'
+import fastify from "fastify";
+import request from "supertest";
+import { describe, it, expect } from "vitest";
 
 function build(opts = {}) {
-  	const app = fastify(opts)
+  const app = fastify(opts);
 
-  	app.get('/', async function (request, reply) {
-	    reply.send({ hello: 'world' })
-	})
+  app.get("/", async function (request, reply) {
+    reply.send({ hello: "world" });
+  });
 
-  	return app
+  return app;
 }
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-  		const app = build()
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const app = build();
 
-		const response = await app.inject({
-		    url: '/',
-		    method: 'GET',
-	  })
+    const response = await app.inject({
+      url: "/",
+      method: "GET",
+    });
 
-		expect(res.status).toBe(200)
-		expect(res.text).toBe('Hello World')
-	})
-})
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("Hello World");
+  });
+});
 ```
 
 :::
-
 
 > Fastify use `fastify.inject()` to simulate network request
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
-import { describe, it, expect } from 'vitest'
+import { Elysia } from "elysia";
+import { describe, it, expect } from "vitest";
 
-const app = new Elysia()
-	.get('/', 'Hello World')
+const app = new Elysia().get("/", "Hello World");
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const res = await app.handle(
-			new Request('http://localhost')
-		)
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const res = await app.handle(new Request("http://localhost"));
 
-		expect(res.status).toBe(200)
-		expect(await res.text()).toBe('Hello World')
-	})
-})
+    expect(res.status).toBe(200);
+    expect(await res.text()).toBe("Hello World");
+  });
+});
 ```
 
 :::
-
 
 > Elysia use Web Standard API to handle **actual** request
 
 Alternatively, Elysia also offers a helper library called [Eden](/eden/overview) for End-to-end type safety, allowing us to test with auto-completion, and full type safety.
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
-import { describe, expect, it } from 'bun:test'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
+import { describe, expect, it } from "bun:test";
 
-const app = new Elysia().get('/hello', 'Hello World')
-const api = treaty(app)
+const app = new Elysia().get("/hello", "Hello World");
+const api = treaty(app);
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const { data, error, status } = await api.hello.get()
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const { data, error, status } = await api.hello.get();
 
-		expect(status).toBe(200)
-		expect(data).toBe('Hello World')
-		//      ^?
-	})
-})
+    expect(status).toBe(200);
+    expect(data).toBe("Hello World");
+    //      ^?
+  });
+});
 ```
 
 ## End-to-end type safety
@@ -12858,53 +12667,36 @@ Elysia offers a built-in support for **end-to-end type safety** without code gen
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-	.post('/mirror', ({ body }) => body, {
-		body: t.Object({
-			message: t.String()
-		})
-	})
+const app = new Elysia().post("/mirror", ({ body }) => body, {
+  body: t.Object({
+    message: t.String(),
+  }),
+});
 
-const api = treaty(app)
+const api = treaty(app);
 
 const { data, error } = await api.mirror.post({
-	message: 'Hello World'
-})
+  message: "Hello World",
+});
 
-if(error)
-	throw error
-	//     ^?
+if (error) throw error;
+//     ^?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.log(data)
+console.log(data);
 //          ^?
 
-
-
 // ---cut-after---
-console.log('ok')
+console.log("ok");
 ```
 
 :::
 
 If end-to-end type safety is important for you then Elysia is the right choice.
 
-***
+---
 
 Elysia offers a more ergonomic and developer-friendly experience with a focus on performance, type safety, and simplicity while Fastify is one of the established framework for Node.js, but doesn't have **sounds type safety** and **end-to-end type safety** offered by next generation framework.
 
@@ -12915,8 +12707,8 @@ Alternatively, if you are coming from a different framework, you can check out:
 ---
 
 ---
-url: 'https://elysiajs.com/migrate/from-hono.md'
----
+
+## url: 'https://elysiajs.com/migrate/from-hono.md'
 
 # From Hono to Elysia
 
@@ -12941,45 +12733,40 @@ Both use a single `Context` parameters to handle request and response, and retur
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const app = new Hono()
+const app = new Hono();
 
-app.get('/', (c) => {
-    return c.text('Hello World')
-})
+app.get("/", (c) => {
+  return c.text("Hello World");
+});
 
-app.post('/id/:id', (c) => {
-	c.status(201)
-    return c.text(req.params.id)
-})
+app.post("/id/:id", (c) => {
+  c.status(201);
+  return c.text(req.params.id);
+});
 
-export default app
+export default app;
 ```
 
 :::
-
 
 > Hono use helper `c.text`, `c.json` to return a response
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .post(
-    	'/id/:id',
-     	({ status, params: { id } }) => {
-      		return status(201, id)
-      	}
-    )
-    .listen(3000)
+  .get("/", "Hello World")
+  .post("/id/:id", ({ status, params: { id } }) => {
+    return status(201, id);
+  })
+  .listen(3000);
 ```
 
 :::
-
 
 > Elysia use a single `context` and returns the response directly
 
@@ -12996,41 +12783,38 @@ Hono use a function to parse query, header, and body manually while Elysia autom
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const app = new Hono()
+const app = new Hono();
 
-app.post('/user', async (c) => {
-	const limit = c.req.query('limit')
-    const { name } = await c.body()
-    const auth = c.req.header('authorization')
+app.post("/user", async (c) => {
+  const limit = c.req.query("limit");
+  const { name } = await c.body();
+  const auth = c.req.header("authorization");
 
-    return c.json({ limit, name, auth })
-})
+  return c.json({ limit, name, auth });
+});
 ```
 
 :::
-
 
 > Hono parse body automatically but it doesn't apply to query and headers
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.post('/user', (ctx) => {
-	    const limit = ctx.query.limit
-	    const name = ctx.body.name
-	    const auth = ctx.headers.authorization
+const app = new Elysia().post("/user", (ctx) => {
+  const limit = ctx.query.limit;
+  const name = ctx.body.name;
+  const auth = ctx.headers.authorization;
 
-	    return { limit, name, auth }
-	})
+  return { limit, name, auth };
+});
 ```
 
 :::
-
 
 > Elysia use static code analysis to analyze what to parse
 
@@ -13045,38 +12829,34 @@ Both can inherits another instance as a router, but Elysia treat every instances
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const subRouter = new Hono()
+const subRouter = new Hono();
 
-subRouter.get('/user', (c) => {
-	return c.text('Hello User')
-})
+subRouter.get("/user", (c) => {
+  return c.text("Hello User");
+});
 
-const app = new Hono()
+const app = new Hono();
 
-app.route('/api', subRouter)
+app.route("/api", subRouter);
 ```
 
 :::
-
 
 > Hono **require** a prefix to separate the subrouter
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia({ prefix: '/api' })
-	.get('/user', 'Hello User')
+const subRouter = new Elysia({ prefix: "/api" }).get("/user", "Hello User");
 
-const app = new Elysia()
-	.use(subRouter)
+const app = new Elysia().use(subRouter);
 ```
 
 :::
-
 
 > Elysia use optional prefix constructor to define one
 
@@ -13089,100 +12869,104 @@ While Hono supports for various validator via external package, Elysia has a bui
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
-import { z } from 'zod'
+import { Hono } from "hono";
+import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
 
-const app = new Hono()
+const app = new Hono();
 
 app.patch(
-	'/user/:id',
-	zValidator(
-		'param',
-		z.object({
-			id: z.coerce.number()
-		})
-	),
-	zValidator(
-		'json',
-		z.object({
-			name: z.string()
-		})
-	),
-	(c) => {
-		return c.json({
-			params: c.req.param(),
-			body: c.req.json()
-		})
-	}
-)
+  "/user/:id",
+  zValidator(
+    "param",
+    z.object({
+      id: z.coerce.number(),
+    }),
+  ),
+  zValidator(
+    "json",
+    z.object({
+      name: z.string(),
+    }),
+  ),
+  (c) => {
+    return c.json({
+      params: c.req.param(),
+      body: c.req.json(),
+    });
+  },
+);
 ```
 
 :::
-
 
 > Hono use pipe based
 
 ::: code-group
 
 ```ts twoslash [Elysia TypeBox]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: t.Object({
-			id: t.Number()
-		}),
-		body: t.Object({
-			name: t.String()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: t.Object({
+      id: t.Number(),
+    }),
+    body: t.Object({
+      name: t.String(),
+    }),
+  },
+);
 ```
 
 ```ts twoslash [Elysia Zod]
-import { Elysia } from 'elysia'
-import { z } from 'zod'
+import { Elysia } from "elysia";
+import { z } from "zod";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: z.object({
-			id: z.number()
-		}),
-		body: z.object({
-			name: z.string()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: z.object({
+      id: z.number(),
+    }),
+    body: z.object({
+      name: z.string(),
+    }),
+  },
+);
 ```
 
 ```ts twoslash [Elysia Valibot]
-import { Elysia } from 'elysia'
-import * as v from 'valibot'
+import { Elysia } from "elysia";
+import * as v from "valibot";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: v.object({
-			id: v.number()
-		}),
-		body: v.object({
-			name: v.string()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: v.object({
+      id: v.number(),
+    }),
+    body: v.object({
+      name: v.string(),
+    }),
+  },
+);
 ```
 
 :::
-
 
 > Elysia use TypeBox for validation, and coerce type automatically. While supporting various validation library like Zod, Valibot with the same syntax as well.
 
@@ -13195,58 +12979,55 @@ Both Hono, and Elysia use Web Standard API to handle file upload, but Elysia has
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
-import { z } from 'zod'
-import { zValidator } from '@hono/zod-validator'
+import { Hono } from "hono";
+import { z } from "zod";
+import { zValidator } from "@hono/zod-validator";
 
-import { fileTypeFromBlob } from 'file-type'
+import { fileTypeFromBlob } from "file-type";
 
-const app = new Hono()
+const app = new Hono();
 
 app.post(
-	'/upload',
-	zValidator(
-		'form',
-		z.object({
-			file: z.instanceof(File)
-		})
-	),
-	async (c) => {
-		const body = await c.req.parseBody()
+  "/upload",
+  zValidator(
+    "form",
+    z.object({
+      file: z.instanceof(File),
+    }),
+  ),
+  async (c) => {
+    const body = await c.req.parseBody();
 
-		const type = await fileTypeFromBlob(body.image as File)
-		if (!type || !type.mime.startsWith('image/')) {
-			c.status(422)
-			return c.text('File is not a valid image')
-		}
+    const type = await fileTypeFromBlob(body.image as File);
+    if (!type || !type.mime.startsWith("image/")) {
+      c.status(422);
+      return c.text("File is not a valid image");
+    }
 
-		return new Response(body.image)
-	}
-)
+    return new Response(body.image);
+  },
+);
 ```
 
 :::
-
 
 > Hono needs a separate `file-type` library to validate mimetype
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.post('/upload', ({ body }) => body.file, {
-		body: t.Object({
-			file: t.File({
-				type: 'image'
-			})
-		})
-	})
+const app = new Elysia().post("/upload", ({ body }) => body.file, {
+  body: t.Object({
+    file: t.File({
+      type: "image",
+    }),
+  }),
+});
 ```
 
 :::
-
 
 > Elysia handle file, and mimetype validation declaratively
 
@@ -13266,62 +13047,59 @@ While Hono has a single flow for request pipeline in order, Elysia can intercept
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const app = new Hono()
+const app = new Hono();
 
 // Global middleware
 app.use(async (c, next) => {
-	console.log(`${c.method} ${c.url}`)
+  console.log(`${c.method} ${c.url}`);
 
-	await next()
-})
+  await next();
+});
 
 app.get(
-	'/protected',
-	// Route-specific middleware
-	async (c, next) => {
-	  	const token = c.headers.authorization
+  "/protected",
+  // Route-specific middleware
+  async (c, next) => {
+    const token = c.headers.authorization;
 
-	  	if (!token) {
-			c.status(401)
-	   		return c.text('Unauthorized')
-		}
+    if (!token) {
+      c.status(401);
+      return c.text("Unauthorized");
+    }
 
-	  	await next()
-	},
-	(req, res) => {
-  		res.send('Protected route')
-	}
-)
+    await next();
+  },
+  (req, res) => {
+    res.send("Protected route");
+  },
+);
 ```
 
 :::
-
 
 > Hono use a single queue-based order for middleware which execute in order
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	// Global middleware
-	.onRequest(({ method, path }) => {
-		console.log(`${method} ${path}`)
-	})
-	// Route-specific middleware
-	.get('/protected', () => 'protected', {
-		beforeHandle({ status, headers }) {
-  			if (!headers.authorizaton)
-     			return status(401)
-		}
-	})
+  // Global middleware
+  .onRequest(({ method, path }) => {
+    console.log(`${method} ${path}`);
+  })
+  // Route-specific middleware
+  .get("/protected", () => "protected", {
+    beforeHandle({ status, headers }) {
+      if (!headers.authorizaton) return status(401);
+    },
+  });
 ```
 
 :::
-
 
 > Elysia use a specific event interceptor for each point in the request pipeline
 
@@ -13337,87 +13115,83 @@ For example, you can customize context in a **type safe** manner using [derive](
 
 ```ts twoslash [Hono]
 // @errors: 2339, 2769
-import { Hono } from 'hono'
-import { createMiddleware } from 'hono/factory'
+import { Hono } from "hono";
+import { createMiddleware } from "hono/factory";
 
-const app = new Hono()
+const app = new Hono();
 
 const getVersion = createMiddleware(async (c, next) => {
-	c.set('version', 2)
+  c.set("version", 2);
 
-	await next()
-})
+  await next();
+});
 
-app.use(getVersion)
+app.use(getVersion);
 
-app.get('/version', getVersion, (c) => {
-	return c.text(c.get('version') + '')
-})
+app.get("/version", getVersion, (c) => {
+  return c.text(c.get("version") + "");
+});
 
 const authenticate = createMiddleware(async (c, next) => {
-	const token = c.req.header('authorization')
+  const token = c.req.header("authorization");
 
-	if (!token) {
-		c.status(401)
-		return c.text('Unauthorized')
-	}
+  if (!token) {
+    c.status(401);
+    return c.text("Unauthorized");
+  }
 
-	c.set('token', token.split(' ')[1])
+  c.set("token", token.split(" ")[1]);
 
-	await next()
-})
+  await next();
+});
 
-app.post('/user', authenticate, async (c) => {
-	c.get('version')
+app.post("/user", authenticate, async (c) => {
+  c.get("version");
 
-	return c.text(c.get('token'))
-})
+  return c.text(c.get("token"));
+});
 ```
 
 :::
-
 
 > Hono use a middleware to extend the context, but is not type safe
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.decorate('version', 2)
-	.get('/version', ({ version }) => version)
-	.resolve(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
+  .decorate("version", 2)
+  .get("/version", ({ version }) => version)
+  .resolve(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
 
-		return {
-			token: authorization.split(' ')[1]
-		}
-	})
-	.get('/token', ({ token, version }) => {
-		version
-		//  ^?
+    return {
+      token: authorization.split(" ")[1],
+    };
+  })
+  .get("/token", ({ token, version }) => {
+    version;
+    //  ^?
 
-
-		return token
-		//       ^?
-	})
+    return token;
+    //       ^?
+  });
 ```
 
 :::
-
 
 > Elysia use a specific event interceptor for each point in the request pipeline
 
 While Hono can, use `declare module` to extend the `ContextVariableMap` interface, it is globally available and doesn't have sounds type safety, and doesn't garantee that the property is available in all request handlers.
 
 ```ts
-declare module 'hono' {
-  	interface ContextVariableMap {
-    	version: number
-  		token: string
-  	}
+declare module "hono" {
+  interface ContextVariableMap {
+    version: number;
+    token: string;
+  }
 }
 ```
 
@@ -13431,38 +13205,38 @@ Hono use a callback function to define a reusable route-specific middleware, whi
 
 ```ts twoslash [Hono]
 const findUser = (authorization?: string) => {
-	return {
-		name: 'Jane Doe',
-		role: 'admin' as const
-	}
-}
+  return {
+    name: "Jane Doe",
+    role: "admin" as const,
+  };
+};
 // ---cut---
 // @errors: 2339 2589 2769
-import { Hono } from 'hono'
-import { createMiddleware } from 'hono/factory'
+import { Hono } from "hono";
+import { createMiddleware } from "hono/factory";
 
-const app = new Hono()
+const app = new Hono();
 
-const role = (role: 'user' | 'admin') => createMiddleware(async (c, next) => {
-	const user = findUser(c.req.header('Authorization'))
+const role = (role: "user" | "admin") =>
+  createMiddleware(async (c, next) => {
+    const user = findUser(c.req.header("Authorization"));
 
-	if(user.role !== role) {
-		c.status(401)
-		return c.text('Unauthorized')
-	}
+    if (user.role !== role) {
+      c.status(401);
+      return c.text("Unauthorized");
+    }
 
-	c.set('user', user)
+    c.set("user", user);
 
-	await next()
-})
+    await next();
+  });
 
-app.get('/user/:id', role('admin'), (c) => {
-	return c.json(c.get('user'))
-})
+app.get("/user/:id", role("admin"), (c) => {
+  return c.json(c.get("user"));
+});
 ```
 
 :::
-
 
 > Hono use callback to return `createMiddleware` to create a reusable middleware, but is not type safe
 
@@ -13470,37 +13244,35 @@ app.get('/user/:id', role('admin'), (c) => {
 
 ```ts twoslash [Elysia]
 const findUser = (authorization?: string) => {
-	return {
-		name: 'Jane Doe',
-		role: 'admin' as const
-	}
-}
+  return {
+    name: "Jane Doe",
+    role: "admin" as const,
+  };
+};
 // ---cut---
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.macro({
-		role: (role: 'user' | 'admin') => ({
-			resolve({ status, headers: { authorization } }) {
-				const user = findUser(authorization)
+  .macro({
+    role: (role: "user" | "admin") => ({
+      resolve({ status, headers: { authorization } }) {
+        const user = findUser(authorization);
 
-				if(user.role !== role)
-					return status(401)
+        if (user.role !== role) return status(401);
 
-				return {
-					user
-				}
-			}
-		})
-	})
-	.get('/token', ({ user }) => user, {
-	//                 ^?
-		role: 'admin'
-	})
+        return {
+          user,
+        };
+      },
+    }),
+  })
+  .get("/token", ({ user }) => user, {
+    //                 ^?
+    role: "admin",
+  });
 ```
 
 :::
-
 
 > Elysia use macro to pass custom argument to custom middleware
 
@@ -13511,96 +13283,95 @@ Hono provide a `onError` function which apply to all routes while Elysia provide
 ::: code-group
 
 ```ts
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const app = new Hono()
+const app = new Hono();
 
 class CustomError extends Error {
-	constructor(message: string) {
-		super(message)
-		this.name = 'CustomError'
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
 }
 
 // global error handler
 app.onError((error, c) => {
-	if(error instanceof CustomError) {
-		c.status(500)
+  if (error instanceof CustomError) {
+    c.status(500);
 
-		return c.json({
-			message: 'Something went wrong!',
-			error
-		})
-	}
-})
+    return c.json({
+      message: "Something went wrong!",
+      error,
+    });
+  }
+});
 
 // route-specific error handler
-app.get('/error', (req, res) => {
-	throw new CustomError('oh uh')
-})
+app.get("/error", (req, res) => {
+  throw new CustomError("oh uh");
+});
 ```
 
 :::
-
 
 > Hono use `onError` funcition to handle error, a single error handler for all routes
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class CustomError extends Error {
-	// Optional: custom HTTP status code
-	status = 500
+  // Optional: custom HTTP status code
+  status = 500;
 
-	constructor(message: string) {
-		super(message)
-		this.name = 'CustomError'
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
 
-	// Optional: what should be sent to the client
-	toResponse() {
-		return {
-			message: "If you're seeing this, our dev forgot to handle this error",
-			error: this
-		}
-	}
+  // Optional: what should be sent to the client
+  toResponse() {
+    return {
+      message: "If you're seeing this, our dev forgot to handle this error",
+      error: this,
+    };
+  }
 }
 
 const app = new Elysia()
-	// Optional: register custom error class
-	.error({
-		CUSTOM: CustomError,
-	})
-	// Global error handler
-	.onError(({ error, code }) => {
-		if(code === 'CUSTOM')
-		// ^?
+  // Optional: register custom error class
+  .error({
+    CUSTOM: CustomError,
+  })
+  // Global error handler
+  .onError(({ error, code }) => {
+    if (code === "CUSTOM")
+      // ^?
 
-
-
-
-			return {
-				message: 'Something went wrong!',
-				error
-			}
-	})
-	.get('/error', () => {
-		throw new CustomError('oh uh')
-	}, {
-		// Optional: route specific error handler
-		error({ error }) {
-			return {
-				message: 'Only for this route!',
-				error
-			}
-		}
-	})
+      return {
+        message: "Something went wrong!",
+        error,
+      };
+  })
+  .get(
+    "/error",
+    () => {
+      throw new CustomError("oh uh");
+    },
+    {
+      // Optional: route specific error handler
+      error({ error }) {
+        return {
+          message: "Only for this route!",
+          error,
+        };
+      },
+    },
+  );
 ```
 
 :::
-
 
 > Elysia provide more granular control over error handling, and scoping mechanism
 
@@ -13621,44 +13392,42 @@ Hono encapsulate plugin side-effect, while Elysia give you a control over side-e
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const subRouter = new Hono()
+const subRouter = new Hono();
 
-subRouter.get('/user', (c) => {
-	return c.text('Hello User')
-})
+subRouter.get("/user", (c) => {
+  return c.text("Hello User");
+});
 
-const app = new Hono()
+const app = new Hono();
 
-app.route('/api', subRouter)
+app.route("/api", subRouter);
 ```
 
 :::
-
 
 > Hono encapsulate side-effect of a plugin
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia()
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
+const subRouter = new Elysia().onBeforeHandle(
+  ({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  },
+);
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .use(subRouter)
-    // doesn't have side-effect from subRouter
-    .get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  // doesn't have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 :::
-
 
 > Elysia encapsulate side-effect of a plugin unless explicitly stated
 
@@ -13667,22 +13436,21 @@ Both has a encapsulate mechanism of a plugin to prevent side-effect.
 However, Elysia can explicitly stated which plugin should have side-effect by declaring a scoped while Hono always encapsulate it.
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const subRouter = new Elysia()
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
-	// Scoped to parent instance but not beyond
-	.as('scoped') // [!code ++]
+  .onBeforeHandle(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  })
+  // Scoped to parent instance but not beyond
+  .as("scoped"); // [!code ++]
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .use(subRouter)
-    // [!code ++]
-    // now have side-effect from subRouter
-    .get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  // [!code ++]
+  // now have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 Elysia offers 3 type of scoping mechanism:
@@ -13691,7 +13459,7 @@ Elysia offers 3 type of scoping mechanism:
 2. **scoped** - Scoped side-effect to the parent instance but not beyond
 3. **global** - Affects every instances
 
-***
+---
 
 As Hono doesn't offers a scoping mechanism, we need to either:
 
@@ -13701,51 +13469,50 @@ As Hono doesn't offers a scoping mechanism, we need to either:
 However, this can caused a duplicated side-effect if not handled carefully.
 
 ```ts [Hono]
-import { Hono } from 'hono'
-import { createMiddleware } from 'hono/factory'
+import { Hono } from "hono";
+import { createMiddleware } from "hono/factory";
 
 const middleware = createMiddleware(async (c, next) => {
-	console.log('called')
+  console.log("called");
 
-	await next()
-})
+  await next();
+});
 
-const app = new Hono()
-const subRouter = new Hono()
+const app = new Hono();
+const subRouter = new Hono();
 
-app.use(middleware)
-app.get('/main', (c) => c.text('Hello from main!'))
+app.use(middleware);
+app.get("/main", (c) => c.text("Hello from main!"));
 
-subRouter.use(middleware)
+subRouter.use(middleware);
 
 // This would log twice
-subRouter.get('/sub', (c) => c.text('Hello from sub router!'))
+subRouter.get("/sub", (c) => c.text("Hello from sub router!"));
 
-app.route('/sub', subRouter)
+app.route("/sub", subRouter);
 
-export default app
+export default app;
 ```
 
 In this scenario, Elysia offers a plugin deduplication mechanism to prevent duplicated side-effect.
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia({ name: 'subRouter' }) // [!code ++]
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
-	.as('scoped')
+const subRouter = new Elysia({ name: "subRouter" }) // [!code ++]
+  .onBeforeHandle(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  })
+  .as("scoped");
 
 const app = new Elysia()
-	.get('/', 'Hello World')
-	.use(subRouter)
-	.use(subRouter) // [!code ++]
-	.use(subRouter) // [!code ++]
-	.use(subRouter) // [!code ++]
-	// side-effect only called once
-	.get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  .use(subRouter) // [!code ++]
+  .use(subRouter) // [!code ++]
+  .use(subRouter) // [!code ++]
+  // side-effect only called once
+  .get("/side-effect", () => "hi");
 ```
 
 By using a unique `name`, Elysia will apply the plugin only once, and will not cause duplicated side-effect.
@@ -13757,53 +13524,44 @@ Hono has a built-in cookie utility functions under `hono/cookie`, while Elysia u
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
-import { getSignedCookie, setSignedCookie } from 'hono/cookie'
+import { Hono } from "hono";
+import { getSignedCookie, setSignedCookie } from "hono/cookie";
 
-const app = new Hono()
+const app = new Hono();
 
-app.get('/', async (c) => {
-	const name = await getSignedCookie(c, 'secret', 'name')
+app.get("/", async (c) => {
+  const name = await getSignedCookie(c, "secret", "name");
 
-	await setSignedCookie(
-		c,
-		'name',
-		'value',
-		'secret',
-		{
-			maxAge: 1000,
-		}
-	)
-})
+  await setSignedCookie(c, "name", "value", "secret", {
+    maxAge: 1000,
+  });
+});
 ```
 
 :::
-
 
 > Hono use utility functions to handle cookies
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia({
-	cookie: {
-		secret: 'secret'
-	}
-})
-	.get('/', ({ cookie: { name } }) => {
-		// signature verification is handle automatically
-		name.value
+  cookie: {
+    secret: "secret",
+  },
+}).get("/", ({ cookie: { name } }) => {
+  // signature verification is handle automatically
+  name.value;
 
-		// cookie signature is signed automatically
-		name.value = 'value'
-		name.maxAge = 1000 * 60 * 60 * 24
-	})
+  // cookie signature is signed automatically
+  name.value = "value";
+  name.maxAge = 1000 * 60 * 60 * 24;
+});
 ```
 
 :::
-
 
 > Elysia use signal-based approach to handle cookies
 
@@ -13814,111 +13572,108 @@ Hono require additional effort to describe the specification, while Elysia seaml
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
-import { describeRoute, openAPISpecs } from 'hono-openapi'
-import { resolver, validator as zodValidator } from 'hono-openapi/zod'
-import { swaggerUI } from '@hono/swagger-ui'
+import { Hono } from "hono";
+import { describeRoute, openAPISpecs } from "hono-openapi";
+import { resolver, validator as zodValidator } from "hono-openapi/zod";
+import { swaggerUI } from "@hono/swagger-ui";
 
-import { z } from '@hono/zod-openapi'
+import { z } from "@hono/zod-openapi";
 
-const app = new Hono()
+const app = new Hono();
 
 const model = z.array(
-	z.object({
-		name: z.string().openapi({
-			description: 'first name only'
-		}),
-		age: z.number()
-	})
-)
+  z.object({
+    name: z.string().openapi({
+      description: "first name only",
+    }),
+    age: z.number(),
+  }),
+);
 
-const detail = await resolver(model).builder()
+const detail = await resolver(model).builder();
 
-console.log(detail)
+console.log(detail);
 
 app.post(
-	'/',
-	zodValidator('json', model),
-	describeRoute({
-		validateResponse: true,
-		summary: 'Create user',
-		requestBody: {
-			content: {
-				'application/json': { schema: detail.schema }
-			}
-		},
-		responses: {
-			201: {
-				description: 'User created',
-				content: {
-					'application/json': { schema: resolver(model) }
-				}
-			}
-		}
-	}),
-	(c) => {
-		c.status(201)
-		return c.json(c.req.valid('json'))
-	}
-)
+  "/",
+  zodValidator("json", model),
+  describeRoute({
+    validateResponse: true,
+    summary: "Create user",
+    requestBody: {
+      content: {
+        "application/json": { schema: detail.schema },
+      },
+    },
+    responses: {
+      201: {
+        description: "User created",
+        content: {
+          "application/json": { schema: resolver(model) },
+        },
+      },
+    },
+  }),
+  (c) => {
+    c.status(201);
+    return c.json(c.req.valid("json"));
+  },
+);
 
-app.get('/ui', swaggerUI({ url: '/doc' }))
+app.get("/ui", swaggerUI({ url: "/doc" }));
 
 app.get(
-	'/doc',
-	openAPISpecs(app, {
-		documentation: {
-			info: {
-				title: 'Hono API',
-				version: '1.0.0',
-				description: 'Greeting API'
-			},
-			components: {
-				...detail.components
-			}
-		}
-	})
-)
+  "/doc",
+  openAPISpecs(app, {
+    documentation: {
+      info: {
+        title: "Hono API",
+        version: "1.0.0",
+        description: "Greeting API",
+      },
+      components: {
+        ...detail.components,
+      },
+    },
+  }),
+);
 
-export default app
+export default app;
 ```
 
 :::
-
 
 > Hono require additional effort to describe the specification
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi' // [!code ++]
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi"; // [!code ++]
 
 const app = new Elysia()
-	.use(openapi()) // [!code ++]
-	.model({
-		user: t.Array(
-			t.Object({
-				name: t.String(),
-				age: t.Number()
-			})
-		)
-	})
-	.post('/users', ({ body }) => body, {
-	//                  ^?
-		body: 'user',
-		response: {
-			201: 'user'
-		},
-		detail: {
-			summary: 'Create user'
-		}
-	})
-
+  .use(openapi()) // [!code ++]
+  .model({
+    user: t.Array(
+      t.Object({
+        name: t.String(),
+        age: t.Number(),
+      }),
+    ),
+  })
+  .post("/users", ({ body }) => body, {
+    //                  ^?
+    body: "user",
+    response: {
+      201: "user",
+    },
+    detail: {
+      summary: "Create user",
+    },
+  });
 ```
 
 :::
-
 
 > Elysia seamlessly integrate the specification into the schema
 
@@ -13935,72 +13690,66 @@ Both is built on top of Web Standard API allowing it be used with any testing li
 ::: code-group
 
 ```ts [Hono]
-import { Hono } from 'hono'
-import { describe, it, expect } from 'vitest'
+import { Hono } from "hono";
+import { describe, it, expect } from "vitest";
 
-const app = new Hono()
-	.get('/', (c) => c.text('Hello World'))
+const app = new Hono().get("/", (c) => c.text("Hello World"));
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const res = await app.request('/')
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const res = await app.request("/");
 
-		expect(res.status).toBe(200)
-		expect(await res.text()).toBe('Hello World')
-	})
-})
+    expect(res.status).toBe(200);
+    expect(await res.text()).toBe("Hello World");
+  });
+});
 ```
 
 :::
-
 
 > Hono has a built-in `request` method to run the request
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
-import { describe, it, expect } from 'vitest'
+import { Elysia } from "elysia";
+import { describe, it, expect } from "vitest";
 
-const app = new Elysia()
-	.get('/', 'Hello World')
+const app = new Elysia().get("/", "Hello World");
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const res = await app.handle(
-			new Request('http://localhost')
-		)
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const res = await app.handle(new Request("http://localhost"));
 
-		expect(res.status).toBe(200)
-		expect(await res.text()).toBe('Hello World')
-	})
-})
+    expect(res.status).toBe(200);
+    expect(await res.text()).toBe("Hello World");
+  });
+});
 ```
 
 :::
-
 
 > Elysia use Web Standard API to handle request and response
 
 Alternatively, Elysia also offers a helper library called [Eden](/eden/overview) for End-to-end type safety, allowing us to test with auto-completion, and full type safety.
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
-import { describe, expect, it } from 'bun:test'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
+import { describe, expect, it } from "bun:test";
 
-const app = new Elysia().get('/hello', 'Hello World')
-const api = treaty(app)
+const app = new Elysia().get("/hello", "Hello World");
+const api = treaty(app);
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const { data, error, status } = await api.hello.get()
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const { data, error, status } = await api.hello.get();
 
-		expect(status).toBe(200)
-		expect(data).toBe('Hello World')
-		//      ^?
-	})
-})
+    expect(status).toBe(200);
+    expect(data).toBe("Hello World");
+    //      ^?
+  });
+});
 ```
 
 ## End-to-end type safety
@@ -14010,94 +13759,69 @@ Both offers end-to-end type safety, however Hono doesn't seems to offers type-sa
 ::: code-group
 
 ```ts twoslash [Hono]
-import { Hono } from 'hono'
-import { hc } from 'hono/client'
-import { z } from 'zod'
-import { zValidator } from '@hono/zod-validator'
+import { Hono } from "hono";
+import { hc } from "hono/client";
+import { z } from "zod";
+import { zValidator } from "@hono/zod-validator";
 
-const app = new Hono()
-	.post(
-		'/mirror',
-		zValidator(
-			'json',
-			z.object({
-				message: z.string()
-			})
-		),
-		(c) => c.json(c.req.valid('json'))
-	)
+const app = new Hono().post(
+  "/mirror",
+  zValidator(
+    "json",
+    z.object({
+      message: z.string(),
+    }),
+  ),
+  (c) => c.json(c.req.valid("json")),
+);
 
-const client = hc<typeof app>('/')
+const client = hc<typeof app>("/");
 
 const response = await client.mirror.$post({
-	json: {
-		message: 'Hello, world!'
-	}
-})
+  json: {
+    message: "Hello, world!",
+  },
+});
 
-const data = await response.json()
+const data = await response.json();
 //     ^?
 
-
-
-
-
-console.log(data)
+console.log(data);
 ```
 
 :::
-
 
 > Hono use `hc` to run the request, and offers end-to-end type safety
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-	.post('/mirror', ({ body }) => body, {
-		body: t.Object({
-			message: t.String()
-		})
-	})
+const app = new Elysia().post("/mirror", ({ body }) => body, {
+  body: t.Object({
+    message: t.String(),
+  }),
+});
 
-const api = treaty(app)
+const api = treaty(app);
 
 const { data, error } = await api.mirror.post({
-	message: 'Hello World'
-})
+  message: "Hello World",
+});
 
-if(error)
-	throw error
-	//     ^?
+if (error) throw error;
+//     ^?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.log(data)
+console.log(data);
 //          ^?
 
-
-
 // ---cut-after---
-console.log('ok')
+console.log("ok");
 ```
 
 :::
-
 
 > Elysia use `treaty` to run the request, and offers end-to-end type safety
 
@@ -14125,11 +13849,11 @@ This is caused by the large schema, and Hono doesn't support over a 100 routes w
 
 > Elysia Eden code showing type inference without error
 
-Elysia has a faster type inference performance, and doesn't have **"Type instantiation is excessively deep and possibly infinite."** *at least* up to 2,000 routes with complex body, and response validation.
+Elysia has a faster type inference performance, and doesn't have **"Type instantiation is excessively deep and possibly infinite."** _at least_ up to 2,000 routes with complex body, and response validation.
 
 If end-to-end type safety is important for you then Elysia is the right choice.
 
-***
+---
 
 Both are the next generation web framework built on top of Web Standard API with slight differences.
 
@@ -14142,8 +13866,8 @@ Alternatively, if you are coming from a different framework, you can check out:
 ---
 
 ---
-url: 'https://elysiajs.com/migrate/from-trpc.md'
----
+
+## url: 'https://elysiajs.com/migrate/from-trpc.md'
 
 # From tRPC to Elysia
 
@@ -14170,52 +13894,47 @@ While tRPC use a nested router approach to define routes.
 ::: code-group
 
 ```ts [tRPC]
-import { initTRPC } from '@trpc/server'
-import { createHTTPServer } from '@trpc/server/adapters/standalone'
+import { initTRPC } from "@trpc/server";
+import { createHTTPServer } from "@trpc/server/adapters/standalone";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 const appRouter = t.router({
-	hello: t.procedure.query(() => 'Hello World'),
-	user: t.router({
-		getById: t.procedure
-			.input((id: string) => id)
-			.query(({ input }) => {
-				return { id: input }
-			})
-	})
-})
+  hello: t.procedure.query(() => "Hello World"),
+  user: t.router({
+    getById: t.procedure
+      .input((id: string) => id)
+      .query(({ input }) => {
+        return { id: input };
+      }),
+  }),
+});
 
 const server = createHTTPServer({
-  	router: appRouter
-})
+  router: appRouter,
+});
 
-server.listen(3000)
+server.listen(3000);
 ```
 
 :::
-
 
 > tRPC use nested router and procedure to define routes
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .post(
-    	'/id/:id',
-     	({ status, params: { id } }) => {
-      		return status(201, id)
-      	}
-    )
-    .listen(3000)
+  .get("/", "Hello World")
+  .post("/id/:id", ({ status, params: { id } }) => {
+    return status(201, id);
+  })
+  .listen(3000);
 ```
 
 :::
-
 
 > Elysia use HTTP method, and path parameters to define routes
 
@@ -14230,45 +13949,44 @@ tRPC is doesn't have a concept of HTTP property like query, headers, status code
 ::: code-group
 
 ```ts [tRPC]
-import { initTRPC } from '@trpc/server'
+import { initTRPC } from "@trpc/server";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 const appRouter = t.router({
-	user: t.procedure
-		.input((val: { limit?: number; name: string; authorization?: string }) => val)
-		.mutation(({ input }) => {
-			const limit = input.limit
-			const name = input.name
-			const auth = input.authorization
+  user: t.procedure
+    .input(
+      (val: { limit?: number; name: string; authorization?: string }) => val,
+    )
+    .mutation(({ input }) => {
+      const limit = input.limit;
+      const name = input.name;
+      const auth = input.authorization;
 
-			return { limit, name, auth }
-		})
-})
+      return { limit, name, auth };
+    }),
+});
 ```
 
 :::
-
 
 > tRPC use single `input` for all properties
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.post('/user', (ctx) => {
-	    const limit = ctx.query.limit
-	    const name = ctx.body.name
-	    const auth = ctx.headers.authorization
+const app = new Elysia().post("/user", (ctx) => {
+  const limit = ctx.query.limit;
+  const name = ctx.body.name;
+  const auth = ctx.headers.authorization;
 
-	    return { limit, name, auth }
-	})
+  return { limit, name, auth };
+});
 ```
 
 :::
-
 
 > Elysia use specific property for each HTTP property
 
@@ -14283,38 +14001,34 @@ tRPC use nested router to define subrouter, while Elysia use `.use()` method to 
 ::: code-group
 
 ```ts [tRPC]
-import { initTRPC } from '@trpc/server'
+import { initTRPC } from "@trpc/server";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 const subRouter = t.router({
-	user: t.procedure.query(() => 'Hello User')
-})
+  user: t.procedure.query(() => "Hello User"),
+});
 
 const appRouter = t.router({
-	api: subRouter
-})
+  api: subRouter,
+});
 ```
 
 :::
-
 
 > tRPC use nested router to define subrouter
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia()
-	.get('/user', 'Hello User')
+const subRouter = new Elysia().get("/user", "Hello User");
 
-const app = new Elysia()
-	.use(subRouter)
+const app = new Elysia().use(subRouter);
 ```
 
 :::
-
 
 > Elysia use a `.use()` method to define a subrouter
 
@@ -14327,89 +14041,93 @@ Both support Standard Schema for validation. Allowing you to use various validat
 ::: code-group
 
 ```ts [tRPC]
-import { initTRPC } from '@trpc/server'
-import { z } from 'zod'
+import { initTRPC } from "@trpc/server";
+import { z } from "zod";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 const appRouter = t.router({
-	user: t.procedure
-		.input(
-			z.object({
-				id: z.number(),
-				name: z.string()
-			})
-		)
-		.mutation(({ input }) => input)
-//                    ^?
-})
+  user: t.procedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+      }),
+    )
+    .mutation(({ input }) => input),
+  //                    ^?
+});
 ```
 
 :::
-
 
 > tRPC use `input` to define validation schema
 
 ::: code-group
 
 ```ts twoslash [Elysia TypeBox]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: t.Object({
-			id: t.Number()
-		}),
-		body: t.Object({
-			name: t.String()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: t.Object({
+      id: t.Number(),
+    }),
+    body: t.Object({
+      name: t.String(),
+    }),
+  },
+);
 ```
 
 ```ts twoslash [Elysia Zod]
-import { Elysia } from 'elysia'
-import { z } from 'zod'
+import { Elysia } from "elysia";
+import { z } from "zod";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: z.object({
-			id: z.number()
-		}),
-		body: z.object({
-			name: z.string()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: z.object({
+      id: z.number(),
+    }),
+    body: z.object({
+      name: z.string(),
+    }),
+  },
+);
 ```
 
 ```ts twoslash [Elysia Valibot]
-import { Elysia } from 'elysia'
-import * as v from 'zod'
+import { Elysia } from "elysia";
+import * as v from "zod";
 
-const app = new Elysia()
-	.patch('/user/:id', ({ params, body }) => ({
-		params,
-		body
-	}),
-	{
-		params: v.object({
-			id: v.number()
-		}),
-		body: v.object({
-			name: v.string()
-		})
-	})
+const app = new Elysia().patch(
+  "/user/:id",
+  ({ params, body }) => ({
+    params,
+    body,
+  }),
+  {
+    params: v.object({
+      id: v.number(),
+    }),
+    body: v.object({
+      name: v.string(),
+    }),
+  },
+);
 ```
 
 :::
-
 
 > Elysia use specific property to define validation schema
 
@@ -14424,53 +14142,48 @@ While Elysia has built-in support for file upload using Web Standard API.
 ::: code-group
 
 ```ts [tRPC]
-import { initTRPC } from '@trpc/server'
-import { z } from 'zod'
+import { initTRPC } from "@trpc/server";
+import { z } from "zod";
 
-import { fileTypeFromBuffer } from 'file-type'
+import { fileTypeFromBuffer } from "file-type";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 export const uploadRouter = t.router({
-	uploadImage: t.procedure
-		.input(z.base64())
-		.mutation(({ input }) => {
-			const buffer = Buffer.from(input, 'base64')
+  uploadImage: t.procedure.input(z.base64()).mutation(({ input }) => {
+    const buffer = Buffer.from(input, "base64");
 
-			const type = await fileTypeFromBuffer(buffer)
-			if (!type || !type.mime.startsWith('image/'))
-				throw new TRPCError({
-      				code: 'UNPROCESSABLE_CONTENT',
-       				message: 'Invalid file type',
-    			})
+    const type = await fileTypeFromBuffer(buffer);
+    if (!type || !type.mime.startsWith("image/"))
+      throw new TRPCError({
+        code: "UNPROCESSABLE_CONTENT",
+        message: "Invalid file type",
+      });
 
-			return input
-		})
-})
+    return input;
+  }),
+});
 ```
 
 :::
-
 
 > tRPC
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-	.post('/upload', ({ body }) => body.file, {
-		body: t.Object({
-			file: t.File({
-				type: 'image'
-			})
-		})
-	})
+const app = new Elysia().post("/upload", ({ body }) => body.file, {
+  body: t.Object({
+    file: t.File({
+      type: "image",
+    }),
+  }),
+});
 ```
 
 :::
-
 
 > Elysia handle file, and mimetype validation declaratively
 
@@ -14490,53 +14203,48 @@ While tRPC has a single flow for request pipeline in order, Elysia can intercept
 ::: code-group
 
 ```ts [tRPC]
-import { initTRPC } from '@trpc/server'
+import { initTRPC } from "@trpc/server";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 const log = t.middleware(async ({ ctx, next }) => {
-	console.log('Request started')
+  console.log("Request started");
 
-	const result = await next()
+  const result = await next();
 
-	console.log('Request ended')
+  console.log("Request ended");
 
-	return result
-})
+  return result;
+});
 
 const appRouter = t.router({
-	hello: log
-		.procedure
-		.query(() => 'Hello World')
-})
+  hello: log.procedure.query(() => "Hello World"),
+});
 ```
 
 :::
-
 
 > tRPC use a single middleware queue defined as a procedure
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	// Global middleware
-	.onRequest(({ method, path }) => {
-		console.log(`${method} ${path}`)
-	})
-	// Route-specific middleware
-	.get('/protected', () => 'protected', {
-		beforeHandle({ status, headers }) {
-  			if (!headers.authorizaton)
-     			return status(401)
-		}
-	})
+  // Global middleware
+  .onRequest(({ method, path }) => {
+    console.log(`${method} ${path}`);
+  })
+  // Route-specific middleware
+  .get("/protected", () => "protected", {
+    beforeHandle({ status, headers }) {
+      if (!headers.authorizaton) return status(401);
+    },
+  });
 ```
 
 :::
-
 
 > Elysia use a specific event interceptor for each point in the request pipeline
 
@@ -14551,61 +14259,58 @@ For example, you can customize context in a **type safe** manner using [derive](
 ::: code-group
 
 ```ts twoslash [tRPC]
-import { initTRPC } from '@trpc/server'
+import { initTRPC } from "@trpc/server";
 
-const t = initTRPC.context<{
-	version: number
-	token: string
-}>().create()
+const t = initTRPC
+  .context<{
+    version: number;
+    token: string;
+  }>()
+  .create();
 
 const appRouter = t.router({
-	version: t.procedure.query(({ ctx: { version } }) => version),
-	//                                                     ^?
+  version: t.procedure.query(({ ctx: { version } }) => version),
+  //                                                     ^?
 
+  token: t.procedure.query(({ ctx: { token, version } }) => {
+    version;
+    //  ^?
 
-	token: t.procedure.query(({ ctx: { token, version } }) => {
-		version
-		//  ^?
-
-		return token
-		//       ^?
-	})
-})
+    return token;
+    //       ^?
+  }),
+});
 ```
 
 :::
-
 
 > tRPC use `context` to extend context but doesn't have sounds type safety
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.decorate('version', 2)
-	.get('/version', ({ version }) => version)
-	.resolve(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
+  .decorate("version", 2)
+  .get("/version", ({ version }) => version)
+  .resolve(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
 
-		return {
-			token: authorization.split(' ')[1]
-		}
-	})
-	.get('/token', ({ token, version }) => {
-		version
-		//  ^?
+    return {
+      token: authorization.split(" ")[1],
+    };
+  })
+  .get("/token", ({ token, version }) => {
+    version;
+    //  ^?
 
-
-		return token
-		//       ^?
-	})
+    return token;
+    //       ^?
+  });
 ```
 
 :::
-
 
 > Elysia use a specific event interceptor for each point in the request pipeline
 
@@ -14616,44 +14321,39 @@ Both support custom middleware, but Elysia use macro to pass custom argument to 
 ::: code-group
 
 ```ts twoslash [tRPC]
-import { initTRPC, TRPCError } from '@trpc/server'
+import { initTRPC, TRPCError } from "@trpc/server";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 const findUser = (authorization?: string) => {
-	return {
-		name: 'Jane Doe',
-		role: 'admin' as const
-	}
-}
+  return {
+    name: "Jane Doe",
+    role: "admin" as const,
+  };
+};
 
-const role = (role: 'user' | 'admin') =>
-	t.middleware(({ next, input }) => {
-		const user = findUser(input as string)
-		//                      ^?
+const role = (role: "user" | "admin") =>
+  t.middleware(({ next, input }) => {
+    const user = findUser(input as string);
+    //                      ^?
 
+    if (user.role !== role)
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Unauthorized",
+      });
 
-		if(user.role !== role)
-			throw new TRPCError({
-      			code: 'UNAUTHORIZED',
-      			message: 'Unauthorized',
-    		})
-
-		return next({
-			ctx: {
-				user
-			}
-		})
-	})
+    return next({
+      ctx: {
+        user,
+      },
+    });
+  });
 
 const appRouter = t.router({
-	token: t.procedure
-		.use(role('admin'))
-		.query(({ ctx: { user } }) => user)
-		//                 ^?
-})
-
-
+  token: t.procedure.use(role("admin")).query(({ ctx: { user } }) => user),
+  //                 ^?
+});
 
 // ---cut-after---
 // Unused
@@ -14661,44 +14361,41 @@ const appRouter = t.router({
 
 :::
 
-
 > tRPC use higher-order-function to pass custom argument to custom middleware
 
 ::: code-group
 
 ```ts twoslash [Elysia]
 const findUser = (authorization?: string) => {
-	return {
-		name: 'Jane Doe',
-		role: 'admin' as const
-	}
-}
+  return {
+    name: "Jane Doe",
+    role: "admin" as const,
+  };
+};
 // ---cut---
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.macro({
-		role: (role: 'user' | 'admin') => ({
-			resolve({ status, headers: { authorization } }) {
-				const user = findUser(authorization)
+  .macro({
+    role: (role: "user" | "admin") => ({
+      resolve({ status, headers: { authorization } }) {
+        const user = findUser(authorization);
 
-				if(user.role !== role)
-					return status(401)
+        if (user.role !== role) return status(401);
 
-				return {
-					user
-				}
-			}
-		})
-	})
-	.get('/token', ({ user }) => user, {
-	//                 ^?
-		role: 'admin'
-	})
+        return {
+          user,
+        };
+      },
+    }),
+  })
+  .get("/token", ({ user }) => user, {
+    //                 ^?
+    role: "admin",
+  });
 ```
 
 :::
-
 
 > Elysia use macro to pass custom argument to custom middleware
 
@@ -14709,96 +14406,96 @@ tRPC use middleware-like to handle error, while Elysia provide custom error with
 ::: code-group
 
 ```ts [trpc]
-import { initTRPC, TRPCError } from '@trpc/server'
+import { initTRPC, TRPCError } from "@trpc/server";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 class CustomError extends Error {
-	constructor(message: string) {
-		super(message)
-		this.name = 'CustomError'
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
 }
 
-const appRouter = t.router()
-	.middleware(async ({ next }) => {
-		try {
-			return await next()
-		} catch (error) {
-			console.log(error)
+const appRouter = t
+  .router()
+  .middleware(async ({ next }) => {
+    try {
+      return await next();
+    } catch (error) {
+      console.log(error);
 
-			throw new TRPCError({
-	  			code: 'INTERNAL_SERVER_ERROR',
-	  			message: error.message
-			})
-		}
-	})
-	.query('error', () => {
-		throw new CustomError('oh uh')
-	})
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: error.message,
+      });
+    }
+  })
+  .query("error", () => {
+    throw new CustomError("oh uh");
+  });
 ```
 
 :::
-
 
 > tRPC use middleware-like to handle error
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 class CustomError extends Error {
-	// Optional: custom HTTP status code
-	status = 500
+  // Optional: custom HTTP status code
+  status = 500;
 
-	constructor(message: string) {
-		super(message)
-		this.name = 'CustomError'
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
 
-	// Optional: what should be sent to the client
-	toResponse() {
-		return {
-			message: "If you're seeing this, our dev forgot to handle this error",
-			error: this
-		}
-	}
+  // Optional: what should be sent to the client
+  toResponse() {
+    return {
+      message: "If you're seeing this, our dev forgot to handle this error",
+      error: this,
+    };
+  }
 }
 
 const app = new Elysia()
-	// Optional: register custom error class
-	.error({
-		CUSTOM: CustomError,
-	})
-	// Global error handler
-	.onError(({ error, code }) => {
-		if(code === 'CUSTOM')
-		// ^?
+  // Optional: register custom error class
+  .error({
+    CUSTOM: CustomError,
+  })
+  // Global error handler
+  .onError(({ error, code }) => {
+    if (code === "CUSTOM")
+      // ^?
 
-
-
-
-			return {
-				message: 'Something went wrong!',
-				error
-			}
-	})
-	.get('/error', () => {
-		throw new CustomError('oh uh')
-	}, {
-		// Optional: route specific error handler
-		error({ error }) {
-			return {
-				message: 'Only for this route!',
-				error
-			}
-		}
-	})
+      return {
+        message: "Something went wrong!",
+        error,
+      };
+  })
+  .get(
+    "/error",
+    () => {
+      throw new CustomError("oh uh");
+    },
+    {
+      // Optional: route specific error handler
+      error({ error }) {
+        return {
+          message: "Only for this route!",
+          error,
+        };
+      },
+    },
+  );
 ```
 
 :::
-
 
 > Elysia provide more granular control over error handling, and scoping mechanism
 
@@ -14819,54 +14516,50 @@ tRPC encapsulate side-effect of a by procedure or router making it always isolat
 ::: code-group
 
 ```ts [tRPC]
-import { initTRPC } from '@trpc/server'
+import { initTRPC } from "@trpc/server";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
-const subRouter = t.router()
-	.middleware(({ ctx, next }) => {
-		if(!ctx.headers.authorization?.startsWith('Bearer '))
-			throw new TRPCError({
-	  			code: 'UNAUTHORIZED',
-	  			message: 'Unauthorized',
-			})
+const subRouter = t.router().middleware(({ ctx, next }) => {
+  if (!ctx.headers.authorization?.startsWith("Bearer "))
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Unauthorized",
+    });
 
-		return next()
-	})
+  return next();
+});
 
 const appRouter = t.router({
-	// doesn't have side-effect from subRouter
-	hello: t.procedure.query(() => 'Hello World'),
-	api: subRouter
-		.mutation('side-effect', () => 'hi')
-})
+  // doesn't have side-effect from subRouter
+  hello: t.procedure.query(() => "Hello World"),
+  api: subRouter.mutation("side-effect", () => "hi"),
+});
 ```
 
 :::
-
 
 > tRPC encapsulate side-effect of a plugin into the procedure or router
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const subRouter = new Elysia()
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
+const subRouter = new Elysia().onBeforeHandle(
+  ({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  },
+);
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .use(subRouter)
-    // doesn't have side-effect from subRouter
-    .get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  // doesn't have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 :::
-
 
 > Elysia encapsulate side-effect of a plugin unless explicitly stated
 
@@ -14875,22 +14568,21 @@ Both has a encapsulate mechanism of a plugin to prevent side-effect.
 However, Elysia can explicitly stated which plugin should have side-effect by declaring a scoped while Fastify always encapsulate it.
 
 ```ts [Elysia]
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const subRouter = new Elysia()
-	.onBeforeHandle(({ status, headers: { authorization } }) => {
-		if(!authorization?.startsWith('Bearer '))
-			return status(401)
-   	})
-	// Scoped to parent instance but not beyond
-	.as('scoped') // [!code ++]
+  .onBeforeHandle(({ status, headers: { authorization } }) => {
+    if (!authorization?.startsWith("Bearer ")) return status(401);
+  })
+  // Scoped to parent instance but not beyond
+  .as("scoped"); // [!code ++]
 
 const app = new Elysia()
-    .get('/', 'Hello World')
-    .use(subRouter)
-    // [!code ++]
-    // now have side-effect from subRouter
-    .get('/side-effect', () => 'hi')
+  .get("/", "Hello World")
+  .use(subRouter)
+  // [!code ++]
+  // now have side-effect from subRouter
+  .get("/side-effect", () => "hi");
 ```
 
 Elysia offers 3 type of scoping mechanism:
@@ -14908,85 +14600,82 @@ While Elysia has built-in support for OpenAPI using [@elysiajs/openapi](/plugins
 ::: code-group
 
 ```ts [tRPC]
-import { initTRPC } from '@trpc/server'
-import { createHTTPServer } from '@trpc/server/adapters/standalone'
+import { initTRPC } from "@trpc/server";
+import { createHTTPServer } from "@trpc/server/adapters/standalone";
 
-import { OpenApiMeta } from 'trpc-to-openapi';
+import { OpenApiMeta } from "trpc-to-openapi";
 
-const t = initTRPC.meta<OpenApiMeta>().create()
+const t = initTRPC.meta<OpenApiMeta>().create();
 
 const appRouter = t.router({
-	user: t.procedure
-		.meta({
-			openapi: {
-				method: 'post',
-				path: '/users',
-				tags: ['User'],
-				summary: 'Create user',
-			}
-		})
-		.input(
-			t.array(
-				t.object({
-					name: t.string(),
-					age: t.number()
-				})
-			)
-		)
-		.output(
-			t.array(
-				t.object({
-					name: t.string(),
-					age: t.number()
-				})
-			)
-		)
-		.mutation(({ input }) => input)
-})
+  user: t.procedure
+    .meta({
+      openapi: {
+        method: "post",
+        path: "/users",
+        tags: ["User"],
+        summary: "Create user",
+      },
+    })
+    .input(
+      t.array(
+        t.object({
+          name: t.string(),
+          age: t.number(),
+        }),
+      ),
+    )
+    .output(
+      t.array(
+        t.object({
+          name: t.string(),
+          age: t.number(),
+        }),
+      ),
+    )
+    .mutation(({ input }) => input),
+});
 
 export const openApiDocument = generateOpenApiDocument(appRouter, {
-  	title: 'tRPC OpenAPI',
-  	version: '1.0.0',
-  	baseUrl: 'http://localhost:3000'
-})
+  title: "tRPC OpenAPI",
+  version: "1.0.0",
+  baseUrl: "http://localhost:3000",
+});
 ```
 
 :::
-
 
 > tRPC rely on third-party library to generate OpenAPI spec
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi' // [!code ++]
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi"; // [!code ++]
 
 const app = new Elysia()
-	.use(openapi()) // [!code ++]
-	.model({
-		user: t.Array(
-			t.Object({
-				name: t.String(),
-				age: t.Number()
-			})
-		)
-	})
-	.post('/users', ({ body }) => body, {
-	//                  ^?
-		body: 'user',
-		response: {
-			201: 'user'
-		},
-		detail: {
-			summary: 'Create user'
-		}
-	})
-
+  .use(openapi()) // [!code ++]
+  .model({
+    user: t.Array(
+      t.Object({
+        name: t.String(),
+        age: t.Number(),
+      }),
+    ),
+  })
+  .post("/users", ({ body }) => body, {
+    //                  ^?
+    body: "user",
+    response: {
+      201: "user",
+    },
+    detail: {
+      summary: "Create user",
+    },
+  });
 ```
 
 :::
-
 
 > Elysia seamlessly integrate the specification into the schema
 
@@ -15003,107 +14692,104 @@ Elysia use Web Standard API to handle request and response while tRPC require a 
 ::: code-group
 
 ```ts [tRPC]
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from "vitest";
 
-import { initTRPC } from '@trpc/server'
-import { z } from 'zod'
+import { initTRPC } from "@trpc/server";
+import { z } from "zod";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
-const publicProcedure = t.procedure
-const { createCallerFactory, router } = t
+const publicProcedure = t.procedure;
+const { createCallerFactory, router } = t;
 
 const appRouter = router({
-	post: router({
-		add: publicProcedure
-			.input(
-				z.object({
-					title: z.string().min(2)
-				})
-			)
-			.mutation(({ input }) => input)
-	})
-})
+  post: router({
+    add: publicProcedure
+      .input(
+        z.object({
+          title: z.string().min(2),
+        }),
+      )
+      .mutation(({ input }) => input),
+  }),
+});
 
-const createCaller = createCallerFactory(appRouter)
+const createCaller = createCallerFactory(appRouter);
 
-const caller = createCaller({})
+const caller = createCaller({});
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const newPost = await caller.post.add({
-			title: '74 Itoki Hana'
-		})
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const newPost = await caller.post.add({
+      title: "74 Itoki Hana",
+    });
 
-		expect(newPost).toEqual({
-			title: '74 Itoki Hana'
-		})
-	})
-})
+    expect(newPost).toEqual({
+      title: "74 Itoki Hana",
+    });
+  });
+});
 ```
 
 :::
-
 
 > tRPC require `createCallerFactory`, and a lot of ceremony to run the request
 
 ::: code-group
 
 ```ts [Elysia]
-import { Elysia, t } from 'elysia'
-import { describe, it, expect } from 'vitest'
+import { Elysia, t } from "elysia";
+import { describe, it, expect } from "vitest";
 
-const app = new Elysia()
-	.post('/add', ({ body }) => body, {
-		body: t.Object({
-			title: t.String({ minLength: 2 })
-		})
-	})
+const app = new Elysia().post("/add", ({ body }) => body, {
+  body: t.Object({
+    title: t.String({ minLength: 2 }),
+  }),
+});
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const res = await app.handle(
-			new Request('http://localhost/add', {
-				method: 'POST',
-				body: JSON.stringify({ title: '74 Itoki Hana' }),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-		)
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const res = await app.handle(
+      new Request("http://localhost/add", {
+        method: "POST",
+        body: JSON.stringify({ title: "74 Itoki Hana" }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    );
 
-		expect(res.status).toBe(200)
-		expect(await res.res()).toEqual({
-			title: '74 Itoki Hana'
-		})
-	})
-})
+    expect(res.status).toBe(200);
+    expect(await res.res()).toEqual({
+      title: "74 Itoki Hana",
+    });
+  });
+});
 ```
 
 :::
-
 
 > Elysia use Web Standard API to handle request and response
 
 Alternatively, Elysia also offers a helper library called [Eden](/eden/overview) for End-to-end type safety which is similar to `tRPC.createCallerFactory`, allowing us to test with auto-completion, and full type safety like tRPC without the ceremony.
 
 ```ts twoslash [Elysia]
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
-import { describe, expect, it } from 'bun:test'
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
+import { describe, expect, it } from "bun:test";
 
-const app = new Elysia().get('/hello', 'Hello World')
-const api = treaty(app)
+const app = new Elysia().get("/hello", "Hello World");
+const api = treaty(app);
 
-describe('GET /', () => {
-	it('should return Hello World', async () => {
-		const { data, error, status } = await api.hello.get()
+describe("GET /", () => {
+  it("should return Hello World", async () => {
+    const { data, error, status } = await api.hello.get();
 
-		expect(status).toBe(200)
-		expect(data).toBe('Hello World')
-		//      ^?
-	})
-})
+    expect(status).toBe(200);
+    expect(data).toBe("Hello World");
+    //      ^?
+  });
+});
 ```
 
 ## End-to-end type safety
@@ -15113,110 +14799,87 @@ Both offers end-to-end type safety for client-server communication.
 ::: code-group
 
 ```ts twoslash [tRPC]
-import { initTRPC } from '@trpc/server'
-import { createHTTPServer } from '@trpc/server/adapters/standalone'
-import { z }  from 'zod'
+import { initTRPC } from "@trpc/server";
+import { createHTTPServer } from "@trpc/server/adapters/standalone";
+import { z } from "zod";
 
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
+import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 
-const t = initTRPC.create()
+const t = initTRPC.create();
 
 const appRouter = t.router({
-	mirror: t.procedure
-		.input(
-			z.object({
-				message: z.string()
-			})
-		)
-		.output(
-			z.object({
-				message: z.string()
-			})
-		)
-		.mutation(({ input }) => input)
-})
+  mirror: t.procedure
+    .input(
+      z.object({
+        message: z.string(),
+      }),
+    )
+    .output(
+      z.object({
+        message: z.string(),
+      }),
+    )
+    .mutation(({ input }) => input),
+});
 
 const server = createHTTPServer({
-  	router: appRouter
-})
+  router: appRouter,
+});
 
-server.listen(3000)
+server.listen(3000);
 
 const client = createTRPCProxyClient<typeof appRouter>({
-	links: [
-		httpBatchLink({
-			url: 'http://localhost:3000'
-		})
-	]
-})
+  links: [
+    httpBatchLink({
+      url: "http://localhost:3000",
+    }),
+  ],
+});
 
 const { message } = await client.mirror.mutate({
-	message: 'Hello World'
-})
+  message: "Hello World",
+});
 
-message
+message;
 // ^?
 
-
-
-
 // ---cut-after---
-console.log('ok')
+console.log("ok");
 ```
 
 :::
-
 
 > tRPC use `createTRPCProxyClient` to create a client with end-to-end type safety
 
 ::: code-group
 
 ```ts twoslash [Elysia]
-import { Elysia, t } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { Elysia, t } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia()
-	.post('/mirror', ({ body }) => body, {
-		body: t.Object({
-			message: t.String()
-		})
-	})
+const app = new Elysia().post("/mirror", ({ body }) => body, {
+  body: t.Object({
+    message: t.String(),
+  }),
+});
 
-const api = treaty(app)
+const api = treaty(app);
 
 const { data, error } = await api.mirror.post({
-	message: 'Hello World'
-})
+  message: "Hello World",
+});
 
-if(error)
-	throw error
-	//     ^?
+if (error) throw error;
+//     ^?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.log(data)
+console.log(data);
 //          ^?
 
-
-
 // ---cut-after---
-console.log('ok')
+console.log("ok");
 ```
 
 :::
-
 
 > Elysia use `treaty` to run the request, and offers end-to-end type safety
 
@@ -15224,7 +14887,7 @@ While both offers end-to-end type safety, tRPC only handle **happy path** where 
 
 If type soundness is important for you, then Elysia is the right choice.
 
-***
+---
 
 While tRPC is a great framework for building type-safe APIs, it has its limitations in terms of RESTful compliance, and type soundness.
 
@@ -15235,8 +14898,8 @@ Alternatively, if you are coming from a different framework, you can check out:
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/features/mount.md'
----
+
+## url: 'https://elysiajs.com/tutorial/features/mount.md'
 
 # Mount
 
@@ -15266,8 +14929,8 @@ Try to modify the code and see how it changes!
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/mount.md'
----
+
+## url: 'https://elysiajs.com/patterns/mount.md'
 
 # Mount&#x20;
 
@@ -15284,51 +14947,52 @@ This allows any framework or code that is WinterCG compliant to be run together,
 To use **.mount**, [simply pass a `fetch` function](https://twitter.com/saltyAom/status/1684786233594290176):
 
 ```ts
-import { Elysia } from 'elysia'
-import { Hono } from 'hono'
+import { Elysia } from "elysia";
+import { Hono } from "hono";
 
-const hono = new Hono()
-	.get('/', (c) => c.text('Hello from Hono!'))
+const hono = new Hono().get("/", (c) => c.text("Hello from Hono!"));
 
 const app = new Elysia()
-    .get('/', () => 'Hello from Elysia')
-    .mount('/hono', hono.fetch)
+  .get("/", () => "Hello from Elysia")
+  .mount("/hono", hono.fetch);
 ```
 
 Any framework that use `Request`, and `Response` can be interoperable with Elysia like
 
-* Hono
-* Nitro
-* H3
-* [Nextjs API Route](/integrations/nextjs)
-* [Nuxt API Route](/integrations/nuxt)
-* [SvelteKit API Route](/integrations/sveltekit)
+- Hono
+- Nitro
+- H3
+- [Nextjs API Route](/integrations/nextjs)
+- [Nuxt API Route](/integrations/nuxt)
+- [SvelteKit API Route](/integrations/sveltekit)
 
 And these can be use on multiple runtimes like:
 
-* Bun
-* Deno
-* Vercel Edge Runtime
-* Cloudflare Worker
-* Netlify Edge Function
+- Bun
+- Deno
+- Vercel Edge Runtime
+- Cloudflare Worker
+- Netlify Edge Function
 
 If the framework supports a **.mount** function, you can also mount Elysia inside another framework:
 
 ```ts
-import { Elysia } from 'elysia'
-import { Hono } from 'hono'
+import { Elysia } from "elysia";
+import { Hono } from "hono";
 
-const elysia = new Elysia()
-    .get('/', () => 'Hello from Elysia inside Hono inside Elysia')
+const elysia = new Elysia().get(
+  "/",
+  () => "Hello from Elysia inside Hono inside Elysia",
+);
 
 const hono = new Hono()
-    .get('/', (c) => c.text('Hello from Hono!'))
-    .mount('/elysia', elysia.fetch)
+  .get("/", (c) => c.text("Hello from Hono!"))
+  .mount("/elysia", elysia.fetch);
 
 const main = new Elysia()
-    .get('/', () => 'Hello from Elysia')
-    .mount('/hono', hono.fetch)
-    .listen(3000)
+  .get("/", () => "Hello from Elysia")
+  .mount("/hono", hono.fetch)
+  .listen(3000);
 ```
 
 ## Reusing Elysia
@@ -15336,16 +15000,13 @@ const main = new Elysia()
 Moreover, you can re-use multiple existing Elysia projects on your server.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-import A from 'project-a/elysia'
-import B from 'project-b/elysia'
-import C from 'project-c/elysia'
+import A from "project-a/elysia";
+import B from "project-b/elysia";
+import C from "project-c/elysia";
 
-new Elysia()
-    .mount(A)
-    .mount(B)
-    .mount(C)
+new Elysia().mount(A).mount(B).mount(C);
 ```
 
 If an instance passed to `mount` is an Elysia instance, it will be resolved with `use` automatically, providing type-safety and support for Eden by default.
@@ -15355,8 +15016,8 @@ This makes the possibility of an interoperable framework and runtime a reality.
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/features/openapi.md'
----
+
+## url: 'https://elysiajs.com/tutorial/features/openapi.md'
 
 # OpenAPI
 
@@ -15365,21 +15026,17 @@ Elysia is built around OpenAPI, and support OpenAPI documentation out of the box
 We can use OpenAPI plugin to show an API documentation.
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi' // [!code ++]
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi"; // [!code ++]
 
 new Elysia()
-	.use(openapi()) // [!code ++]
-	.post(
-		'/',
-		({ body }) => body,
-		{
-			body: t.Object({
-				age: t.Number()
-			})
-		}
-	)
-	.listen(3000)
+  .use(openapi()) // [!code ++]
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      age: t.Number(),
+    }),
+  })
+  .listen(3000);
 ```
 
 Once added, we can access our API documentation at **/openapi**.
@@ -15389,26 +15046,23 @@ Once added, we can access our API documentation at **/openapi**.
 We can provide document API by with a `detail` field which follows OpenAPI 3.0 specification (with auto-completion):
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
 new Elysia()
-	.use(openapi())
-	.post(
-		'/',
-		({ body }) => body,
-		{
-			body: t.Object({
-				age: t.Number()
-			}),
-			detail: { // [!code ++]
-				summary: 'Create a user', // [!code ++]
-				description: 'Create a user with age', // [!code ++]
-				tags: ['User'], // [!code ++]
-			} // [!code ++]
-		}
-	)
-	.listen(3000)
+  .use(openapi())
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      age: t.Number(),
+    }),
+    detail: {
+      // [!code ++]
+      summary: "Create a user", // [!code ++]
+      description: "Create a user with age", // [!code ++]
+      tags: ["User"], // [!code ++]
+    }, // [!code ++]
+  })
+  .listen(3000);
 ```
 
 ## Reference Model
@@ -15416,32 +15070,30 @@ new Elysia()
 We can also define reusable schema with Reference Model:
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
 new Elysia()
-	.use(openapi())
-	.model({
-		age: t.Object({ // [!code ++]
-			age: t.Number() // [!code ++]
-		}) // [!code ++]
-	})
-	.post(
-		'/',
-		({ body }) => body,
-		{
-			age: t.Object({ // [!code --]
-				age: t.Number() // [!code --]
-			}), // [!code --]
-			body: 'age',  // [!code ++]
-			detail: {
-				summary: 'Create a user',
-				description: 'Create a user with age',
-				tags: ['User'],
-			}
-		}
-	)
-	.listen(3000)
+  .use(openapi())
+  .model({
+    age: t.Object({
+      // [!code ++]
+      age: t.Number(), // [!code ++]
+    }), // [!code ++]
+  })
+  .post("/", ({ body }) => body, {
+    age: t.Object({
+      // [!code --]
+      age: t.Number(), // [!code --]
+    }), // [!code --]
+    body: "age", // [!code ++]
+    detail: {
+      summary: "Create a user",
+      description: "Create a user with age",
+      tags: ["User"],
+    },
+  })
+  .listen(3000);
 ```
 
 When we defined a reference model, it will be shown in the **Components** section of the OpenAPI documentation.
@@ -15461,16 +15113,18 @@ For example, if you use Drizzle ORM or Prisma, Elysia can infer the schema direc
 To use OpenAPI Type Gen, simply add apply `fromTypes` plugin before `openapi` plugin.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-import { openapi, fromTypes } from '@elysiajs/openapi' // [!code ++]
+import { openapi, fromTypes } from "@elysiajs/openapi"; // [!code ++]
 
 new Elysia()
-	.use(openapi({
-		references: fromTypes() // [!code ++]
-	}))
-	.get('/', { hello: 'world' })
-	.listen(3000)
+  .use(
+    openapi({
+      references: fromTypes(), // [!code ++]
+    }),
+  )
+  .get("/", { hello: "world" })
+  .listen(3000);
 ```
 
 ### Browser Environment
@@ -15497,8 +15151,8 @@ Try to modify the code and see how the documentation changes!
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/openapi.md'
----
+
+## url: 'https://elysiajs.com/patterns/openapi.md'
 
 # OpenAPI
 
@@ -15515,11 +15169,10 @@ bun add @elysiajs/openapi
 And register the plugin to the server:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { openapi } from '@elysiajs/openapi' // [!code ++]
+import { Elysia } from "elysia";
+import { openapi } from "@elysiajs/openapi"; // [!code ++]
 
-new Elysia()
-	.use(openapi()) // [!code ++]
+new Elysia().use(openapi()); // [!code ++]
 ```
 
 By default, Elysia uses OpenAPI V3 schema and [Scalar UI](http://scalar.com)
@@ -15539,22 +15192,22 @@ However, you can also generate OpenAPI documentation from types by using a gener
 2. Import a generator and provide a **file path from project root** to type generator
 
 ```ts
-import { Elysia, t } from 'elysia'
-import { openapi, fromTypes } from '@elysiajs/openapi' // [!code ++]
+import { Elysia, t } from "elysia";
+import { openapi, fromTypes } from "@elysiajs/openapi"; // [!code ++]
 
 export const app = new Elysia() // [!code ++]
-    .use(
-        openapi({
-            references: fromTypes() // [!code ++]
-        })
-    )
-    .get('/', { test: 'hello' as const })
-    .post('/json', ({ body, status }) => body, {
-        body: t.Object({
-            hello: t.String()
-        })
-    })
-    .listen(3000)
+  .use(
+    openapi({
+      references: fromTypes(), // [!code ++]
+    }),
+  )
+  .get("/", { test: "hello" as const })
+  .post("/json", ({ body, status }) => body, {
+    body: t.Object({
+      hello: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 Elysia will attempt to generate OpenAPI documentation by reading the type of an exported instance to generate OpenAPI documentation.
@@ -15568,19 +15221,18 @@ In production environment, it's likely that you might compile Elysia to a [singl
 It's recommended that you should pre-generate the declaration file (**.d.ts**) to provide type declaration to the generator.
 
 ```ts
-import { Elysia, t } from 'elysia'
-import { openapi, fromTypes } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi, fromTypes } from "@elysiajs/openapi";
 
-const app = new Elysia()
-    .use(
-        openapi({
-            references: fromTypes(
-            	process.env.NODE_ENV === 'production' // [!code ++]
-             		? 'dist/index.d.ts' // [!code ++]
-               		: 'src/index.ts' // [!code ++]
-            )
-        })
-    )
+const app = new Elysia().use(
+  openapi({
+    references: fromTypes(
+      process.env.NODE_ENV === "production" // [!code ++]
+        ? "dist/index.d.ts" // [!code ++]
+        : "src/index.ts", // [!code ++]
+    ),
+  }),
+);
 ```
 
 ### Caveats: Root path
@@ -15588,24 +15240,24 @@ const app = new Elysia()
 As it's unreliable to guess to root of the project, it's recommended to provide the path to the project root to allow generator to run correctly, especially when using monorepo.
 
 ```ts
-import { Elysia, t } from 'elysia'
-import { openapi, fromTypes } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi, fromTypes } from "@elysiajs/openapi";
 
 export const app = new Elysia()
-    .use(
-        openapi({
-            references: fromTypes('src/index.ts', {
-            	projectRoot: path.join('..', import.meta.dir) // [!code ++]
-            })
-        })
-    )
-    .get('/', { test: 'hello' as const })
-    .post('/json', ({ body, status }) => body, {
-        body: t.Object({
-            hello: t.String()
-        })
-    })
-    .listen(3000)
+  .use(
+    openapi({
+      references: fromTypes("src/index.ts", {
+        projectRoot: path.join("..", import.meta.dir), // [!code ++]
+      }),
+    }),
+  )
+  .get("/", { test: "hello" as const })
+  .post("/json", ({ body, status }) => body, {
+    body: t.Object({
+      hello: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 ### Custom tsconfig.json
@@ -15613,25 +15265,25 @@ export const app = new Elysia()
 If you have multiple `tsconfig.json` files, it's important that you must specify a correct `tsconfig.json` file to be used for type generation.
 
 ```ts
-import { Elysia, t } from 'elysia'
-import { openapi, fromTypes } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi, fromTypes } from "@elysiajs/openapi";
 
 export const app = new Elysia()
-    .use(
-        openapi({
-            references: fromTypes('src/index.ts', {
-            	// This is reference from root of the project
-            	tsconfigPath: 'tsconfig.dts.json' // [!code ++]
-            })
-        })
-    )
-    .get('/', { test: 'hello' as const })
-    .post('/json', ({ body, status }) => body, {
-        body: t.Object({
-            hello: t.String()
-        })
-    })
-    .listen(3000)
+  .use(
+    openapi({
+      references: fromTypes("src/index.ts", {
+        // This is reference from root of the project
+        tsconfigPath: "tsconfig.dts.json", // [!code ++]
+      }),
+    }),
+  )
+  .get("/", { test: "hello" as const })
+  .post("/json", ({ body, status }) => body, {
+    body: t.Object({
+      hello: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 ## Standard Schema with OpenAPI
@@ -15655,25 +15307,25 @@ As Zod doesn't have a `toJSONSchema` method on the schema, we need to provide a 
 ::: code-group
 
 ```typescript [Zod 4]
-import openapi from '@elysiajs/openapi'
-import * as z from 'zod'
+import openapi from "@elysiajs/openapi";
+import * as z from "zod";
 
 openapi({
-	mapJsonSchema: {
-		zod: z.toJSONSchema
-	}
-})
+  mapJsonSchema: {
+    zod: z.toJSONSchema,
+  },
+});
 ```
 
 ```typescript [Zod 3]
-import openapi from '@elysiajs/openapi'
-import { zodToJsonSchema } from 'zod-to-json-schema'
+import openapi from "@elysiajs/openapi";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 openapi({
-	mapJsonSchema: {
-		zod: zodToJsonSchema
-	}
-})
+  mapJsonSchema: {
+    zod: zodToJsonSchema,
+  },
+});
 ```
 
 :::
@@ -15683,14 +15335,14 @@ openapi({
 Valibot use a separate package (`@valibot/to-json-schema`) to convert Valibot schema to JSON Schema.
 
 ```typescript
-import openapi from '@elysiajs/openapi'
-import { toJsonSchema } from '@valibot/to-json-schema'
+import openapi from "@elysiajs/openapi";
+import { toJsonSchema } from "@valibot/to-json-schema";
 
 openapi({
-	mapJsonSchema: {
-		valibot: toJsonSchema
-	}
-})
+  mapJsonSchema: {
+    valibot: toJsonSchema,
+  },
+});
 ```
 
 ### Effect OpenAPI
@@ -15698,14 +15350,14 @@ openapi({
 As Effect doesn't have a `toJSONSchema` method on the schema, we need to provide a custom mapper to convert Effect schema to OpenAPI schema.
 
 ```typescript
-import openapi from '@elysiajs/openapi'
-import { JSONSchema } from 'effect'
+import openapi from "@elysiajs/openapi";
+import { JSONSchema } from "effect";
 
 openapi({
- 	mapJsonSchema: {
-   		effect: JSONSchema.make
- 	}
-})
+  mapJsonSchema: {
+    effect: JSONSchema.make,
+  },
+});
 ```
 
 ## Describing route
@@ -15715,31 +15367,29 @@ We can add route information by providing a schema type.
 However, sometimes defining only a type does not make it clear what the route might do. You can use [detail](/plugins/openapi#detail) fields to explicitly describe the route.
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
-new Elysia()
-	.use(openapi())
-	.post(
-		'/sign-in',
-		({ body }) => body, {
-    		body: t.Object(
-      		{
-	            username: t.String(),
-	            password: t.String({
-	                minLength: 8,
-	                description: 'User password (at least 8 characters)' // [!code ++]
-	            })
-	        },
-	        { // [!code ++]
-	            description: 'Expected a username and password' // [!code ++]
-	        } // [!code ++]
-	    ),
-	    detail: { // [!code ++]
-	        summary: 'Sign in the user', // [!code ++]
-	        tags: ['authentication'] // [!code ++]
-	    } // [!code ++]
-	})
+new Elysia().use(openapi()).post("/sign-in", ({ body }) => body, {
+  body: t.Object(
+    {
+      username: t.String(),
+      password: t.String({
+        minLength: 8,
+        description: "User password (at least 8 characters)", // [!code ++]
+      }),
+    },
+    {
+      // [!code ++]
+      description: "Expected a username and password", // [!code ++]
+    }, // [!code ++]
+  ),
+  detail: {
+    // [!code ++]
+    summary: "Sign in the user", // [!code ++]
+    tags: ["authentication"], // [!code ++]
+  }, // [!code ++]
+});
 ```
 
 The detail fields follows an OpenAPI V3 definition with auto-completion and type-safety by default.
@@ -15751,27 +15401,27 @@ Detail is then passed to OpenAPI to put the description to OpenAPI route.
 We can add a response headers by wrapping a schema with `withHeader`:
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi, withHeader } from '@elysiajs/openapi' // [!code ++]
+import { Elysia, t } from "elysia";
+import { openapi, withHeader } from "@elysiajs/openapi"; // [!code ++]
 
-new Elysia()
-	.use(openapi())
-	.get(
-		'/thing',
-		({ body, set }) => {
-			set.headers['x-powered-by'] = 'Elysia'
+new Elysia().use(openapi()).get(
+  "/thing",
+  ({ body, set }) => {
+    set.headers["x-powered-by"] = "Elysia";
 
-			return body
-		},
-		{
-		    response: withHeader( // [!code ++]
-				t.Literal('Hi'), // [!code ++]
-				{ // [!code ++]
-					'x-powered-by': t.Literal('Elysia') // [!code ++]
-				} // [!code ++]
-			) // [!code ++]
-		}
-	)
+    return body;
+  },
+  {
+    response: withHeader(
+      // [!code ++]
+      t.Literal("Hi"), // [!code ++]
+      {
+        // [!code ++]
+        "x-powered-by": t.Literal("Elysia"), // [!code ++]
+      }, // [!code ++]
+    ), // [!code ++]
+  },
+);
 ```
 
 Note that `withHeader` is an annotation only, and does not enforce or validate the actual response headers. You need to set the headers manually.
@@ -15781,29 +15431,24 @@ Note that `withHeader` is an annotation only, and does not enforce or validate t
 You can hide the route from the Swagger page by setting `detail.hide` to `true`
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
-new Elysia()
-	.use(openapi())
-	.post(
-		'/sign-in',
-		({ body }) => body,
-		{
-		    body: t.Object(
-		        {
-		            username: t.String(),
-		            password: t.String()
-		        },
-		        {
-		            description: 'Expected a username and password'
-		        }
-		    ),
-		    detail: { // [!code ++]
-		        hide: true // [!code ++]
-		    } // [!code ++]
-		}
-	)
+new Elysia().use(openapi()).post("/sign-in", ({ body }) => body, {
+  body: t.Object(
+    {
+      username: t.String(),
+      password: t.String(),
+    },
+    {
+      description: "Expected a username and password",
+    },
+  ),
+  detail: {
+    // [!code ++]
+    hide: true, // [!code ++]
+  }, // [!code ++]
+});
 ```
 
 ## Tags
@@ -15814,61 +15459,60 @@ Firstly define the available tags in the swagger config object
 
 ```typescript
 new Elysia().use(
-    openapi({
-        documentation: {
-            tags: [
-                { name: 'App', description: 'General endpoints' },
-                { name: 'Auth', description: 'Authentication endpoints' }
-            ]
-        }
-    })
-)
+  openapi({
+    documentation: {
+      tags: [
+        { name: "App", description: "General endpoints" },
+        { name: "Auth", description: "Authentication endpoints" },
+      ],
+    },
+  }),
+);
 ```
 
 Then use the details property of the endpoint configuration section to assign that endpoint to the group
 
 ```typescript
 new Elysia()
-    .get('/', () => 'Hello Elysia', {
+  .get("/", () => "Hello Elysia", {
+    detail: {
+      tags: ["App"],
+    },
+  })
+  .group("/auth", (app) =>
+    app.post(
+      "/sign-up",
+      ({ body }) =>
+        db.user.create({
+          data: body,
+          select: {
+            id: true,
+            username: true,
+          },
+        }),
+      {
         detail: {
-            tags: ['App']
-        }
-    })
-    .group('/auth', (app) =>
-        app.post(
-            '/sign-up',
-            ({ body }) =>
-                db.user.create({
-                    data: body,
-                    select: {
-                        id: true,
-                        username: true
-                    }
-                }),
-            {
-                detail: {
-                    tags: ['Auth']
-                }
-            }
-        )
-    )
+          tags: ["Auth"],
+        },
+      },
+    ),
+  );
 ```
 
 Which will produce a swagger page like the following
-
 
 ### Tags group
 
 Elysia may accept tags to add an entire instance or group of routes to a specific tag.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia({
-    tags: ['user']
+  tags: ["user"],
 })
-    .get('/user', 'user')
-    .get('/admin', 'admin')
+  .get("/user", "user")
+  .get("/admin", "admin");
 ```
 
 ## Models
@@ -15879,20 +15523,20 @@ By separating models into a dedicated section and linked by reference.
 
 ```typescript
 new Elysia()
-    .model({
-        User: t.Object({
-            id: t.Number(),
-            username: t.String()
-        })
-    })
-    .get('/user', () => ({ id: 1, username: 'saltyaom' }), {
-        response: {
-            200: 'User'
-        },
-        detail: {
-            tags: ['User']
-        }
-    })
+  .model({
+    User: t.Object({
+      id: t.Number(),
+      username: t.String(),
+    }),
+  })
+  .get("/user", () => ({ id: 1, username: "saltyaom" }), {
+    response: {
+      200: "User",
+    },
+    detail: {
+      tags: ["User"],
+    },
+  });
 ```
 
 ## Guard
@@ -15900,16 +15544,16 @@ new Elysia()
 Alternatively, Elysia may accept guards to add an entire instance or group of routes to a specific guard.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .guard({
-        detail: {
-            description: 'Require user to be logged in'
-        }
-    })
-    .get('/user', 'user')
-    .get('/admin', 'admin')
+  .guard({
+    detail: {
+      description: "Require user to be logged in",
+    },
+  })
+  .get("/user", "user")
+  .get("/admin", "admin");
 ```
 
 ## Change OpenAPI Endpoint
@@ -15917,16 +15561,16 @@ new Elysia()
 You can change the OpenAPI endpoint by setting [path](#path) in the plugin config.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
 new Elysia()
-    .use(
-        openapi({
-            path: '/v2/openapi'
-        })
-    )
-    .listen(3000)
+  .use(
+    openapi({
+      path: "/v2/openapi",
+    }),
+  )
+  .listen(3000);
 ```
 
 ## Customize OpenAPI info
@@ -15934,29 +15578,29 @@ new Elysia()
 We can customize the OpenAPI information by setting [documentation.info](#documentationinfo) in the plugin config.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
 new Elysia()
-    .use(
-        openapi({
-            documentation: {
-                info: {
-                    title: 'Elysia Documentation',
-                    version: '1.0.0'
-                }
-            }
-        })
-    )
-    .listen(3000)
+  .use(
+    openapi({
+      documentation: {
+        info: {
+          title: "Elysia Documentation",
+          version: "1.0.0",
+        },
+      },
+    }),
+  )
+  .listen(3000);
 ```
 
 This can be useful for
 
-* adding a title
-* settings an API version
-* adding a description explaining what our API is about
-* explaining what tags are available, what each tag means
+- adding a title
+- settings an API version
+- adding a description explaining what our API is about
+- explaining what tags are available, what each tag means
 
 ## Security Configuration
 
@@ -15964,32 +15608,32 @@ To secure your API endpoints, you can define security schemes in the Swagger con
 
 ```typescript
 new Elysia().use(
-    openapi({
-        documentation: {
-            components: {
-                securitySchemes: {
-                    bearerAuth: {
-                        type: 'http',
-                        scheme: 'bearer',
-                        bearerFormat: 'JWT'
-                    }
-                }
-            }
-        }
-    })
-)
+  openapi({
+    documentation: {
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+          },
+        },
+      },
+    },
+  }),
+);
 
 export const addressController = new Elysia({
-    prefix: '/address',
-    detail: {
-        tags: ['Address'],
-        security: [
-            {
-                bearerAuth: []
-            }
-        ]
-    }
-})
+  prefix: "/address",
+  detail: {
+    tags: ["Address"],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+});
 ```
 
 This will ensures that all endpoints under the `/address` prefix require a valid JWT token for access.
@@ -15997,8 +15641,8 @@ This will ensures that all endpoints under the `/address` prefix require a valid
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/openapi.md'
----
+
+## url: 'https://elysiajs.com/plugins/openapi.md'
 
 # OpenAPI Plugin&#x20;
 
@@ -16013,14 +15657,14 @@ bun add @elysiajs/openapi
 Then use it:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
 new Elysia()
-    .use(openapi())
-    .get('/', () => 'hello')
-    .post('/hello', () => 'OpenAPI')
-    .listen(3000)
+  .use(openapi())
+  .get("/", () => "hello")
+  .post("/hello", () => "OpenAPI")
+  .listen(3000);
 ```
 
 Accessing `/openapi` would show you a Scalar UI with the generated endpoint documentation from the Elysia server. You can also access the raw OpenAPI spec at `/openapi/json`.
@@ -16044,24 +15688,24 @@ It may contain the following fields:
 You can hide the route from the Swagger page by setting `detail.hide` to `true`
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { openapi } from '@elysiajs/openapi'
+import { Elysia, t } from "elysia";
+import { openapi } from "@elysiajs/openapi";
 
-new Elysia().use(openapi()).post('/sign-in', ({ body }) => body, {
-    body: t.Object(
-        {
-            username: t.String(),
-            password: t.String()
-        },
-        {
-            description: 'Expected a username and password'
-        }
-    ),
-    detail: {
-        // [!code ++]
-        hide: true // [!code ++]
-    } // [!code ++]
-})
+new Elysia().use(openapi()).post("/sign-in", ({ body }) => body, {
+  body: t.Object(
+    {
+      username: t.String(),
+      password: t.String(),
+    },
+    {
+      description: "Expected a username and password",
+    },
+  ),
+  detail: {
+    // [!code ++]
+    hide: true, // [!code ++]
+  }, // [!code ++]
+});
 ```
 
 ### detail.deprecated
@@ -16120,14 +15764,14 @@ A custom mapping function from Standard schema to OpenAPI schema
 ### Example
 
 ```typescript
-import { openapi } from '@elysiajs/openapi'
-import { toJsonSchema } from '@valibot/to-json-schema'
+import { openapi } from "@elysiajs/openapi";
+import { toJsonSchema } from "@valibot/to-json-schema";
 
 openapi({
-	mapJsonSchema: {
-	  	valibot: toJsonSchema
-  	}
-})
+  mapJsonSchema: {
+    valibot: toJsonSchema,
+  },
+});
 ```
 
 ## path
@@ -16142,9 +15786,9 @@ The endpoint to expose OpenAPI documentation frontend
 
 OpenAPI documentation frontend between:
 
-* [Scalar](https://github.com/scalar/scalar)
-* [SwaggerUI](https://github.com/swagger-api/swagger-ui)
-* null: disable frontend
+- [Scalar](https://github.com/scalar/scalar)
+- [SwaggerUI](https://github.com/swagger-api/swagger-ui)
+- null: disable frontend
 
 ## references
 
@@ -16169,31 +15813,30 @@ Below you can find the common patterns to use the plugin.
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/opentelemetry.md'
----
+
+## url: 'https://elysiajs.com/patterns/opentelemetry.md'
 
 # OpenTelemetry
 
 To start using OpenTelemetry, install `@elysiajs/opentelemetry` and apply plugin to any instance.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { opentelemetry } from '@elysiajs/opentelemetry'
+import { Elysia } from "elysia";
+import { opentelemetry } from "@elysiajs/opentelemetry";
 
-new Elysia()
-	.use(opentelemetry())
+new Elysia().use(opentelemetry());
 ```
 
 ![OpenTelemetry visualize via Axiom](/assets/axiom.webp)
 
 Why use OpenTelemetry with Elysia?
 
-* 1 line config
-* Span name is the function name
-* Grouping relevant lifecycle together
-* Wrap a code to record a specific part
-* Support Server-Sent Event, and response streaming
-* Compatible with any OpenTelemetry compatible library
+- 1 line config
+- Span name is the function name
+- Grouping relevant lifecycle together
+- Wrap a code to record a specific part
+- Support Server-Sent Event, and response streaming
+- Compatible with any OpenTelemetry compatible library
 
 You may export telemetry data to Jaeger, Zipkin, New Relic, Axiom or any other OpenTelemetry compatible backend.
 
@@ -16204,28 +15847,28 @@ We can export OpenTelemetry data to any backend that supports OpenTelemetry prot
 Here's an example of exporting telemetry to [Axiom](https://axiom.co)
 
 ```typescript
-import { Elysia } from 'elysia'
-import { opentelemetry } from '@elysiajs/opentelemetry'
+import { Elysia } from "elysia";
+import { opentelemetry } from "@elysiajs/opentelemetry";
 
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node'
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto'
+import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 
 new Elysia().use(
-	opentelemetry({
-		spanProcessors: [
-			new BatchSpanProcessor(
-				new OTLPTraceExporter({
-					url: 'https://api.axiom.co/v1/traces', // [!code ++]
-					headers: {
-						// [!code ++]
-						Authorization: `Bearer ${Bun.env.AXIOM_TOKEN}`, // [!code ++]
-						'X-Axiom-Dataset': Bun.env.AXIOM_DATASET // [!code ++]
-					} // [!code ++]
-				})
-			)
-		]
-	})
-)
+  opentelemetry({
+    spanProcessors: [
+      new BatchSpanProcessor(
+        new OTLPTraceExporter({
+          url: "https://api.axiom.co/v1/traces", // [!code ++]
+          headers: {
+            // [!code ++]
+            Authorization: `Bearer ${Bun.env.AXIOM_TOKEN}`, // [!code ++]
+            "X-Axiom-Dataset": Bun.env.AXIOM_DATASET, // [!code ++]
+          }, // [!code ++]
+        }),
+      ),
+    ],
+  }),
+);
 ```
 
 ## OpenTelemetry SDK
@@ -16237,14 +15880,14 @@ You may use OpenTelemetry SDK normally, and the span is run under Elysia's reque
 However, we also provide a `getTracer`, and `record` utility to collect span from any part of your application.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { record } from '@elysiajs/opentelemetry'
+import { Elysia } from "elysia";
+import { record } from "@elysiajs/opentelemetry";
 
-export const plugin = new Elysia().get('', () => {
-	return record('database.query', () => {
-		return db.query('SELECT * FROM users')
-	})
-})
+export const plugin = new Elysia().get("", () => {
+  return record("database.query", () => {
+    return db.query("SELECT * FROM users");
+  });
+});
 ```
 
 ## Record utility
@@ -16263,20 +15906,20 @@ If your hook handler is an arrow function, you may refactor it to named function
 
 ```typescript
 const bad = new Elysia()
-	// ⚠️ span name will be anonymous
-	.derive(async ({ cookie: { session } }) => {
-		return {
-			user: await getProfile(session)
-		}
-	})
+  // ⚠️ span name will be anonymous
+  .derive(async ({ cookie: { session } }) => {
+    return {
+      user: await getProfile(session),
+    };
+  });
 
 const good = new Elysia()
-	// ✅ span name will be getProfile
-	.derive(async function getProfile({ cookie: { session } }) {
-		return {
-			user: await getProfile(session)
-		}
-	})
+  // ✅ span name will be getProfile
+  .derive(async function getProfile({ cookie: { session } }) {
+    return {
+      user: await getProfile(session),
+    };
+  });
 ```
 
 ## getCurrentSpan
@@ -16284,13 +15927,13 @@ const good = new Elysia()
 `getCurrentSpan` is a utility to get the current span of the current request when you are outside of the handler.
 
 ```typescript
-import { getCurrentSpan } from '@elysiajs/opentelemetry'
+import { getCurrentSpan } from "@elysiajs/opentelemetry";
 
 function utility() {
-	const span = getCurrentSpan()
-	span.setAttributes({
-		'custom.attribute': 'value'
-	})
+  const span = getCurrentSpan();
+  span.setAttributes({
+    "custom.attribute": "value",
+  });
 }
 ```
 
@@ -16301,12 +15944,12 @@ This works outside of the handler by retriving current span from `AsyncLocalStor
 `setAttributes` is a utility to set attributes to the current span.
 
 ```typescript
-import { setAttributes } from '@elysiajs/opentelemetry'
+import { setAttributes } from "@elysiajs/opentelemetry";
 
 function utility() {
-	setAttributes({
-		'custom.attribute': 'value'
-	})
+  setAttributes({
+    "custom.attribute": "value",
+  });
 }
 ```
 
@@ -16330,21 +15973,21 @@ To achieve this in Bun, we can
 Let's create a new file in `src/instrumentation.ts`
 
 ```ts [src/instrumentation.ts]
-import { opentelemetry } from '@elysiajs/opentelemetry'
-import { PgInstrumentation } from '@opentelemetry/instrumentation-pg'
+import { opentelemetry } from "@elysiajs/opentelemetry";
+import { PgInstrumentation } from "@opentelemetry/instrumentation-pg";
 
 export const instrumentation = opentelemetry({
-	instrumentations: [new PgInstrumentation()]
-})
+  instrumentations: [new PgInstrumentation()],
+});
 ```
 
 Then we can apply this `instrumentaiton` plugin into our main instance in `src/index.ts`
 
 ```ts [src/index.ts]
-import { Elysia } from 'elysia'
-import { instrumentation } from './instrumentation.ts'
+import { Elysia } from "elysia";
+import { instrumentation } from "./instrumentation.ts";
 
-new Elysia().use(instrumentation).listen(3000)
+new Elysia().use(instrumentation).listen(3000);
 ```
 
 Then create a `bunfig.toml` with the following:
@@ -16369,21 +16012,21 @@ To make this works, we may specified `pg` as an external module with `--external
 bun build --compile --external pg --outfile server src/index.ts
 ```
 
-This tells bun to not `pg` bundled into the final output file, and will be imported from the **node\_modules** directory at runtime. So on a production server, you must also keeps the **node\_modules** directory.
+This tells bun to not `pg` bundled into the final output file, and will be imported from the **node_modules** directory at runtime. So on a production server, you must also keeps the **node_modules** directory.
 
 It's recommended to specify packages that should be available in a production server as **dependencies** in **package.json** and use `bun install --production` to install only production dependencies.
 
 ```json
 {
-	"dependencies": {
-		"pg": "^8.15.6"
-	},
-	"devDependencies": {
-		"@elysiajs/opentelemetry": "^1.2.0",
-		"@opentelemetry/instrumentation-pg": "^0.52.0",
-		"@types/pg": "^8.11.14",
-		"elysia": "^1.2.25"
-	}
+  "dependencies": {
+    "pg": "^8.15.6"
+  },
+  "devDependencies": {
+    "@elysiajs/opentelemetry": "^1.2.0",
+    "@opentelemetry/instrumentation-pg": "^0.52.0",
+    "@types/pg": "^8.11.14",
+    "elysia": "^1.2.25"
+  }
 }
 ```
 
@@ -16393,13 +16036,13 @@ Then after running a build command, on a production server
 bun install --production
 ```
 
-If the node\_modules directory still includes development dependencies, you may remove the node\_modules directory and reinstall production dependencies again.
+If the node_modules directory still includes development dependencies, you may remove the node_modules directory and reinstall production dependencies again.
 
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/opentelemetry.md'
----
+
+## url: 'https://elysiajs.com/plugins/opentelemetry.md'
 
 # OpenTelemetry
 
@@ -16410,22 +16053,17 @@ This page is a **config reference** for **OpenTelemetry**, if you're looking to 
 To start using OpenTelemetry, install `@elysiajs/opentelemetry` and apply plugin to any instance.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { opentelemetry } from '@elysiajs/opentelemetry'
+import { Elysia } from "elysia";
+import { opentelemetry } from "@elysiajs/opentelemetry";
 
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node'
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto'
+import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 
-new Elysia()
-	.use(
-		opentelemetry({
-			spanProcessors: [
-				new BatchSpanProcessor(
-					new OTLPTraceExporter()
-				)
-			]
-		})
-	)
+new Elysia().use(
+  opentelemetry({
+    spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
+  }),
+);
 ```
 
 ![jaeger showing collected trace automatically](/blog/elysia-11/jaeger.webp)
@@ -16488,15 +16126,15 @@ Resources may also be detected by using the autoDetectResources method of the SD
 
 Configure resource detectors. By default, the resource detectors are \[envDetector, processDetector, hostDetector]. NOTE: In order to enable the detection, the parameter autoDetectResources has to be true.
 
-If resourceDetectors was not set, you can also use the environment variable OTEL\_NODE\_RESOURCE\_DETECTORS to enable only certain detectors, or completely disable them:
+If resourceDetectors was not set, you can also use the environment variable OTEL_NODE_RESOURCE_DETECTORS to enable only certain detectors, or completely disable them:
 
-* env
-* host
-* os
-* process
-* serviceinstance (experimental)
-* all - enable all resource detectors above
-* none - disable resource detection
+- env
+- host
+- os
+- process
+- serviceinstance (experimental)
+- all - enable all resource detectors above
+- none - disable resource detection
 
 For example, to enable only the env, host detectors:
 
@@ -16529,8 +16167,8 @@ Configure tracing parameters. These are the same trace parameters used to config
 ---
 
 ---
-url: 'https://elysiajs.com/eden/treaty/overview.md'
----
+
+## url: 'https://elysiajs.com/eden/treaty/overview.md'
 
 # Eden Treaty
 
@@ -16540,52 +16178,52 @@ To use Eden Treaty, first export your existing Elysia server type:
 
 ```typescript
 // server.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .get('/hi', () => 'Hi Elysia')
-    .get('/id/:id', ({ params: { id } }) => id)
-    .post('/mirror', ({ body }) => body, {
-        body: t.Object({
-            id: t.Number(),
-            name: t.String()
-        })
-    })
-    .listen(3000)
+  .get("/hi", () => "Hi Elysia")
+  .get("/id/:id", ({ params: { id } }) => id)
+  .post("/mirror", ({ body }) => body, {
+    body: t.Object({
+      id: t.Number(),
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 
-export type App = typeof app // [!code ++]
+export type App = typeof app; // [!code ++]
 ```
 
 Then import the server type and consume the Elysia API on the client:
 
 ```typescript twoslash
 // @filename: server.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .get('/hi', () => 'Hi Elysia')
-    .get('/id/:id', ({ params: { id } }) => id)
-    .post('/mirror', ({ body }) => body, {
-        body: t.Object({
-            id: t.Number(),
-            name: t.String()
-        })
-    })
-    .listen(3000)
+  .get("/hi", () => "Hi Elysia")
+  .get("/id/:id", ({ params: { id } }) => id)
+  .post("/mirror", ({ body }) => body, {
+    body: t.Object({
+      id: t.Number(),
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 
-export type App = typeof app // [!code ++]
+export type App = typeof app; // [!code ++]
 
 // @filename: client.ts
 // ---cut---
 // client.ts
-import { treaty } from '@elysiajs/eden'
-import type { App } from './server' // [!code ++]
+import { treaty } from "@elysiajs/eden";
+import type { App } from "./server"; // [!code ++]
 
-const app = treaty<App>('localhost:3000')
+const app = treaty<App>("localhost:3000");
 
 // response type: 'Hi Elysia'
-const { data, error } = await app.hi.get()
-      // ^?
+const { data, error } = await app.hi.get();
+// ^?
 ```
 
 ## Tree like syntax
@@ -16594,9 +16232,9 @@ HTTP Path is a resource indicator for a file system tree.
 
 File system consists of multiple levels of folders, for example:
 
-* /documents/elysia
-* /documents/kalpas
-* /documents/kelvin
+- /documents/elysia
+- /documents/kalpas
+- /documents/kelvin
 
 Each level is separated by **/** (slash) and a name.
 
@@ -16625,27 +16263,27 @@ However, dynamic path parameters cannot be expressed using notation. If they are
 
 ```typescript
 // ❌ Unclear what the value is supposed to represent?
-treaty.item['skadi'].get()
+treaty.item["skadi"].get();
 ```
 
 To handle this, we can specify a dynamic path using a function to provide a key value instead.
 
 ```typescript
 // ✅ Clear that value is dynamic path is 'name'
-treaty.item({ name: 'Skadi' }).get()
+treaty.item({ name: "Skadi" }).get();
 ```
 
-| Path            | Treaty                           |
-| --------------- | -------------------------------- |
-| /item           | .item                            |
-| /item/:name     | .item({ name: 'Skadi' })         |
-| /item/:name/id  | .item({ name: 'Skadi' }).id      |
+| Path           | Treaty                      |
+| -------------- | --------------------------- |
+| /item          | .item                       |
+| /item/:name    | .item({ name: 'Skadi' })    |
+| /item/:name/id | .item({ name: 'Skadi' }).id |
 
 ---
 
 ---
-url: 'https://elysiajs.com/playground.md'
----
+
+## url: 'https://elysiajs.com/playground.md'
 
 # Welcome to ElysiaJS
 
@@ -16658,24 +16296,24 @@ Elysia is an ergonomic web framework for humans.
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/getting-started/plugin.md'
----
+
+## url: 'https://elysiajs.com/tutorial/getting-started/plugin.md'
 
 # Plugin
 
 Every Elysia instance can be plug-and-play with other instances by `use` method.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const user = new Elysia()
-	.get('/profile', 'User Profile')
-	.get('/settings', 'User Settings')
+  .get("/profile", "User Profile")
+  .get("/settings", "User Settings");
 
 new Elysia()
-	.use(user) // [!code ++]
-	.get('/', 'Home')
-	.listen(3000)
+  .use(user) // [!code ++]
+  .get("/", "Home")
+  .listen(3000);
 ```
 
 Once applied, all routes from `user` instance will be available in `app` instance.
@@ -16685,19 +16323,20 @@ Once applied, all routes from `user` instance will be available in `app` instanc
 You can also create a plugin that takes argument, and returns an Elysia instance to make a more dynamic plugin.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const user = ({ log = false }) => new Elysia() // [!code ++]
-	.onBeforeHandle(({ request }) => {
-		if (log) console.log(request)
-	})
-	.get('/profile', 'User Profile')
-	.get('/settings', 'User Settings')
+const user = ({ log = false }) =>
+  new Elysia() // [!code ++]
+    .onBeforeHandle(({ request }) => {
+      if (log) console.log(request);
+    })
+    .get("/profile", "User Profile")
+    .get("/settings", "User Settings");
 
 new Elysia()
-	.use(user({ log: true })) // [!code ++]
-	.get('/', 'Home')
-	.listen(3000)
+  .use(user({ log: true })) // [!code ++]
+  .get("/", "Home")
+  .listen(3000);
 ```
 
 ## Assignment
@@ -16709,23 +16348,23 @@ Let's apply the `user` instance to the `app` instance.
 Similar to the above example, we can use the `use` method to plug the `user` instance into the `app` instance.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const user = new Elysia()
-	.get('/profile', 'User Profile')
-	.get('/settings', 'User Settings')
+  .get("/profile", "User Profile")
+  .get("/settings", "User Settings");
 
 const app = new Elysia()
-	.use(user) // [!code ++]
-	.get('/', 'Home')
-	.listen(3000)
+  .use(user) // [!code ++]
+  .get("/", "Home")
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/essential/plugin.md'
----
+
+## url: 'https://elysiajs.com/essential/plugin.md'
 
 # Plugin&#x20;
 
@@ -16734,22 +16373,22 @@ Plugin is a pattern that decouples functionality into smaller parts. Creating re
 To create a plugin is to create a separate instance.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const plugin = new Elysia()
-    .decorate('plugin', 'hi')
-    .get('/plugin', ({ plugin }) => plugin)
+  .decorate("plugin", "hi")
+  .get("/plugin", ({ plugin }) => plugin);
 
 const app = new Elysia()
-    .use(plugin)
-    .get('/', ({ plugin }) => plugin)
-               // ^?
-    .listen(3000)
+  .use(plugin)
+  .get("/", ({ plugin }) => plugin)
+  // ^?
+  .listen(3000);
 ```
 
 We can use the plugin by passing an instance to **Elysia.use**.
 
-The plugin will inherit all properties of the plugin instance like `state`, `decorate` but **WILL NOT inherit  plugin lifecycle** as it's [isolated by default](#scope) (mentioned in the next section ↓).
+The plugin will inherit all properties of the plugin instance like `state`, `decorate` but **WILL NOT inherit plugin lifecycle** as it's [isolated by default](#scope) (mentioned in the next section ↓).
 
 Elysia will also handle the type inference automatically as well.
 
@@ -16760,18 +16399,18 @@ Elysia lifecycle methods are **encapsulated** to its own instance only.
 Which means if you create a new instance, it will not share the lifecycle methods with others.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const profile = new Elysia()
-	.onBeforeHandle(({ cookie }) => {
-		throwIfNotSignIn(cookie)
-	})
-	.get('/profile', () => 'Hi there!')
+  .onBeforeHandle(({ cookie }) => {
+    throwIfNotSignIn(cookie);
+  })
+  .get("/profile", () => "Hi there!");
 
 const app = new Elysia()
-	.use(profile)
-	// ⚠️ This will NOT have sign in check
-	.patch('/rename', ({ body }) => updateProfile(body))
+  .use(profile)
+  // ⚠️ This will NOT have sign in check
+  .patch("/rename", ({ body }) => updateProfile(body));
 ```
 
 In this example, the `isSignIn` check will only apply to `profile` but not `app`.
@@ -16783,21 +16422,21 @@ In this example, the `isSignIn` check will only apply to `profile` but not `app`
 To **"export"** the lifecycle to other instances, you must add specify the scope.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const profile = new Elysia()
-	.onBeforeHandle(
-		{ as: 'global' }, // [!code ++]
-		({ cookie }) => {
-			throwIfNotSignIn(cookie)
-		}
-	)
-	.get('/profile', () => 'Hi there!')
+  .onBeforeHandle(
+    { as: "global" }, // [!code ++]
+    ({ cookie }) => {
+      throwIfNotSignIn(cookie);
+    },
+  )
+  .get("/profile", () => "Hi there!");
 
 const app = new Elysia()
-	.use(profile)
-	// This has sign in check
-	.patch('/rename', ({ body }) => updateProfile(body))
+  .use(profile)
+  // This has sign in check
+  .patch("/rename", ({ body }) => updateProfile(body));
 ```
 
 Casting lifecycle to **"global"** will export lifecycle to **every instance**.
@@ -16815,36 +16454,31 @@ Scope type are as the following:
 Let's review what each scope type does by using the following example:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-
-const child = new Elysia()
-    .get('/child', 'hi')
+const child = new Elysia().get("/child", "hi");
 
 const current = new Elysia()
-	// ? Value based on table value provided below
-    .onBeforeHandle({ as: 'local' }, () => { // [!code ++]
-        console.log('hi')
-    })
-    .use(child)
-    .get('/current', 'hi')
+  // ? Value based on table value provided below
+  .onBeforeHandle({ as: "local" }, () => {
+    // [!code ++]
+    console.log("hi");
+  })
+  .use(child)
+  .get("/current", "hi");
 
-const parent = new Elysia()
-    .use(current)
-    .get('/parent', 'hi')
+const parent = new Elysia().use(current).get("/parent", "hi");
 
-const main = new Elysia()
-    .use(parent)
-    .get('/main', 'hi')
+const main = new Elysia().use(parent).get("/main", "hi");
 ```
 
 By changing the `type` value, the result should be as follows:
 
-| type       | child | current | parent | main |
-| ---------- | ----- | ------- | ------ | ---- |
-| local      | ✅    | ✅      | ❌      | ❌   |
-| scoped     | ✅    | ✅      | ✅      | ❌   |
-| global     | ✅    | ✅      | ✅      | ✅   |
+| type   | child | current | parent | main |
+| ------ | ----- | ------- | ------ | ---- |
+| local  | ✅    | ✅      | ❌     | ❌   |
+| scoped | ✅    | ✅      | ✅     | ❌   |
+| global | ✅    | ✅      | ✅     | ✅   |
 
 ### Descendant
 
@@ -16853,34 +16487,30 @@ By default plugin will **apply hook to itself and descendants** only.
 If the hook is registered in a plugin, instances that inherit the plugin will **NOT** inherit hooks and schema.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const plugin = new Elysia()
-    .onBeforeHandle(() => {
-        console.log('hi')
-    })
-    .get('/child', 'log hi')
+  .onBeforeHandle(() => {
+    console.log("hi");
+  })
+  .get("/child", "log hi");
 
-const main = new Elysia()
-    .use(plugin)
-    .get('/parent', 'not log hi')
+const main = new Elysia().use(plugin).get("/parent", "not log hi");
 ```
 
 To apply hook to globally, we need to specify hook as global.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const plugin = new Elysia()
-    .onBeforeHandle(() => {
-        return 'hi'
-    })
-    .get('/child', 'child')
-    .as('scoped')
+  .onBeforeHandle(() => {
+    return "hi";
+  })
+  .get("/child", "child")
+  .as("scoped");
 
-const main = new Elysia()
-    .use(plugin)
-    .get('/parent', 'parent')
+const main = new Elysia().use(plugin).get("/parent", "parent");
 ```
 
 ## Config
@@ -16890,14 +16520,11 @@ To make the plugin more useful, allowing customization via config is recommended
 You can create a function that accepts parameters that may change the behavior of the plugin to make it more reusable.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const version = (version = 1) => new Elysia()
-        .get('/version', version)
+const version = (version = 1) => new Elysia().get("/version", version);
 
-const app = new Elysia()
-    .use(version(1))
-    .listen(3000)
+const app = new Elysia().use(version(1)).listen(3000);
 ```
 
 ### Functional callback
@@ -16909,16 +16536,15 @@ Functional callback allows us to access the existing property of the main instan
 To define a functional callback, create a function that accepts Elysia as a parameter.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const plugin = (app: Elysia) => app
-    .state('counter', 0)
-    .get('/plugin', () => 'Hi')
+const plugin = (app: Elysia) =>
+  app.state("counter", 0).get("/plugin", () => "Hi");
 
 const app = new Elysia()
-    .use(plugin)
-    .get('/counter', ({ store: { counter } }) => counter)
-    .listen(3000)
+  .use(plugin)
+  .get("/counter", ({ store: { counter } }) => counter)
+  .listen(3000);
 ```
 
 Once passed to `Elysia.use`, functional callback behaves as a normal plugin except the property is assigned directly to the main instance.
@@ -16938,22 +16564,21 @@ Some plugins may be used multiple times to provide type inference, resulting in 
 Elysia avoids this by differentiating the instance by using **name** and **optional seeds** to help Elysia identify instance duplication:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const plugin = <T extends string>(config: { prefix: T }) =>
-    new Elysia({
-        name: 'my-plugin', // [!code ++]
-        seed: config, // [!code ++]
-    })
-    .get(`${config.prefix}/hi`, () => 'Hi')
+  new Elysia({
+    name: "my-plugin", // [!code ++]
+    seed: config, // [!code ++]
+  }).get(`${config.prefix}/hi`, () => "Hi");
 
 const app = new Elysia()
-    .use(
-        plugin({
-            prefix: '/v2'
-        })
-    )
-    .listen(3000)
+  .use(
+    plugin({
+      prefix: "/v2",
+    }),
+  )
+  .listen(3000);
 ```
 
 Elysia will use **name** and **seed** to create a checksum to identify if the instance has been registered previously or not, if so, Elysia will skip the registration of the plugin.
@@ -16961,16 +16586,16 @@ Elysia will use **name** and **seed** to create a checksum to identify if the in
 If seed is not provided, Elysia will only use **name** to differentiate the instance. This means that the plugin is only registered once even if you registered it multiple times.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const plugin = new Elysia({ name: 'plugin' })
+const plugin = new Elysia({ name: "plugin" });
 
 const app = new Elysia()
-    .use(plugin)
-    .use(plugin)
-    .use(plugin)
-    .use(plugin)
-    .listen(3000)
+  .use(plugin)
+  .use(plugin)
+  .use(plugin)
+  .use(plugin)
+  .listen(3000);
 ```
 
 This allows Elysia to improve performance by reusing the registered plugins instead of processing the plugin over and over again.
@@ -16989,15 +16614,13 @@ But if you don't apply the plugin to another instance, it will not be able to in
 
 ```typescript twoslash
 // @errors: 2339
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const child = new Elysia()
-    // ❌ 'a' is missing
-    .get('/', ({ a }) => a)
+  // ❌ 'a' is missing
+  .get("/", ({ a }) => a);
 
-const main = new Elysia()
-    .decorate('a', 'a')
-    .use(child)
+const main = new Elysia().decorate("a", "a").use(child);
 ```
 
 Elysia introduces the **Service Locator** pattern to counteract this.
@@ -17008,23 +16631,20 @@ So we have to provide the plugin reference for Elysia to find the service to add
 
 ```typescript twoslash
 // @errors: 2339
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const setup = new Elysia({ name: 'setup' })
-    .decorate('a', 'a')
+const setup = new Elysia({ name: "setup" }).decorate("a", "a");
 
 // Without 'setup', type will be missing
-const error = new Elysia()
-    .get('/', ({ a }) => a)
+const error = new Elysia().get("/", ({ a }) => a);
 
 // With `setup`, type will be inferred
 const child = new Elysia()
-    .use(setup) // [!code ++]
-    .get('/', ({ a }) => a)
-    //           ^?
+  .use(setup) // [!code ++]
+  .get("/", ({ a }) => a);
+//           ^?
 
-const main = new Elysia()
-    .use(child)
+const main = new Elysia().use(child);
 ```
 
 ## Guard&#x20;
@@ -17032,30 +16652,34 @@ const main = new Elysia()
 Guard allows us to apply hook and schema into multiple routes all at once.
 
 ```typescript twoslash
-const signUp = <T>(a: T) => a
-const signIn = <T>(a: T) => a
-const isUserExists = <T>(a: T) => a
+const signUp = <T>(a: T) => a;
+const signIn = <T>(a: T) => a;
+const isUserExists = <T>(a: T) => a;
 // ---cut---
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .guard(
-        { // [!code ++]
-            body: t.Object({ // [!code ++]
-                username: t.String(), // [!code ++]
-                password: t.String() // [!code ++]
-            }) // [!code ++]
-        }, // [!code ++]
-        (app) => // [!code ++]
-            app
-                .post('/sign-up', ({ body }) => signUp(body))
-                .post('/sign-in', ({ body }) => signIn(body), {
-                                                     // ^?
-                    beforeHandle: isUserExists
-                })
-    )
-    .get('/', 'hi')
-    .listen(3000)
+  .guard(
+    {
+      // [!code ++]
+      body: t.Object({
+        // [!code ++]
+        username: t.String(), // [!code ++]
+        password: t.String(), // [!code ++]
+      }), // [!code ++]
+    }, // [!code ++]
+    (
+      app, // [!code ++]
+    ) =>
+      app
+        .post("/sign-up", ({ body }) => signUp(body))
+        .post("/sign-in", ({ body }) => signIn(body), {
+          // ^?
+          beforeHandle: isUserExists,
+        }),
+  )
+  .get("/", "hi")
+  .listen(3000);
 ```
 
 This code applies validation for `body` to both '/sign-in' and '/sign-up' instead of inlining the schema one by one but applies not to '/'.
@@ -17072,28 +16696,28 @@ Guard accepts the same parameter as inline hook, the only difference is that you
 This means that the code above is translated into:
 
 ```typescript twoslash
-const signUp = <T>(a: T) => a
-const signIn = <T>(a: T) => a
-const isUserExists = (a: any) => a
+const signUp = <T>(a: T) => a;
+const signIn = <T>(a: T) => a;
+const isUserExists = (a: any) => a;
 // ---cut---
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .post('/sign-up', ({ body }) => signUp(body), {
-        body: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
-    .post('/sign-in', ({ body }) => body, {
-        beforeHandle: isUserExists,
-        body: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
-    .get('/', () => 'hi')
-    .listen(3000)
+  .post("/sign-up", ({ body }) => signUp(body), {
+    body: t.Object({
+      username: t.String(),
+      password: t.String(),
+    }),
+  })
+  .post("/sign-in", ({ body }) => body, {
+    beforeHandle: isUserExists,
+    body: t.Object({
+      username: t.String(),
+      password: t.String(),
+    }),
+  })
+  .get("/", () => "hi")
+  .listen(3000);
 ```
 
 ### Grouped Guard
@@ -17109,54 +16733,56 @@ With the same API as guard apply to the 2nd parameter, instead of nesting group 
 Consider the following example:
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .group('/v1', (app) =>
-        app.guard(
-            {
-                body: t.Literal('Rikuhachima Aru')
-            },
-            (app) => app.post('/student', ({ body }) => body)
-                                            // ^?
-        )
-    )
-    .listen(3000)
+  .group("/v1", (app) =>
+    app.guard(
+      {
+        body: t.Literal("Rikuhachima Aru"),
+      },
+      (app) => app.post("/student", ({ body }) => body),
+      // ^?
+    ),
+  )
+  .listen(3000);
 ```
 
 From nested groupped guard, we may merge group and guard together by providing guard scope to 2nd parameter of group:
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .group(
-        '/v1',
-        (app) => app.guard( // [!code --]
+  .group(
+    "/v1",
+    (app) =>
+      app.guard(
+        // [!code --]
         {
-            body: t.Literal('Rikuhachima Aru')
+          body: t.Literal("Rikuhachima Aru"),
         },
-        (app) => app.post('/student', ({ body }) => body)
-        ) // [!code --]
-    )
-    .listen(3000)
+        (app) => app.post("/student", ({ body }) => body),
+      ), // [!code --]
+  )
+  .listen(3000);
 ```
 
 Which results in the follows syntax:
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .group(
-        '/v1',
-        {
-            body: t.Literal('Rikuhachima Aru')
-        },
-        (app) => app.post('/student', ({ body }) => body)
-                                       // ^?
-    )
-    .listen(3000)
+  .group(
+    "/v1",
+    {
+      body: t.Literal("Rikuhachima Aru"),
+    },
+    (app) => app.post("/student", ({ body }) => body),
+    // ^?
+  )
+  .listen(3000);
 ```
 
 ## Scope cast Advanced Concept
@@ -17172,18 +16798,19 @@ To apply hook to parent may use one of the following:
 Every event listener will accept `as` parameter to specify the scope of the hook.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const plugin = new Elysia()
-    .derive({ as: 'scoped' }, () => { // [!code ++]
-        return { hi: 'ok' }
-    })
-    .get('/child', ({ hi }) => hi)
+  .derive({ as: "scoped" }, () => {
+    // [!code ++]
+    return { hi: "ok" };
+  })
+  .get("/child", ({ hi }) => hi);
 
 const main = new Elysia()
-    .use(plugin)
-    // ✅ Hi is now available
-    .get('/parent', ({ hi }) => hi)
+  .use(plugin)
+  // ✅ Hi is now available
+  .get("/parent", ({ hi }) => hi);
 ```
 
 However, this method is apply to only a single hook, and may not be suitable for multiple hooks.
@@ -17193,21 +16820,19 @@ However, this method is apply to only a single hook, and may not be suitable for
 Every event listener will accept `as` parameter to specify the scope of the hook.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const plugin = new Elysia()
-	.guard({
-		as: 'scoped', // [!code ++]
-		response: t.String(),
-		beforeHandle() {
-			console.log('ok')
-		}
-	})
-    .get('/child', 'ok')
+  .guard({
+    as: "scoped", // [!code ++]
+    response: t.String(),
+    beforeHandle() {
+      console.log("ok");
+    },
+  })
+  .get("/child", "ok");
 
-const main = new Elysia()
-    .use(plugin)
-    .get('/parent', 'hello')
+const main = new Elysia().use(plugin).get("/parent", "hello");
 ```
 
 Guard alllowing us to apply `schema` and `hook` to multiple routes all at once while specifying the scope.
@@ -17219,19 +16844,19 @@ However, it doesn't support `derive` and `resolve` method.
 `as` will read all hooks and schema scope of the current instance, modify.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const plugin = new Elysia()
-    .derive(() => {
-        return { hi: 'ok' }
-    })
-    .get('/child', ({ hi }) => hi)
-    .as('scoped') // [!code ++]
+  .derive(() => {
+    return { hi: "ok" };
+  })
+  .get("/child", ({ hi }) => hi)
+  .as("scoped"); // [!code ++]
 
 const main = new Elysia()
-    .use(plugin)
-    // ✅ Hi is now available
-    .get('/parent', ({ hi }) => hi)
+  .use(plugin)
+  // ✅ Hi is now available
+  .get("/parent", ({ hi }) => hi);
 ```
 
 Sometimes we want to reapply plugin to parent instance as well but as it's limited by `scoped` mechanism, it's limited to 1 parent only.
@@ -17242,26 +16867,28 @@ Which means if you have `local` scope, and want to apply it to the parent instan
 
 ```typescript twoslash
 // @errors: 2304 2345
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const plugin = new Elysia()
-	.guard({
-		response: t.String()
-	})
-	.onBeforeHandle(() => { console.log('called') })
-	.get('/ok', () => 'ok')
-	.get('/not-ok', () => 1)
-	.as('scoped') // [!code ++]
+  .guard({
+    response: t.String(),
+  })
+  .onBeforeHandle(() => {
+    console.log("called");
+  })
+  .get("/ok", () => "ok")
+  .get("/not-ok", () => 1)
+  .as("scoped"); // [!code ++]
 
 const instance = new Elysia()
-	.use(plugin)
-	.get('/no-ok-parent', () => 2)
-	.as('scoped') // [!code ++]
+  .use(plugin)
+  .get("/no-ok-parent", () => 2)
+  .as("scoped"); // [!code ++]
 
 const parent = new Elysia()
-	.use(instance)
-	// This now error because `scoped` is lifted up to parent
-	.get('/ok', () => 3)
+  .use(instance)
+  // This now error because `scoped` is lifted up to parent
+  .get("/ok", () => 3);
 ```
 
 ## Lazy Load
@@ -17280,28 +16907,25 @@ The deferred module is an async plugin that can be registered after the server i
 
 ```typescript
 // plugin.ts
-import { Elysia, file } from 'elysia'
-import { loadAllFiles } from './files'
+import { Elysia, file } from "elysia";
+import { loadAllFiles } from "./files";
 
 export const loadStatic = async (app: Elysia) => {
-    const files = await loadAllFiles()
+  const files = await loadAllFiles();
 
-    files.forEach((asset) => app
-        .get(asset, file(file))
-    )
+  files.forEach((asset) => app.get(asset, file(file)));
 
-    return app
-}
+  return app;
+};
 ```
 
 And in the main file:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { loadStatic } from './plugin'
+import { Elysia } from "elysia";
+import { loadStatic } from "./plugin";
 
-const app = new Elysia()
-    .use(loadStatic)
+const app = new Elysia().use(loadStatic);
 ```
 
 ### Lazy Load Module
@@ -17311,10 +16935,9 @@ Same as the async plugin, the lazy-load module will be registered after the serv
 A lazy-load module can be both sync or async function, as long as the module is used with `import` the module will be lazy-loaded.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-    .use(import('./plugin'))
+const app = new Elysia().use(import("./plugin"));
 ```
 
 Using module lazy-loading is recommended when the module is computationally heavy and/or blocking.
@@ -17326,32 +16949,31 @@ To ensure module registration before the server starts, we can use `await` on th
 In a test environment, we can use `await app.modules` to wait for deferred and lazy-loading modules.
 
 ```typescript
-import { describe, expect, it } from 'bun:test'
-import { Elysia } from 'elysia'
+import { describe, expect, it } from "bun:test";
+import { Elysia } from "elysia";
 
-describe('Modules', () => {
-    it('inline async', async () => {
-        const app = new Elysia()
-              .use(async (app) =>
-                  app.get('/async', () => 'async')
-              )
+describe("Modules", () => {
+  it("inline async", async () => {
+    const app = new Elysia().use(async (app) =>
+      app.get("/async", () => "async"),
+    );
 
-        await app.modules
+    await app.modules;
 
-        const res = await app
-            .handle(new Request('http://localhost/async'))
-            .then((r) => r.text())
+    const res = await app
+      .handle(new Request("http://localhost/async"))
+      .then((r) => r.text());
 
-        expect(res).toBe('async')
-    })
-})
+    expect(res).toBe("async");
+  });
+});
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/overview.md'
----
+
+## url: 'https://elysiajs.com/plugins/overview.md'
 
 # Overview
 
@@ -17367,122 +16989,121 @@ This is to ensure developers end up with a performant web server they intend to 
 
 Here are some of the official plugins maintained by the Elysia team:
 
-* [Bearer](/plugins/bearer) - retrieve [Bearer](https://swagger.io/docs/specification/authentication/bearer-authentication/) token automatically
-* [CORS](/plugins/cors) - set up [Cross-origin resource sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
-* [Cron](/plugins/cron) - set up [cron](https://en.wikipedia.org/wiki/Cron) job
-* [Eden](/eden/overview) - end-to-end type safety client for Elysia
-* [GraphQL Apollo](/plugins/graphql-apollo) - run [Apollo GraphQL](https://www.apollographql.com/) on Elysia
-* [GraphQL Yoga](/plugins/graphql-yoga) - run [GraphQL Yoga](https://github.com/dotansimha/graphql-yoga) on Elysia
-* [HTML](/plugins/html) - handle HTML responses
-* [JWT](/plugins/jwt) - authenticate with [JWTs](https://jwt.io/)
-* [OpenAPI](/plugins/openapi) - generate an [OpenAPI](https://swagger.io/specification/) documentation
-* [OpenTelemetry](/plugins/opentelemetry) - add support for OpenTelemetry
-* [Server Timing](/plugins/server-timing) - audit performance bottlenecks with the [Server-Timing API](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing)
-* [Static](/plugins/static) - serve static files/folders
+- [Bearer](/plugins/bearer) - retrieve [Bearer](https://swagger.io/docs/specification/authentication/bearer-authentication/) token automatically
+- [CORS](/plugins/cors) - set up [Cross-origin resource sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+- [Cron](/plugins/cron) - set up [cron](https://en.wikipedia.org/wiki/Cron) job
+- [Eden](/eden/overview) - end-to-end type safety client for Elysia
+- [GraphQL Apollo](/plugins/graphql-apollo) - run [Apollo GraphQL](https://www.apollographql.com/) on Elysia
+- [GraphQL Yoga](/plugins/graphql-yoga) - run [GraphQL Yoga](https://github.com/dotansimha/graphql-yoga) on Elysia
+- [HTML](/plugins/html) - handle HTML responses
+- [JWT](/plugins/jwt) - authenticate with [JWTs](https://jwt.io/)
+- [OpenAPI](/plugins/openapi) - generate an [OpenAPI](https://swagger.io/specification/) documentation
+- [OpenTelemetry](/plugins/opentelemetry) - add support for OpenTelemetry
+- [Server Timing](/plugins/server-timing) - audit performance bottlenecks with the [Server-Timing API](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing)
+- [Static](/plugins/static) - serve static files/folders
 
 ## Community plugins
 
-* [Create ElysiaJS](https://github.com/kravetsone/create-elysiajs) - scaffold your Elysia project with the environment easily (help with ORM, Linters and Plugins)!
-* [Lucia Auth](https://github.com/pilcrowOnPaper/lucia) - authentication, simple and clean
-* [Elysia Clerk](https://github.com/wobsoriano/elysia-clerk) - unofficial Clerk authentication plugin
-* [Elysia Polyfills](https://github.com/bogeychan/elysia-polyfills) - run Elysia ecosystem on Node.js and Deno
-* [Vite server](https://github.com/kravetsone/elysia-vite-server) - plugin which starts and decorates [`vite`](https://vitejs.dev/) dev server in `development` and in `production` mode serves static files (if needed)
-* [Vite](https://github.com/timnghg/elysia-vite) - serve entry HTML file with Vite's scripts injected
-* [Nuxt](https://github.com/trylovetom/elysiajs-nuxt) - easily integrate Elysia with Nuxt!
-* [Remix](https://github.com/kravetsone/elysia-remix) - use [Remix](https://remix.run/) with `HMR` support (powered by [`vite`](https://vitejs.dev/))! Close a really long-standing plugin request [#12](https://github.com/elysiajs/elysia/issues/12)
-* [Sync](https://github.com/johnny-woodtke/elysiajs-sync) - a lightweight offline-first data synchronization framework powered by [Dexie.js](https://dexie.org/)
-* [Connect middleware](https://github.com/kravetsone/elysia-connect-middleware) - plugin which allows you to use [`express`](https://www.npmjs.com/package/express)/[`connect`](https://www.npmjs.com/package/connect) middleware directly in Elysia!
-* [Elysia HTTP Exception](https://github.com/codev911/elysia-http-exception) - Elysia plugin for HTTP 4xx/5xx error handling with structured exception classes
-* [Elysia Helmet](https://github.com/DevTobias/elysia-helmet) - secure Elysia apps with various HTTP headers
-* [Vite Plugin SSR](https://github.com/timnghg/elysia-vite-plugin-ssr) - Vite SSR plugin using Elysia server
-* [OAuth 2.0](https://github.com/kravetsone/elysia-oauth2) - a plugin for [OAuth 2.0](https://en.wikipedia.org/wiki/OAuth) Authorization Flow with more than **42** providers and **type-safety**!
-* [OAuth2](https://github.com/bogeychan/elysia-oauth2) - handle OAuth 2.0 authorization code flow
-* [OAuth2 Resource Server](https://github.com/ap-1/elysia-oauth2-resource-server) - a plugin for validating JWT tokens from OAuth2 providers against JWKS endpoints with support for issuer, audience, and scope verification
-* [Elysia OpenID Client](https://github.com/macropygia/elysia-openid-client) - OpenID client based on [openid-client](https://github.com/panva/node-openid-client)
-* [Rate Limit](https://github.com/rayriffy/elysia-rate-limit) - simple, lightweight rate limiter
-* [Logysia](https://github.com/tristanisham/logysia) - classic logging middleware
-* [Logestic](https://github.com/cybercoder-naj/logestic) - an advanced and customisable logging library for ElysiaJS
-* [Logger](https://github.com/bogeychan/elysia-logger) - [pino](https://github.com/pinojs/pino)-based logging middleware
-* [Elysia Line](https://github.com/KrataiB/elysia-line) - LINE Messaging API and LINE Login integration for Elysia (wrapper around the official [@line/bot-sdk](https://github.com/line/line-bot-sdk-nodejs))
-* [Elylog](https://github.com/eajr/elylog) - simple stdout logging library with some customization
-* [Logify for Elysia.js](https://github.com/0xrasla/logify) - a beautiful, fast, and type-safe logging middleware for Elysia.js applications
-* [Nice Logger](https://github.com/tanishqmanuja/nice-logger) - not the nicest, but a pretty nice and sweet logger for Elysia.
-* [Sentry](https://github.com/johnny-woodtke/elysiajs-sentry) - capture traces and errors with this [Sentry](https://docs.sentry.io/) plugin
-* [Elysia Lambda](https://github.com/TotalTechGeek/elysia-lambda) - deploy on AWS Lambda
-* [Decorators](https://github.com/gaurishhs/elysia-decorators) - use TypeScript decorators
-* [Autoload](https://github.com/kravetsone/elysia-autoload) - filesystem router based on a directory structure that generates types for [Eden](/eden/overview) with [`Bun.build`](https://github.com/kravetsone/elysia-autoload?tab=readme-ov-file#bun-build-usage) support
-* [Msgpack](https://github.com/kravetsone/elysia-msgpack) - allows you to work with [MessagePack](https://msgpack.org)
-* [XML](https://github.com/kravetsone/elysia-xml) - allows you to work with XML
-* [Autoroutes](https://github.com/wobsoriano/elysia-autoroutes) - filesystem routes
-* [Group Router](https://github.com/itsyoboieltr/elysia-group-router) - filesystem and folder-based router for groups
-* [Basic Auth](https://github.com/itsyoboieltr/elysia-basic-auth) - basic HTTP authentication
-* [ETag](https://github.com/bogeychan/elysia-etag) - automatic HTTP [ETag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag) generation
-* [CDN Cache](https://github.com/johnny-woodtke/elysiajs-cdn-cache) - Cache-Control plugin for Elysia - no more manually setting HTTP headers
-* [Basic Auth](https://github.com/eelkevdbos/elysia-basic-auth) - basic HTTP authentication (using `request` event)
-* [i18n](https://github.com/eelkevdbos/elysia-i18next) - [i18n](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/i18n) wrapper based on [i18next](https://www.i18next.com/)
-* [Intlify](https://github.com/intlify/srvmid/blob/main/packages/elysia/README.md) - Internationalization server middleware & utilities
-* [Elysia Request ID](https://github.com/gtramontina/elysia-requestid) - add/forward request IDs (`X-Request-ID` or custom)
-* [Elysia HTMX](https://github.com/gtramontina/elysia-htmx) - context helpers for [HTMX](https://htmx.org/)
-* [Elysia HMR HTML](https://github.com/gtrabanco/elysia-hmr-html) - reload HTML files when changing any file in a directory
-* [Elysia Inject HTML](https://github.com/gtrabanco/elysia-inject-html) - inject HTML code in HTML files
-* [Elysia HTTP Error](https://github.com/yfrans/elysia-http-error) - return HTTP errors from Elysia handlers
-* [Elysia Http Status Code](https://github.com/sylvain12/elysia-http-status-code) - integrate HTTP status codes
-* [NoCache](https://github.com/gaurishhs/elysia-nocache) - disable caching
-* [Elysia Tailwind](https://github.com/gtramontina/elysia-tailwind) - compile [Tailwindcss](https://tailwindcss.com/) in a plugin.
-* [Elysia Compression](https://github.com/gusb3ll/elysia-compression) - compress response
-* [Elysia IP](https://github.com/gaurishhs/elysia-ip) - get the IP Address
-* [OAuth2 Server](https://github.com/myazarc/elysia-oauth2-server) - developing an OAuth2 Server with Elysia
-* [Elysia Flash Messages](https://github.com/gtramontina/elysia-flash-messages) - enable flash messages
-* [Elysia AuthKit](https://github.com/gtramontina/elysia-authkit) - unnoficial [WorkOS' AuthKit](https://www.authkit.com/) authentication
-* [Elysia Error Handler](https://github.com/gtramontina/elysia-error-handler) - simpler error handling
-* [Elysia env](https://github.com/yolk-oss/elysia-env) - typesafe environment variables with typebox
-* [Elysia Drizzle Schema](https://github.com/Edsol/elysia-drizzle-schema) - helps to use Drizzle ORM schema inside Elysia OpenAPI model.
-* [Unify-Elysia](https://github.com/qlaffont/unify-elysia) - unify error code for Elysia
-* [Unify-Elysia-GQL](https://github.com/qlaffont/unify-elysia-gql) - unify error code for Elysia GraphQL Server (Yoga & Apollo)
-* [Elysia Auth Drizzle](https://github.com/qlaffont/elysia-auth-drizzle) - library who handle authentification with JWT (Header/Cookie/QueryParam).
-* [graceful-server-elysia](https://github.com/qlaffont/graceful-server-elysia) - library inspired by [graceful-server](https://github.com/gquittet/graceful-server).
-* [Logixlysia](https://github.com/PunGrumpy/logixlysia) - a beautiful and simple logging middleware for ElysiaJS with colors and timestamps.
-* [Elysia Fault](https://github.com/vitorpldev/elysia-fault) - a simple and customizable error handling middleware with the possibility of creating your own HTTP errors
-* [Elysia Compress](https://github.com/vermaysha/elysia-compress) - ElysiaJS plugin to compress responses inspired by [@fastify/compress](https://github.com/fastify/fastify-compress)
-* [@labzzhq/compressor](https://github.com/labzzhq/compressor/) - Compact Brilliance, Expansive Results: HTTP Compressor for Elysia and Bunnyhop with gzip, deflate and brotli support.
-* [Elysia Accepts](https://github.com/morigs/elysia-accepts) - Elysia plugin for accept headers parsing and content negotiation
-* [Elysia Compression](https://github.com/chneau/elysia-compression) - Elysia plugin for compressing responses
-* [Elysia Logger](https://github.com/chneau/elysia-logger) - Elysia plugin for logging HTTP requests and responses inspired by [hono/logger](https://hono.dev/docs/middleware/builtin/logger)
-* [Elysia CQRS](https://github.com/jassix/elysia-cqrs) - Elysia plugin for CQRS pattern
-* [Elysia Supabase](https://github.com/mastermakrela/elysia-supabase) - Seamlessly integrate [Supabase](https://supabase.com/) authentication and database functionality into Elysia, allowing easy access to authenticated user data and Supabase client instance. Especially useful for [Edge Functions](https://supabase.com/docs/guides/functions).
-* [Elysia XSS](https://www.npmjs.com/package/elysia-xss) - a plugin for Elysia.js that provides XSS (Cross-Site Scripting) protection by sanitizing request body data.
-* [Elysiajs Helmet](https://www.npmjs.com/package/elysiajs-helmet) - a comprehensive security middleware for Elysia.js applications that helps secure your apps by setting various HTTP headers.
-* [Decorators for Elysia.js](https://github.com/Ateeb-Khan-97/better-elysia) - seamlessly develop and integrate APIs, Websocket and Streaming APIs with this small library.
-* [Elysia Protobuf](https://github.com/ilyhalight/elysia-protobuf) - support protobuf for Elysia.
-* [Elysia Prometheus](https://github.com/m1handr/elysia-prometheus) - Elysia plugin for exposing HTTP metrics for Prometheus.
-* [Elysia Remote DTS](https://github.com/rayriffy/elysia-remote-dts) - A plugin that provide .d.ts types remotely for Eden Treaty to consume.
-* [Cap Checkpoint plugin for Elysia](https://capjs.js.org/guide/middleware/elysia.html) - Cloudflare-like middleware for Cap, a lightweight, modern open-source CAPTCHA alternative designed using SHA-256 PoW.
-* [Elysia Background](https://github.com/staciax/elysia-background) - A background task processing plugin for Elysia.js
-* [@fedify/elysia](https://github.com/fedify-dev/fedify/tree/main/packages/elysia) - A plugin that provides seamless integration with [Fedify](https://fedify.dev/), the ActivityPub server framework.
-* [elysia-healthcheck](https://github.com/iam-medvedev/elysia-healthcheck) - Healthcheck plugin for Elysia.js
-* [elysia-csrf](https://github.com/lauhon/elysia-csrf) - A CSRF plugin, ported from [express-csrf](https://github.com/expressjs/csurf)
-* [elysia-local-https](https://github.com/mrtcmn/elysia-local-https) - Automatic local HTTPS for Elysia — certs generated, managed, and refreshed in one line.
+- [Create ElysiaJS](https://github.com/kravetsone/create-elysiajs) - scaffold your Elysia project with the environment easily (help with ORM, Linters and Plugins)!
+- [Lucia Auth](https://github.com/pilcrowOnPaper/lucia) - authentication, simple and clean
+- [Elysia Clerk](https://github.com/wobsoriano/elysia-clerk) - unofficial Clerk authentication plugin
+- [Elysia Polyfills](https://github.com/bogeychan/elysia-polyfills) - run Elysia ecosystem on Node.js and Deno
+- [Vite server](https://github.com/kravetsone/elysia-vite-server) - plugin which starts and decorates [`vite`](https://vitejs.dev/) dev server in `development` and in `production` mode serves static files (if needed)
+- [Vite](https://github.com/timnghg/elysia-vite) - serve entry HTML file with Vite's scripts injected
+- [Nuxt](https://github.com/trylovetom/elysiajs-nuxt) - easily integrate Elysia with Nuxt!
+- [Remix](https://github.com/kravetsone/elysia-remix) - use [Remix](https://remix.run/) with `HMR` support (powered by [`vite`](https://vitejs.dev/))! Close a really long-standing plugin request [#12](https://github.com/elysiajs/elysia/issues/12)
+- [Sync](https://github.com/johnny-woodtke/elysiajs-sync) - a lightweight offline-first data synchronization framework powered by [Dexie.js](https://dexie.org/)
+- [Connect middleware](https://github.com/kravetsone/elysia-connect-middleware) - plugin which allows you to use [`express`](https://www.npmjs.com/package/express)/[`connect`](https://www.npmjs.com/package/connect) middleware directly in Elysia!
+- [Elysia HTTP Exception](https://github.com/codev911/elysia-http-exception) - Elysia plugin for HTTP 4xx/5xx error handling with structured exception classes
+- [Elysia Helmet](https://github.com/DevTobias/elysia-helmet) - secure Elysia apps with various HTTP headers
+- [Vite Plugin SSR](https://github.com/timnghg/elysia-vite-plugin-ssr) - Vite SSR plugin using Elysia server
+- [OAuth 2.0](https://github.com/kravetsone/elysia-oauth2) - a plugin for [OAuth 2.0](https://en.wikipedia.org/wiki/OAuth) Authorization Flow with more than **42** providers and **type-safety**!
+- [OAuth2](https://github.com/bogeychan/elysia-oauth2) - handle OAuth 2.0 authorization code flow
+- [OAuth2 Resource Server](https://github.com/ap-1/elysia-oauth2-resource-server) - a plugin for validating JWT tokens from OAuth2 providers against JWKS endpoints with support for issuer, audience, and scope verification
+- [Elysia OpenID Client](https://github.com/macropygia/elysia-openid-client) - OpenID client based on [openid-client](https://github.com/panva/node-openid-client)
+- [Rate Limit](https://github.com/rayriffy/elysia-rate-limit) - simple, lightweight rate limiter
+- [Logysia](https://github.com/tristanisham/logysia) - classic logging middleware
+- [Logestic](https://github.com/cybercoder-naj/logestic) - an advanced and customisable logging library for ElysiaJS
+- [Logger](https://github.com/bogeychan/elysia-logger) - [pino](https://github.com/pinojs/pino)-based logging middleware
+- [Elysia Line](https://github.com/KrataiB/elysia-line) - LINE Messaging API and LINE Login integration for Elysia (wrapper around the official [@line/bot-sdk](https://github.com/line/line-bot-sdk-nodejs))
+- [Elylog](https://github.com/eajr/elylog) - simple stdout logging library with some customization
+- [Logify for Elysia.js](https://github.com/0xrasla/logify) - a beautiful, fast, and type-safe logging middleware for Elysia.js applications
+- [Nice Logger](https://github.com/tanishqmanuja/nice-logger) - not the nicest, but a pretty nice and sweet logger for Elysia.
+- [Sentry](https://github.com/johnny-woodtke/elysiajs-sentry) - capture traces and errors with this [Sentry](https://docs.sentry.io/) plugin
+- [Elysia Lambda](https://github.com/TotalTechGeek/elysia-lambda) - deploy on AWS Lambda
+- [Decorators](https://github.com/gaurishhs/elysia-decorators) - use TypeScript decorators
+- [Autoload](https://github.com/kravetsone/elysia-autoload) - filesystem router based on a directory structure that generates types for [Eden](/eden/overview) with [`Bun.build`](https://github.com/kravetsone/elysia-autoload?tab=readme-ov-file#bun-build-usage) support
+- [Msgpack](https://github.com/kravetsone/elysia-msgpack) - allows you to work with [MessagePack](https://msgpack.org)
+- [XML](https://github.com/kravetsone/elysia-xml) - allows you to work with XML
+- [Autoroutes](https://github.com/wobsoriano/elysia-autoroutes) - filesystem routes
+- [Group Router](https://github.com/itsyoboieltr/elysia-group-router) - filesystem and folder-based router for groups
+- [Basic Auth](https://github.com/itsyoboieltr/elysia-basic-auth) - basic HTTP authentication
+- [ETag](https://github.com/bogeychan/elysia-etag) - automatic HTTP [ETag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag) generation
+- [CDN Cache](https://github.com/johnny-woodtke/elysiajs-cdn-cache) - Cache-Control plugin for Elysia - no more manually setting HTTP headers
+- [Basic Auth](https://github.com/eelkevdbos/elysia-basic-auth) - basic HTTP authentication (using `request` event)
+- [i18n](https://github.com/eelkevdbos/elysia-i18next) - [i18n](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/i18n) wrapper based on [i18next](https://www.i18next.com/)
+- [Intlify](https://github.com/intlify/srvmid/blob/main/packages/elysia/README.md) - Internationalization server middleware & utilities
+- [Elysia Request ID](https://github.com/gtramontina/elysia-requestid) - add/forward request IDs (`X-Request-ID` or custom)
+- [Elysia HTMX](https://github.com/gtramontina/elysia-htmx) - context helpers for [HTMX](https://htmx.org/)
+- [Elysia HMR HTML](https://github.com/gtrabanco/elysia-hmr-html) - reload HTML files when changing any file in a directory
+- [Elysia Inject HTML](https://github.com/gtrabanco/elysia-inject-html) - inject HTML code in HTML files
+- [Elysia HTTP Error](https://github.com/yfrans/elysia-http-error) - return HTTP errors from Elysia handlers
+- [Elysia Http Status Code](https://github.com/sylvain12/elysia-http-status-code) - integrate HTTP status codes
+- [NoCache](https://github.com/gaurishhs/elysia-nocache) - disable caching
+- [Elysia Tailwind](https://github.com/gtramontina/elysia-tailwind) - compile [Tailwindcss](https://tailwindcss.com/) in a plugin.
+- [Elysia Compression](https://github.com/gusb3ll/elysia-compression) - compress response
+- [Elysia IP](https://github.com/gaurishhs/elysia-ip) - get the IP Address
+- [OAuth2 Server](https://github.com/myazarc/elysia-oauth2-server) - developing an OAuth2 Server with Elysia
+- [Elysia Flash Messages](https://github.com/gtramontina/elysia-flash-messages) - enable flash messages
+- [Elysia AuthKit](https://github.com/gtramontina/elysia-authkit) - unnoficial [WorkOS' AuthKit](https://www.authkit.com/) authentication
+- [Elysia Error Handler](https://github.com/gtramontina/elysia-error-handler) - simpler error handling
+- [Elysia env](https://github.com/yolk-oss/elysia-env) - typesafe environment variables with typebox
+- [Elysia Drizzle Schema](https://github.com/Edsol/elysia-drizzle-schema) - helps to use Drizzle ORM schema inside Elysia OpenAPI model.
+- [Unify-Elysia](https://github.com/qlaffont/unify-elysia) - unify error code for Elysia
+- [Unify-Elysia-GQL](https://github.com/qlaffont/unify-elysia-gql) - unify error code for Elysia GraphQL Server (Yoga & Apollo)
+- [Elysia Auth Drizzle](https://github.com/qlaffont/elysia-auth-drizzle) - library who handle authentification with JWT (Header/Cookie/QueryParam).
+- [graceful-server-elysia](https://github.com/qlaffont/graceful-server-elysia) - library inspired by [graceful-server](https://github.com/gquittet/graceful-server).
+- [Logixlysia](https://github.com/PunGrumpy/logixlysia) - a beautiful and simple logging middleware for ElysiaJS with colors and timestamps.
+- [Elysia Fault](https://github.com/vitorpldev/elysia-fault) - a simple and customizable error handling middleware with the possibility of creating your own HTTP errors
+- [Elysia Compress](https://github.com/vermaysha/elysia-compress) - ElysiaJS plugin to compress responses inspired by [@fastify/compress](https://github.com/fastify/fastify-compress)
+- [@labzzhq/compressor](https://github.com/labzzhq/compressor/) - Compact Brilliance, Expansive Results: HTTP Compressor for Elysia and Bunnyhop with gzip, deflate and brotli support.
+- [Elysia Accepts](https://github.com/morigs/elysia-accepts) - Elysia plugin for accept headers parsing and content negotiation
+- [Elysia Compression](https://github.com/chneau/elysia-compression) - Elysia plugin for compressing responses
+- [Elysia Logger](https://github.com/chneau/elysia-logger) - Elysia plugin for logging HTTP requests and responses inspired by [hono/logger](https://hono.dev/docs/middleware/builtin/logger)
+- [Elysia CQRS](https://github.com/jassix/elysia-cqrs) - Elysia plugin for CQRS pattern
+- [Elysia Supabase](https://github.com/mastermakrela/elysia-supabase) - Seamlessly integrate [Supabase](https://supabase.com/) authentication and database functionality into Elysia, allowing easy access to authenticated user data and Supabase client instance. Especially useful for [Edge Functions](https://supabase.com/docs/guides/functions).
+- [Elysia XSS](https://www.npmjs.com/package/elysia-xss) - a plugin for Elysia.js that provides XSS (Cross-Site Scripting) protection by sanitizing request body data.
+- [Elysiajs Helmet](https://www.npmjs.com/package/elysiajs-helmet) - a comprehensive security middleware for Elysia.js applications that helps secure your apps by setting various HTTP headers.
+- [Decorators for Elysia.js](https://github.com/Ateeb-Khan-97/better-elysia) - seamlessly develop and integrate APIs, Websocket and Streaming APIs with this small library.
+- [Elysia Protobuf](https://github.com/ilyhalight/elysia-protobuf) - support protobuf for Elysia.
+- [Elysia Prometheus](https://github.com/m1handr/elysia-prometheus) - Elysia plugin for exposing HTTP metrics for Prometheus.
+- [Elysia Remote DTS](https://github.com/rayriffy/elysia-remote-dts) - A plugin that provide .d.ts types remotely for Eden Treaty to consume.
+- [Cap Checkpoint plugin for Elysia](https://capjs.js.org/guide/middleware/elysia.html) - Cloudflare-like middleware for Cap, a lightweight, modern open-source CAPTCHA alternative designed using SHA-256 PoW.
+- [Elysia Background](https://github.com/staciax/elysia-background) - A background task processing plugin for Elysia.js
+- [@fedify/elysia](https://github.com/fedify-dev/fedify/tree/main/packages/elysia) - A plugin that provides seamless integration with [Fedify](https://fedify.dev/), the ActivityPub server framework.
+- [elysia-healthcheck](https://github.com/iam-medvedev/elysia-healthcheck) - Healthcheck plugin for Elysia.js
+- [elysia-csrf](https://github.com/lauhon/elysia-csrf) - A CSRF plugin, ported from [express-csrf](https://github.com/expressjs/csurf)
+- [elysia-local-https](https://github.com/mrtcmn/elysia-local-https) - Automatic local HTTPS for Elysia — certs generated, managed, and refreshed in one line.
 
 ## Complementary projects:
 
-* [prismabox](https://github.com/m1212e/prismabox) - Generator for typebox schemes based on your database models, works well with elysia
+- [prismabox](https://github.com/m1212e/prismabox) - Generator for typebox schemes based on your database models, works well with elysia
 
-***
+---
 
 If you have a plugin written for Elysia, feel free to add your plugin to the list by **clicking Edit this page on GitHub** below 👇
 
 ---
 
 ---
-url: 'https://elysiajs.com/playground/preview.md'
----
 
-
----
+## url: 'https://elysiajs.com/playground/preview.md'
 
 ---
-url: 'https://elysiajs.com/quick-start.md'
+
 ---
+
+## url: 'https://elysiajs.com/quick-start.md'
 
 # Quick Start
 
@@ -17556,43 +17177,41 @@ This will install Elysia and Bun type definitions.
 Create a new file `src/index.ts` and add the following code:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.get('/', () => 'Hello Elysia')
-	.listen(3000)
+const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
 
 console.log(
-	`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-)
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
 ```
 
 Open your `package.json` file and add the following scripts:
 
 ```json
 {
-   	"scripts": {
-  		"dev": "bun --watch src/index.ts",
-  		"build": "bun build src/index.ts --target bun --outdir ./dist",
-  		"start": "NODE_ENV=production bun dist/index.js",
-  		"test": "bun test"
-   	}
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --target bun --outdir ./dist",
+    "start": "NODE_ENV=production bun dist/index.js",
+    "test": "bun test"
+  }
 }
 ```
 
 These scripts refer to the different stages of developing an application:
 
-* **dev** - Start Elysia in development mode with auto-reload on code change.
-* **build** - Build the application for production usage.
-* **start** - Start an Elysia production server.
+- **dev** - Start Elysia in development mode with auto-reload on code change.
+- **build** - Build the application for production usage.
+- **start** - Start an Elysia production server.
 
 If you are using TypeScript, make sure to create, and update `tsconfig.json` to include `compilerOptions.strict` to `true`:
 
 ```json
 {
-   	"compilerOptions": {
-  		"strict": true
-   	}
+  "compilerOptions": {
+    "strict": true
+  }
 }
 ```
 
@@ -17665,35 +17284,33 @@ This will install Elysia, TypeScript, and `tsx`.
 Create a new file `src/index.ts` and add the following code:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { node } from '@elysiajs/node'
+import { Elysia } from "elysia";
+import { node } from "@elysiajs/node";
 
 const app = new Elysia({ adapter: node() })
-	.get('/', () => 'Hello Elysia')
-	.listen(3000, ({ hostname, port }) => {
-		console.log(
-			`🦊 Elysia is running at ${hostname}:${port}`
-		)
-	})
+  .get("/", () => "Hello Elysia")
+  .listen(3000, ({ hostname, port }) => {
+    console.log(`🦊 Elysia is running at ${hostname}:${port}`);
+  });
 ```
 
 Open your `package.json` file and add the following scripts:
 
 ```json
 {
-   	"scripts": {
-  		"dev": "tsx watch src/index.ts",
-    	"build": "tsc src/index.ts --outDir dist",
-  		"start": "NODE_ENV=production node dist/index.js"
-   	}
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc src/index.ts --outDir dist",
+    "start": "NODE_ENV=production node dist/index.js"
+  }
 }
 ```
 
 These scripts refer to the different stages of developing an application:
 
-* **dev** - Start Elysia in development mode with auto-reload on code change.
-* **build** - Build the application for production usage.
-* **start** - Start an Elysia production server.
+- **dev** - Start Elysia in development mode with auto-reload on code change.
+- **build** - Build the application for production usage.
+- **start** - Start an Elysia production server.
 
 Make sure to create `tsconfig.json`
 
@@ -17705,9 +17322,9 @@ Don't forget to update `tsconfig.json` to include `compilerOptions.strict` to `t
 
 ```json
 {
-   	"compilerOptions": {
-  		"strict": true
-   	}
+  "compilerOptions": {
+    "strict": true
+  }
 }
 ```
 
@@ -17745,16 +17362,14 @@ This will install Elysia, TypeScript, and `tsx`.
 Create a new file `src/index.ts` and add the following code:
 
 ```javascript
-import { Elysia } from 'elysia'
-import { node } from '@elysiajs/node'
+import { Elysia } from "elysia";
+import { node } from "@elysiajs/node";
 
 const app = new Elysia({ adapter: node() })
-	.get('/', () => 'Hello Elysia')
-	.listen(3000, ({ hostname, port }) => {
-		console.log(
-			`🦊 Elysia is running at ${hostname}:${port}`
-		)
-	})
+  .get("/", () => "Hello Elysia")
+  .listen(3000, ({ hostname, port }) => {
+    console.log(`🦊 Elysia is running at ${hostname}:${port}`);
+  });
 ```
 
 Open your `package.json` file and add the following scripts:
@@ -17771,8 +17386,8 @@ Open your `package.json` file and add the following scripts:
 
 These scripts refer to the different stages of developing an application:
 
-* **dev** - Start Elysia in development mode with auto-reload on code change.
-* **start** - Start an Elysia production server.
+- **dev** - Start Elysia in development mode with auto-reload on code change.
+- **start** - Start an Elysia production server.
 
 Make sure to create `tsconfig.json`
 
@@ -17784,9 +17399,9 @@ Don't forget to update `tsconfig.json` to include `compilerOptions.strict` to `t
 
 ```json
 {
-   	"compilerOptions": {
-  		"strict": true
-   	}
+  "compilerOptions": {
+    "strict": true
+  }
 }
 ```
 
@@ -17824,24 +17439,22 @@ We have a few recommendations:
 If you are using a custom runtime, you may access `app.fetch` to handle the request and response manually.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.get('/', () => 'Hello Elysia')
-	.listen(3000)
+const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
 
-export default app.fetch
+export default app.fetch;
 
 console.log(
-	`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-)
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/integrations/react-email.md'
----
+
+## url: 'https://elysiajs.com/integrations/react-email.md'
 
 # React Email
 
@@ -17877,7 +17490,7 @@ If you are using TypeScript, you may need to add the following to your `tsconfig
 ```json
 {
   "compilerOptions": {
-	"jsx": "react"
+    "jsx": "react"
   }
 }
 ```
@@ -17887,36 +17500,36 @@ If you are using TypeScript, you may need to add the following to your `tsconfig
 Create file `src/emails/otp.tsx` with the following code:
 
 ```tsx
-import * as React from 'react'
-import { Tailwind, Section, Text } from '@react-email/components'
+import * as React from "react";
+import { Tailwind, Section, Text } from "@react-email/components";
 
 export default function OTPEmail({ otp }: { otp: number }) {
-    return (
-        <Tailwind>
-            <Section className="flex justify-center items-center w-full min-h-screen font-sans">
-                <Section className="flex flex-col items-center w-76 rounded-2xl px-6 py-1 bg-gray-50">
-                    <Text className="text-xs font-medium text-violet-500">
-                        Verify your Email Address
-                    </Text>
-                    <Text className="text-gray-500 my-0">
-                        Use the following code to verify your email address
-                    </Text>
-                    <Text className="text-5xl font-bold pt-2">{otp}</Text>
-                    <Text className="text-gray-400 font-light text-xs pb-4">
-                        This code is valid for 10 minutes
-                    </Text>
-                    <Text className="text-gray-600 text-xs">
-                        Thank you for joining us
-                    </Text>
-                </Section>
-            </Section>
-        </Tailwind>
-    )
+  return (
+    <Tailwind>
+      <Section className="flex justify-center items-center w-full min-h-screen font-sans">
+        <Section className="flex flex-col items-center w-76 rounded-2xl px-6 py-1 bg-gray-50">
+          <Text className="text-xs font-medium text-violet-500">
+            Verify your Email Address
+          </Text>
+          <Text className="text-gray-500 my-0">
+            Use the following code to verify your email address
+          </Text>
+          <Text className="text-5xl font-bold pt-2">{otp}</Text>
+          <Text className="text-gray-400 font-light text-xs pb-4">
+            This code is valid for 10 minutes
+          </Text>
+          <Text className="text-gray-600 text-xs">
+            Thank you for joining us
+          </Text>
+        </Section>
+      </Section>
+    </Tailwind>
+  );
 }
 
 OTPEmail.PreviewProps = {
-    otp: 123456
-}
+  otp: 123456,
+};
 ```
 
 You may notice that we are using `@react-email/components` to create the email template.
@@ -17944,150 +17557,178 @@ To send an email, we can use `react-dom/server` to render the the email then sub
 ::: code-group
 
 ```tsx [Nodemailer]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-import * as React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
+import * as React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 
-import OTPEmail from './emails/otp'
+import OTPEmail from "./emails/otp";
 
-import nodemailer from 'nodemailer' // [!code ++]
+import nodemailer from "nodemailer"; // [!code ++]
 
-const transporter = nodemailer.createTransport({ // [!code ++]
-  	host: 'smtp.gehenna.sh', // [!code ++]
-  	port: 465, // [!code ++]
-  	auth: { // [!code ++]
-  		user: 'makoto', // [!code ++]
-  		pass: '12345678' // [!code ++]
-  	} // [!code ++]
-}) // [!code ++]
+const transporter = nodemailer.createTransport({
+  // [!code ++]
+  host: "smtp.gehenna.sh", // [!code ++]
+  port: 465, // [!code ++]
+  auth: {
+    // [!code ++]
+    user: "makoto", // [!code ++]
+    pass: "12345678", // [!code ++]
+  }, // [!code ++]
+}); // [!code ++]
 
 new Elysia()
-	.get('/otp', async ({ body }) => {
-		// Random between 100,000 and 999,999
-  		const otp = ~~(Math.random() * (900_000 - 1)) + 100_000
+  .get(
+    "/otp",
+    async ({ body }) => {
+      // Random between 100,000 and 999,999
+      const otp = ~~(Math.random() * (900_000 - 1)) + 100_000;
 
-		const html = renderToStaticMarkup(<OTPEmail otp={otp} />)
+      const html = renderToStaticMarkup(<OTPEmail otp={otp} />);
 
-        await transporter.sendMail({ // [!code ++]
-        	from: 'ibuki@gehenna.sh', // [!code ++]
-           	to: body, // [!code ++]
-           	subject: 'Verify your email address', // [!code ++]
-            html, // [!code ++]
-        }) // [!code ++]
+      await transporter.sendMail({
+        // [!code ++]
+        from: "ibuki@gehenna.sh", // [!code ++]
+        to: body, // [!code ++]
+        subject: "Verify your email address", // [!code ++]
+        html, // [!code ++]
+      }); // [!code ++]
 
-        return { success: true }
-	}, {
-		body: t.String({ format: 'email' })
-	})
-	.listen(3000)
+      return { success: true };
+    },
+    {
+      body: t.String({ format: "email" }),
+    },
+  )
+  .listen(3000);
 ```
 
 ```tsx [Resend]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-import OTPEmail from './emails/otp'
+import OTPEmail from "./emails/otp";
 
-import Resend from 'resend' // [!code ++]
+import Resend from "resend"; // [!code ++]
 
-const resend = new Resend('re_123456789') // [!code ++]
+const resend = new Resend("re_123456789"); // [!code ++]
 
 new Elysia()
-	.get('/otp', ({ body }) => {
-		// Random between 100,000 and 999,999
-  		const otp = ~~(Math.random() * (900_000 - 1)) + 100_000
+  .get(
+    "/otp",
+    ({ body }) => {
+      // Random between 100,000 and 999,999
+      const otp = ~~(Math.random() * (900_000 - 1)) + 100_000;
 
-        await resend.emails.send({ // [!code ++]
-        	from: 'ibuki@gehenna.sh', // [!code ++]
-           	to: body, // [!code ++]
-           	subject: 'Verify your email address', // [!code ++]
-            html: <OTPEmail otp={otp} />, // [!code ++]
-        }) // [!code ++]
+      await resend.emails.send({
+        // [!code ++]
+        from: "ibuki@gehenna.sh", // [!code ++]
+        to: body, // [!code ++]
+        subject: "Verify your email address", // [!code ++]
+        html: <OTPEmail otp={otp} />, // [!code ++]
+      }); // [!code ++]
 
-        return { success: true }
-	}, {
-		body: t.String({ format: 'email' })
-	})
-	.listen(3000)
+      return { success: true };
+    },
+    {
+      body: t.String({ format: "email" }),
+    },
+  )
+  .listen(3000);
 ```
 
 ```tsx [AWS SES]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-import * as React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
+import * as React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 
-import OTPEmail from './emails/otp'
+import OTPEmail from "./emails/otp";
 
-import { type SendEmailCommandInput, SES } from '@aws-sdk/client-ses' // [!code ++]
-import { fromEnv } from '@aws-sdk/credential-providers' // [!code ++]
+import { type SendEmailCommandInput, SES } from "@aws-sdk/client-ses"; // [!code ++]
+import { fromEnv } from "@aws-sdk/credential-providers"; // [!code ++]
 
-const ses = new SES({ // [!code ++]
-    credentials: // [!code ++]
-        process.env.NODE_ENV === 'production' ? fromEnv() : undefined // [!code ++]
-}) // [!code ++]
+const ses = new SES({
+  // [!code ++]
+  // [!code ++]
+  credentials: process.env.NODE_ENV === "production" ? fromEnv() : undefined, // [!code ++]
+}); // [!code ++]
 
 new Elysia()
-	.get('/otp', ({ body }) => {
-		// Random between 100,000 and 999,999
-  		const otp = ~~(Math.random() * (900_000 - 1)) + 100_000
+  .get(
+    "/otp",
+    ({ body }) => {
+      // Random between 100,000 and 999,999
+      const otp = ~~(Math.random() * (900_000 - 1)) + 100_000;
 
-		const html = renderToStaticMarkup(<OTPEmail otp={otp} />)
+      const html = renderToStaticMarkup(<OTPEmail otp={otp} />);
 
-        await ses.sendEmail({ // [!code ++]
-            Source: 'ibuki@gehenna.sh', // [!code ++]
-            Destination: { // [!code ++]
-                ToAddresses: [body] // [!code ++]
+      await ses.sendEmail({
+        // [!code ++]
+        Source: "ibuki@gehenna.sh", // [!code ++]
+        Destination: {
+          // [!code ++]
+          ToAddresses: [body], // [!code ++]
+        }, // [!code ++]
+        Message: {
+          // [!code ++]
+          Body: {
+            // [!code ++]
+            Html: {
+              // [!code ++]
+              Charset: "UTF-8", // [!code ++]
+              Data: html, // [!code ++]
             }, // [!code ++]
-            Message: { // [!code ++]
-                Body: { // [!code ++]
-                    Html: { // [!code ++]
-                        Charset: 'UTF-8', // [!code ++]
-                        Data: html // [!code ++]
-                    } // [!code ++]
-                }, // [!code ++]
-                Subject: { // [!code ++]
-                    Charset: 'UTF-8', // [!code ++]
-                    Data: 'Verify your email address' // [!code ++]
-                } // [!code ++]
-            } // [!code ++]
-        } satisfies SendEmailCommandInput) // [!code ++]
+          }, // [!code ++]
+          Subject: {
+            // [!code ++]
+            Charset: "UTF-8", // [!code ++]
+            Data: "Verify your email address", // [!code ++]
+          }, // [!code ++]
+        }, // [!code ++]
+      } satisfies SendEmailCommandInput); // [!code ++]
 
-        return { success: true }
-	}, {
-		body: t.String({ format: 'email' })
-	})
-	.listen(3000)
+      return { success: true };
+    },
+    {
+      body: t.String({ format: "email" }),
+    },
+  )
+  .listen(3000);
 ```
 
 ```tsx [Sendgrid]
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-import OTPEmail from './emails/otp'
+import OTPEmail from "./emails/otp";
 
-import sendgrid from "@sendgrid/mail" // [!code ++]
+import sendgrid from "@sendgrid/mail"; // [!code ++]
 
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY) // [!code ++]
+sendgrid.setApiKey(process.env.SENDGRID_API_KEY); // [!code ++]
 
 new Elysia()
-	.get('/otp', ({ body }) => {
-		// Random between 100,000 and 999,999
-  		const otp = ~~(Math.random() * (900_000 - 1)) + 100_000
+  .get(
+    "/otp",
+    ({ body }) => {
+      // Random between 100,000 and 999,999
+      const otp = ~~(Math.random() * (900_000 - 1)) + 100_000;
 
-    	const html = renderToStaticMarkup(<OTPEmail otp={otp} />)
+      const html = renderToStaticMarkup(<OTPEmail otp={otp} />);
 
-        await sendgrid.send({ // [!code ++]
-        	from: 'ibuki@gehenna.sh', // [!code ++]
-           	to: body, // [!code ++]
-           	subject: 'Verify your email address', // [!code ++]
-            html // [!code ++]
-        }) // [!code ++]
+      await sendgrid.send({
+        // [!code ++]
+        from: "ibuki@gehenna.sh", // [!code ++]
+        to: body, // [!code ++]
+        subject: "Verify your email address", // [!code ++]
+        html, // [!code ++]
+      }); // [!code ++]
 
-        return { success: true }
-	}, {
-		body: t.String({ format: 'email' })
-	})
-	.listen(3000)
+      return { success: true };
+    },
+    {
+      body: t.String({ format: "email" }),
+    },
+  )
+  .listen(3000);
 ```
 
 :::
@@ -18101,8 +17742,8 @@ You may see all of the available integration with React Email in the [React Emai
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/cookie.md'
----
+
+## url: 'https://elysiajs.com/patterns/cookie.md'
 
 # Cookie&#x20;
 
@@ -18111,16 +17752,15 @@ Elysia provides a mutable signal for interacting with Cookie.
 There's no get/set, you can extract the cookie name and retrieve or update its value directly.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/', ({ cookie: { name } }) => {
-        // Get
-        name.value
+new Elysia().get("/", ({ cookie: { name } }) => {
+  // Get
+  name.value;
 
-        // Set
-        name.value = "New Value"
-    })
+  // Set
+  name.value = "New Value";
+});
 ```
 
 By default, Reactive Cookie can encode/decode object types automatically allowing us to treat cookies as objects without worrying about the encoding/decoding. **It just works**.
@@ -18149,17 +17789,16 @@ See [cookie attribute config](/patterns/cookie.html#config) for more information
 You can get/set the property of a cookie like any normal object, the reactivity model synchronizes the cookie value automatically.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/', ({ cookie: { name } }) => {
-        // get
-        name.domain
+new Elysia().get("/", ({ cookie: { name } }) => {
+  // get
+  name.domain;
 
-        // set
-        name.domain = 'millennium.sh'
-        name.httpOnly = true
-    })
+  // set
+  name.domain = "millennium.sh";
+  name.httpOnly = true;
+});
 ```
 
 ## set
@@ -18167,15 +17806,14 @@ new Elysia()
 **set** permits updating multiple cookie properties all at once through **reset all property** and overwrite the property with a new value.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/', ({ cookie: { name } }) => {
-        name.set({
-            domain: 'millennium.sh',
-            httpOnly: true
-        })
-    })
+new Elysia().get("/", ({ cookie: { name } }) => {
+  name.set({
+    domain: "millennium.sh",
+    httpOnly: true,
+  });
+});
 ```
 
 ## add
@@ -18190,14 +17828,13 @@ To remove a cookie, you can use either:
 2. delete cookie.name
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/', ({ cookie, cookie: { name } }) => {
-        name.remove()
+new Elysia().get("/", ({ cookie, cookie: { name } }) => {
+  name.remove();
 
-        delete cookie.name
-    })
+  delete cookie.name;
+});
 ```
 
 ## Cookie Schema
@@ -18205,23 +17842,26 @@ new Elysia()
 You can strictly validate cookie type and providing type inference for cookie by using cookie schema with `t.Cookie`.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-    .get('/', ({ cookie: { name } }) => {
-        // Set
-        name.value = {
-            id: 617,
-            name: 'Summoning 101'
-        }
-    }, {
-        cookie: t.Cookie({
-            name: t.Object({
-                id: t.Numeric(),
-                name: t.String()
-            })
-        })
-    })
+new Elysia().get(
+  "/",
+  ({ cookie: { name } }) => {
+    // Set
+    name.value = {
+      id: 617,
+      name: "Summoning 101",
+    };
+  },
+  {
+    cookie: t.Cookie({
+      name: t.Object({
+        id: t.Numeric(),
+        name: t.String(),
+      }),
+    }),
+  },
+);
 ```
 
 ## Nullable Cookie
@@ -18229,25 +17869,28 @@ new Elysia()
 To handle nullable cookie value, you can use `t.Optional` on the cookie name you want to be nullable.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-    .get('/', ({ cookie: { name } }) => {
-        // Set
-        name.value = {
-            id: 617,
-            name: 'Summoning 101'
-        }
-    }, {
-        cookie: t.Cookie({
-            name: t.Optional(
-                t.Object({
-                    id: t.Numeric(),
-                    name: t.String()
-                })
-            )
-        })
-    })
+new Elysia().get(
+  "/",
+  ({ cookie: { name } }) => {
+    // Set
+    name.value = {
+      id: 617,
+      name: "Summoning 101",
+    };
+  },
+  {
+    cookie: t.Cookie({
+      name: t.Optional(
+        t.Object({
+          id: t.Numeric(),
+          name: t.String(),
+        }),
+      ),
+    }),
+  },
+);
 ```
 
 ## Cookie Signature
@@ -18263,25 +17906,31 @@ This make sure that the cookie value is not modified by malicious actor, helps i
 By provide a cookie secret, and `sign` property to indicate which cookie should have a signature verification.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-    .get('/', ({ cookie: { profile } }) => {
-        profile.value = {
-            id: 617,
-            name: 'Summoning 101'
-        }
-    }, {
-        cookie: t.Cookie({
-            profile: t.Object({
-                id: t.Numeric(),
-                name: t.String()
-            })
-        }, {
-            secrets: 'Fischl von Luftschloss Narfidort',
-            sign: ['profile']
-        })
-    })
+new Elysia().get(
+  "/",
+  ({ cookie: { profile } }) => {
+    profile.value = {
+      id: 617,
+      name: "Summoning 101",
+    };
+  },
+  {
+    cookie: t.Cookie(
+      {
+        profile: t.Object({
+          id: t.Numeric(),
+          name: t.String(),
+        }),
+      },
+      {
+        secrets: "Fischl von Luftschloss Narfidort",
+        sign: ["profile"],
+      },
+    ),
+  },
+);
 ```
 
 Elysia then sign and unsign cookie value automatically.
@@ -18291,27 +17940,30 @@ Elysia then sign and unsign cookie value automatically.
 You can use Elysia constructor to set global cookie `secret`, and `sign` value to apply to all route globally instead of inlining to every route you need.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia({
-    cookie: {
-        secrets: 'Fischl von Luftschloss Narfidort',
-        sign: ['profile']
-    }
-})
-    .get('/', ({ cookie: { profile } }) => {
-        profile.value = {
-            id: 617,
-            name: 'Summoning 101'
-        }
-    }, {
-        cookie: t.Cookie({
-            profile: t.Object({
-                id: t.Numeric(),
-                name: t.String()
-            })
-        })
-    })
+  cookie: {
+    secrets: "Fischl von Luftschloss Narfidort",
+    sign: ["profile"],
+  },
+}).get(
+  "/",
+  ({ cookie: { profile } }) => {
+    profile.value = {
+      id: 617,
+      name: "Summoning 101",
+    };
+  },
+  {
+    cookie: t.Cookie({
+      profile: t.Object({
+        id: t.Numeric(),
+        name: t.String(),
+      }),
+    }),
+  },
+);
 ```
 
 ## Cookie Rotation
@@ -18321,13 +17973,13 @@ Elysia handle Cookie's secret rotation automatically.
 Cookie Rotation is a migration technique to sign a cookie with a newer secret, while also be able to verify the old signature of the cookie.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-    cookie: {
-        secrets: ['Vengeance will be mine', 'Fischl von Luftschloss Narfidort']
-    }
-})
+  cookie: {
+    secrets: ["Vengeance will be mine", "Fischl von Luftschloss Narfidort"],
+  },
+});
 ```
 
 ## Config
@@ -18342,7 +17994,7 @@ If an array is passed, will use Key Rotation.
 
 Key rotation is when an encryption key is retired and replaced by generating a new cryptographic key.
 
-***
+---
 
 Below is a config that extends from [cookie](https://npmjs.com/package/cookie)
 
@@ -18442,8 +18094,8 @@ Be careful when setting this to true, as compliant clients will not send the coo
 ---
 
 ---
-url: 'https://elysiajs.com/essential/route.md'
----
+
+## url: 'https://elysiajs.com/essential/route.md'
 
 # Routing&#x20;
 
@@ -18452,12 +18104,9 @@ Web servers use the request's **path and method** to look up the correct resourc
 We can define a route with **HTTP verb method**, a path and a function to execute when matched.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/', 'hello')
-    .get('/hi', 'hi')
-    .listen(3000)
+new Elysia().get("/", "hello").get("/hi", "hi").listen(3000);
 ```
 
 We can access the web server by going to **http://localhost:3000**
@@ -18472,20 +18121,20 @@ Using the interactive browser above, hover on the blue highlight area to see dif
 
 Path in Elysia can be grouped into 3 types:
 
-* **static paths** - static string to locate the resource
-* **dynamic paths** - segment can be any value
-* **wildcards** - path until a specific point can be anything
+- **static paths** - static string to locate the resource
+- **dynamic paths** - segment can be any value
+- **wildcards** - path until a specific point can be anything
 
 You can use all of the path types together to compose a behavior for your web server.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/id/1', 'static path')
-    .get('/id/:id', 'dynamic path')
-    .get('/id/*', 'wildcard path')
-    .listen(3000)
+  .get("/id/1", "static path")
+  .get("/id/:id", "dynamic path")
+  .get("/id/*", "wildcard path")
+  .listen(3000);
 ```
 
 ## Static Path
@@ -18493,12 +18142,9 @@ new Elysia()
 Static path is a hardcoded string to locate the resource on the server.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.get('/hello', 'hello')
-	.get('/hi', 'hi')
-	.listen(3000)
+new Elysia().get("/hello", "hello").get("/hi", "hi").listen(3000);
 ```
 
 ## Dynamic path
@@ -18508,12 +18154,12 @@ Dynamic paths match some part and capture the value to extract extra information
 To define a dynamic path, we can use a colon `:` followed by a name.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/id/:id', ({ params: { id } }) => id)
-                      // ^?
-    .listen(3000)
+  .get("/id/:id", ({ params: { id } }) => id)
+  // ^?
+  .listen(3000);
 ```
 
 Here, a dynamic path is created with `/id/:id`. Which tells Elysia to capture the value `:id` segment with value like **/id/1**, **/id/123**, **/id/anything**.
@@ -18538,13 +18184,13 @@ We refer to the named variable path as **path parameter** or **params** for shor
 You can have as many path parameters as you like, which will then be stored into a `params` object.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/id/:id', ({ params: { id } }) => id)
-    .get('/id/:id/:name', ({ params: { id, name } }) => id + ' ' + name)
-                             // ^?
-    .listen(3000)
+  .get("/id/:id", ({ params: { id } }) => id)
+  .get("/id/:id/:name", ({ params: { id, name } }) => id + " " + name)
+  // ^?
+  .listen(3000);
 ```
 
 The server will respond as follows:
@@ -18565,12 +18211,12 @@ Sometime we might want a static and dynamic path to resolve the same handler.
 We can make a path parameter optional by adding a question mark `?` after the parameter name.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/id/:id?', ({ params: { id } }) => `id ${id}`)
-                          // ^?
-    .listen(3000)
+  .get("/id/:id?", ({ params: { id } }) => `id ${id}`)
+  // ^?
+  .listen(3000);
 ```
 
 ## Wildcards
@@ -18580,12 +18226,12 @@ Dynamic paths allow capturing a single segment while wildcards allow capturing t
 To define a wildcard, we can use an asterisk `*`.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/id/*', ({ params }) => params['*'])
-                    // ^?
-    .listen(3000)
+  .get("/id/*", ({ params }) => params["*"])
+  // ^?
+  .listen(3000);
 ```
 
 ## Path priority
@@ -18599,13 +18245,13 @@ Elysia has a path priorities as follows:
 If the path is resolved as the static wild dynamic path is presented, Elysia will resolve the static path rather than the dynamic path
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .get('/id/1', 'static path')
-    .get('/id/:id', 'dynamic path')
-    .get('/id/*', 'wildcard path')
-    .listen(3000)
+  .get("/id/1", "static path")
+  .get("/id/:id", "dynamic path")
+  .get("/id/*", "wildcard path")
+  .listen(3000);
 ```
 
 ## HTTP Verb
@@ -18634,24 +18280,21 @@ Applies partial modifications to a resource.
 
 Deletes the specified resource.
 
-***
+---
 
 To handle each of the different verbs, Elysia has a built-in API for several HTTP verbs by default, similar to `Elysia.get`
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/', 'hello')
-    .post('/hi', 'hi')
-    .listen(3000)
+new Elysia().get("/", "hello").post("/hi", "hi").listen(3000);
 ```
 
 Elysia HTTP methods accepts the following parameters:
 
-* **path**: Pathname
-* **function**: Function to respond to the client
-* **hook**: Additional metadata
+- **path**: Pathname
+- **function**: Function to respond to the client
+- **hook**: Additional metadata
 
 You can read more about the HTTP methods on [HTTP Request Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods).
 
@@ -18660,21 +18303,21 @@ You can read more about the HTTP methods on [HTTP Request Methods](https://devel
 We can accept custom HTTP Methods with `Elysia.route`.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-    .get('/get', 'hello')
-    .post('/post', 'hi')
-    .route('M-SEARCH', '/m-search', 'connect') // [!code ++]
-    .listen(3000)
+  .get("/get", "hello")
+  .post("/post", "hi")
+  .route("M-SEARCH", "/m-search", "connect") // [!code ++]
+  .listen(3000);
 ```
 
 **Elysia.route** accepts the following:
 
-* **method**: HTTP Verb
-* **path**: Pathname
-* **function**: Function to response to the client
-* **hook**: Additional metadata
+- **method**: HTTP Verb
+- **path**: Pathname
+- **function**: Function to response to the client
+- **hook**: Additional metadata
 
 ::: tip
 Based on [RFC 7231](https://www.rfc-editor.org/rfc/rfc7231#section-4.1), HTTP Verb is case-sensitive.
@@ -18687,11 +18330,9 @@ It's recommended to use the UPPERCASE convention for defining a custom HTTP Verb
 Elysia provides an `Elysia.all` for handling any HTTP method for a specified path using the same API like **Elysia.get** and **Elysia.post**
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .all('/', 'hi')
-    .listen(3000)
+new Elysia().all("/", "hi").listen(3000);
 ```
 
 Any HTTP method that matches the path, will be handled as follows:
@@ -18708,14 +18349,11 @@ Most developers use REST clients like Postman, Insomnia or Hoppscotch to test th
 However, Elysia can be programmatically test using `Elysia.handle`.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-    .get('/', 'hello')
-    .post('/hi', 'hi')
-    .listen(3000)
+const app = new Elysia().get("/", "hello").post("/hi", "hi").listen(3000);
 
-app.handle(new Request('http://localhost/')).then(console.log)
+app.handle(new Request("http://localhost/")).then(console.log);
 ```
 
 **Elysia.handle** is a function to process an actual request sent to the server.
@@ -18731,28 +18369,28 @@ But also useful for simulating or creating unit tests.
 When creating a web server, you would often have multiple routes sharing the same prefix:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .post('/user/sign-in', 'Sign in')
-    .post('/user/sign-up', 'Sign up')
-    .post('/user/profile', 'Profile')
-    .listen(3000)
+  .post("/user/sign-in", "Sign in")
+  .post("/user/sign-up", "Sign up")
+  .post("/user/profile", "Profile")
+  .listen(3000);
 ```
 
 This can be improved with `Elysia.group`, allowing us to apply prefixes to multiple routes at the same time by grouping them together:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .group('/user', (app) =>
-        app
-            .post('/sign-in', 'Sign in')
-            .post('/sign-up', 'Sign up')
-            .post('/profile', 'Profile')
-    )
-    .listen(3000)
+  .group("/user", (app) =>
+    app
+      .post("/sign-in", "Sign in")
+      .post("/sign-up", "Sign up")
+      .post("/profile", "Profile"),
+  )
+  .listen(3000);
 ```
 
 This code behaves the same as our first example and should be structured as follows:
@@ -18766,20 +18404,21 @@ This code behaves the same as our first example and should be structured as foll
 `.group()` can also accept an optional guard parameter to reduce boilerplate of using groups and guards together:
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .group(
-        '/user',
-        {
-            body: t.Literal('Rikuhachima Aru')
-        },
-        (app) => app
-            .post('/sign-in', 'Sign in')
-            .post('/sign-up', 'Sign up')
-            .post('/profile', 'Profile')
-    )
-    .listen(3000)
+  .group(
+    "/user",
+    {
+      body: t.Literal("Rikuhachima Aru"),
+    },
+    (app) =>
+      app
+        .post("/sign-in", "Sign in")
+        .post("/sign-up", "Sign up")
+        .post("/profile", "Profile"),
+  )
+  .listen(3000);
 ```
 
 You may find more information about grouped guards in [scope](/essential/plugin.html#scope).
@@ -18789,24 +18428,21 @@ You may find more information about grouped guards in [scope](/essential/plugin.
 We can separate a group into a separate plugin instance to reduce nesting by providing a **prefix** to the constructor.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const users = new Elysia({ prefix: '/user' })
-    .post('/sign-in', 'Sign in')
-    .post('/sign-up', 'Sign up')
-    .post('/profile', 'Profile')
+const users = new Elysia({ prefix: "/user" })
+  .post("/sign-in", "Sign in")
+  .post("/sign-up", "Sign up")
+  .post("/profile", "Profile");
 
-new Elysia()
-    .use(users)
-    .get('/', 'hello world')
-    .listen(3000)
+new Elysia().use(users).get("/", "hello world").listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/server-timing.md'
----
+
+## url: 'https://elysiajs.com/plugins/server-timing.md'
 
 # Server Timing Plugin
 
@@ -18821,13 +18457,13 @@ bun add @elysiajs/server-timing
 Then use it:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { serverTiming } from '@elysiajs/server-timing'
+import { Elysia } from "elysia";
+import { serverTiming } from "@elysiajs/server-timing";
 
 new Elysia()
-    .use(serverTiming())
-    .get('/', () => 'hello')
-    .listen(3000)
+  .use(serverTiming())
+  .get("/", () => "hello")
+  .listen(3000);
 ```
 
 Server Timing then will append header 'Server-Timing' with log duration, function name, and detail for each life-cycle function.
@@ -18862,93 +18498,88 @@ Allow Server Timing to log specified life-cycle events:
 
 Trace accepts objects of the following:
 
-* request: capture duration from request
-* parse: capture duration from parse
-* transform: capture duration from transform
-* beforeHandle: capture duration from beforeHandle
-* handle: capture duration from the handle
-* afterHandle: capture duration from afterHandle
-* total: capture total duration from start to finish
+- request: capture duration from request
+- parse: capture duration from parse
+- transform: capture duration from transform
+- beforeHandle: capture duration from beforeHandle
+- handle: capture duration from the handle
+- afterHandle: capture duration from afterHandle
+- total: capture total duration from start to finish
 
 ## Pattern
 
 Below you can find the common patterns to use the plugin.
 
-* [Allow Condition](#allow-condition)
+- [Allow Condition](#allow-condition)
 
 ## Allow Condition
 
 You may disable Server Timing on specific routes via `allow` property
 
 ```ts twoslash
-import { Elysia } from 'elysia'
-import { serverTiming } from '@elysiajs/server-timing'
+import { Elysia } from "elysia";
+import { serverTiming } from "@elysiajs/server-timing";
 
-new Elysia()
-    .use(
-        serverTiming({
-            allow: ({ request }) => {
-                return new URL(request.url).pathname !== '/no-trace'
-            }
-        })
-    )
+new Elysia().use(
+  serverTiming({
+    allow: ({ request }) => {
+      return new URL(request.url).pathname !== "/no-trace";
+    },
+  }),
+);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/patterns/standalone-schema.md'
----
+
+## url: 'https://elysiajs.com/tutorial/patterns/standalone-schema.md'
 
 # Standalone Schema
 
 When we define a schema using Guard, the schema will be added to a route. But it will be **override** if the route provide a schema:
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.guard({
-		body: t.Object({
-			age: t.Number()
-		})
-	})
-	.post(
-		'/user',
-		({ body }) => body,
-		{
-			// This will override the guard schema
-			body: t.Object({
-				name: t.String()
-			})
-		}
-	)
-	.listen(3000)
+  .guard({
+    body: t.Object({
+      age: t.Number(),
+    }),
+  })
+  .post("/user", ({ body }) => body, {
+    // This will override the guard schema
+    body: t.Object({
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 If we want a schema to **co-exist** with route schema, we can define it as **standalone schema**:
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.guard({
-		schema: 'standalone', // [!code ++]
-		body: t.Object({
-			age: t.Number()
-		})
-	})
-	.post(
-		'/user',
-		// body will have both age and name property
-		({ body }) => body,
-		{
-			body: t.Object({
-				name: t.String()
-			})
-		}
-	)
-	.listen(3000)
+  .guard({
+    schema: "standalone", // [!code ++]
+    body: t.Object({
+      age: t.Number(),
+    }),
+  })
+  .post(
+    "/user",
+    // body will have both age and name property
+    ({ body }) => body,
+    {
+      body: t.Object({
+        name: t.String(),
+      }),
+    },
+  )
+  .listen(3000);
 ```
 
 ## Schema Library Interoperability
@@ -18966,33 +18597,29 @@ Let's make both `age` and `name` property required in the request body by using 
 We can define a standalone schema by adding `schema: 'standalone'` in the guard options.
 
 ```typescript
-import { Elysia, t } from 'elysia'
-import { z } from 'zod'
+import { Elysia, t } from "elysia";
+import { z } from "zod";
 
 new Elysia()
-	.guard({
-		schema: 'standalone', // [!code ++]
-		body: z.object({
-			age: z.number()
-		})
-	})
-	.post(
-		'/user',
-		({ body }) => body,
-		{
-			body: t.Object({
-				name: t.String()
-			})
-		}
-	)
-	.listen(3000)
+  .guard({
+    schema: "standalone", // [!code ++]
+    body: z.object({
+      age: z.number(),
+    }),
+  })
+  .post("/user", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/static.md'
----
+
+## url: 'https://elysiajs.com/plugins/static.md'
 
 # Static Plugin
 
@@ -19007,12 +18634,10 @@ bun add @elysiajs/static
 Then use it:
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { staticPlugin } from '@elysiajs/static'
+import { Elysia } from "elysia";
+import { staticPlugin } from "@elysiajs/static";
 
-new Elysia()
-    .use(staticPlugin())
-    .listen(3000)
+new Elysia().use(staticPlugin()).listen(3000);
 ```
 
 By default, the static plugin default folder is `public`, and registered with `/public` prefix.
@@ -19030,8 +18655,8 @@ Suppose your project structure is:
 
 The available path will become:
 
-* /public/takodachi.png
-* /public/nested/takodachi.png
+- /public/takodachi.png
+- /public/nested/takodachi.png
 
 ## Config
 
@@ -19084,24 +18709,23 @@ If set to true, the `index.html` file from the static directory will be served f
 
 Below you can find the common patterns to use the plugin.
 
-* [Single File](#single-file)
+- [Single File](#single-file)
 
 ## Single file
 
 Suppose you want to return just a single file, you can use `file` instead of using the static plugin
 
 ```typescript
-import { Elysia, file } from 'elysia'
+import { Elysia, file } from "elysia";
 
-new Elysia()
-    .get('/file', file('public/takodachi.png'))
+new Elysia().get("/file", file("public/takodachi.png"));
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/getting-started/status-and-headers.md'
----
+
+## url: 'https://elysiajs.com/tutorial/getting-started/status-and-headers.md'
 
 # Status
 
@@ -19115,18 +18739,18 @@ By default, Elysia will return **200 OK** for a successful request.
 
 Elysia also returns many other status codes depending on the situation like:
 
-* 400 Bad Request
-* 422 Unprocessable Entity
-* 500 Internal Server Error
+- 400 Bad Request
+- 422 Unprocessable Entity
+- 500 Internal Server Error
 
 You can also return a status code by returning your response using a `status` function.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ status }) => status(418, "I'm a teapot'"))
-	.listen(3000)
+  .get("/", ({ status }) => status(418, "I'm a teapot'"))
+  .listen(3000);
 ```
 
 See Status.
@@ -19136,11 +18760,11 @@ See Status.
 Similarly, you can also redirect the request to another URL by returning a `redirect` function.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ redirect }) => redirect('https://elysiajs.com'))
-	.listen(3000)
+  .get("/", ({ redirect }) => redirect("https://elysiajs.com"))
+  .listen(3000);
 ```
 
 See Redirect.
@@ -19152,15 +18776,15 @@ Unlike status code and redirect, which you can return directly, you might need t
 That's why instead of returning a `headers` function, Elysia provides a `set.headers` object to set headers.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ set }) => {
-		set.headers['x-powered-by'] = 'Elysia'
+  .get("/", ({ set }) => {
+    set.headers["x-powered-by"] = "Elysia";
 
-		return 'Hello World'
-	})
-	.listen(3000)
+    return "Hello World";
+  })
+  .listen(3000);
 ```
 
 Because `headers` represents **request headers**, Elysia distinguishes between request headers and response headers by prefixing **set.headers** for response.
@@ -19178,23 +18802,23 @@ Let's exercise what we have learned.
 3. To set a custom header `x-powered-by` to `Elysia`, we can use `set.headers` object.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ status, set }) => {
-		set.headers['x-powered-by'] = 'Elysia'
+  .get("/", ({ status, set }) => {
+    set.headers["x-powered-by"] = "Elysia";
 
-		return status(418, 'Hello Elysia!')
-	})
-	.get('/docs', ({ redirect }) => redirect('https://elysiajs.com'))
-	.listen(3000)
+    return status(418, "Hello Elysia!");
+  })
+  .get("/docs", ({ redirect }) => redirect("https://elysiajs.com"))
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/plugins/swagger.md'
----
+
+## url: 'https://elysiajs.com/plugins/swagger.md'
 
 ::: warning
 Swagger plugin is deprecated and is no longer be maintained. Please use [OpenAPI plugin](/plugins/openapi) instead.
@@ -19213,14 +18837,14 @@ bun add @elysiajs/swagger
 Then use it:
 
 ```typescript
-import { Elysia } from 'elysia'
-import { swagger } from '@elysiajs/swagger'
+import { Elysia } from "elysia";
+import { swagger } from "@elysiajs/swagger";
 
 new Elysia()
-    .use(swagger())
-    .get('/', () => 'hi')
-    .post('/hello', () => 'world')
-    .listen(3000)
+  .use(swagger())
+  .get("/", () => "hi")
+  .post("/hello", () => "world")
+  .listen(3000);
 ```
 
 Accessing `/swagger` would show you a Scalar UI with the generated endpoint documentation from the Elysia server. You can also access the raw OpenAPI spec at `/swagger/json`.
@@ -19265,9 +18889,9 @@ Paths to exclude from Swagger documentation.
 
 Value can be one of the following:
 
-* **string**
-* **RegExp**
-* **Array\<string | RegExp>**
+- **string**
+- **RegExp**
+- **Array\<string | RegExp>**
 
 ## Pattern
 
@@ -19278,36 +18902,36 @@ Below you can find the common patterns to use the plugin.
 You can change the swagger endpoint by setting [path](#path) in the plugin config.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { swagger } from '@elysiajs/swagger'
+import { Elysia } from "elysia";
+import { swagger } from "@elysiajs/swagger";
 
 new Elysia()
-    .use(
-        swagger({
-            path: '/v2/swagger'
-        })
-    )
-    .listen(3000)
+  .use(
+    swagger({
+      path: "/v2/swagger",
+    }),
+  )
+  .listen(3000);
 ```
 
 ## Customize Swagger info
 
 ```typescript
-import { Elysia } from 'elysia'
-import { swagger } from '@elysiajs/swagger'
+import { Elysia } from "elysia";
+import { swagger } from "@elysiajs/swagger";
 
 new Elysia()
-    .use(
-        swagger({
-            documentation: {
-                info: {
-                    title: 'Elysia Documentation',
-                    version: '1.0.0'
-                }
-            }
-        })
-    )
-    .listen(3000)
+  .use(
+    swagger({
+      documentation: {
+        info: {
+          title: "Elysia Documentation",
+          version: "1.0.0",
+        },
+      },
+    }),
+  )
+  .listen(3000);
 ```
 
 ## Using Tags
@@ -19318,48 +18942,47 @@ Firstly define the available tags in the swagger config object
 
 ```typescript
 app.use(
-    swagger({
-        documentation: {
-            tags: [
-                { name: 'App', description: 'General endpoints' },
-                { name: 'Auth', description: 'Authentication endpoints' }
-            ]
-        }
-    })
-)
+  swagger({
+    documentation: {
+      tags: [
+        { name: "App", description: "General endpoints" },
+        { name: "Auth", description: "Authentication endpoints" },
+      ],
+    },
+  }),
+);
 ```
 
 Then use the details property of the endpoint configuration section to assign that endpoint to the group
 
 ```typescript
-app.get('/', () => 'Hello Elysia', {
-    detail: {
-        tags: ['App']
-    }
-})
+app.get("/", () => "Hello Elysia", {
+  detail: {
+    tags: ["App"],
+  },
+});
 
-app.group('/auth', (app) =>
-    app.post(
-        '/sign-up',
-        async ({ body }) =>
-            db.user.create({
-                data: body,
-                select: {
-                    id: true,
-                    username: true
-                }
-            }),
-        {
-            detail: {
-                tags: ['Auth']
-            }
-        }
-    )
-)
+app.group("/auth", (app) =>
+  app.post(
+    "/sign-up",
+    async ({ body }) =>
+      db.user.create({
+        data: body,
+        select: {
+          id: true,
+          username: true,
+        },
+      }),
+    {
+      detail: {
+        tags: ["Auth"],
+      },
+    },
+  ),
+);
 ```
 
 Which will produce a swagger page like the following
-
 
 ## Security Configuration
 
@@ -19367,32 +18990,32 @@ To secure your API endpoints, you can define security schemes in the Swagger con
 
 ```typescript
 app.use(
-    swagger({
-        documentation: {
-            components: {
-                securitySchemes: {
-                    bearerAuth: {
-                        type: 'http',
-                        scheme: 'bearer',
-                        bearerFormat: 'JWT'
-                    }
-                }
-            }
-        }
-    })
-)
+  swagger({
+    documentation: {
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+          },
+        },
+      },
+    },
+  }),
+);
 
 export const addressController = new Elysia({
-    prefix: '/address',
-    detail: {
-        tags: ['Address'],
-        security: [
-            {
-                bearerAuth: []
-            }
-        ]
-    }
-})
+  prefix: "/address",
+  detail: {
+    tags: ["Address"],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+});
 ```
 
 This configuration ensures that all endpoints under the `/address` prefix require a valid JWT token for access.
@@ -19400,8 +19023,8 @@ This configuration ensures that all endpoints under the `/address` prefix requir
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/unit-test.md'
----
+
+## url: 'https://elysiajs.com/patterns/unit-test.md'
 
 # Unit Test&#x20;
 
@@ -19415,20 +19038,20 @@ Create **test/index.test.ts** in the root of project directory with the followin
 
 ```typescript
 // test/index.test.ts
-import { describe, expect, it } from 'bun:test'
-import { Elysia } from 'elysia'
+import { describe, expect, it } from "bun:test";
+import { Elysia } from "elysia";
 
-describe('Elysia', () => {
-    it('returns a response', async () => {
-        const app = new Elysia().get('/', () => 'hi')
+describe("Elysia", () => {
+  it("returns a response", async () => {
+    const app = new Elysia().get("/", () => "hi");
 
-        const response = await app
-            .handle(new Request('http://localhost/'))
-            .then((res) => res.text())
+    const response = await app
+      .handle(new Request("http://localhost/"))
+      .then((res) => res.text());
 
-        expect(response).toBe('hi')
-    })
-})
+    expect(response).toBe("hi");
+  });
+});
 ```
 
 Then we can perform tests by running **bun test**
@@ -19454,22 +19077,22 @@ We may use Eden Treaty to create an end-to-end type safety test for Elysia serve
 
 ```typescript twoslash
 // test/index.test.ts
-import { describe, expect, it } from 'bun:test'
-import { Elysia } from 'elysia'
-import { treaty } from '@elysiajs/eden'
+import { describe, expect, it } from "bun:test";
+import { Elysia } from "elysia";
+import { treaty } from "@elysiajs/eden";
 
-const app = new Elysia().get('/hello', 'hi')
+const app = new Elysia().get("/hello", "hi");
 
-const api = treaty(app)
+const api = treaty(app);
 
-describe('Elysia', () => {
-    it('returns a response', async () => {
-        const { data, error } = await api.hello.get()
+describe("Elysia", () => {
+  it("returns a response", async () => {
+    const { data, error } = await api.hello.get();
 
-        expect(data).toBe('hi')
-              // ^?
-    })
-})
+    expect(data).toBe("hi");
+    // ^?
+  });
+});
 ```
 
 See [Eden Treaty Unit Test](/eden/treaty/unit-test) for setup and more information.
@@ -19477,8 +19100,8 @@ See [Eden Treaty Unit Test](/eden/treaty/unit-test) for setup and more informati
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/trace.md'
----
+
+## url: 'https://elysiajs.com/patterns/trace.md'
 
 # Trace
 
@@ -19503,18 +19126,18 @@ To use `trace`, you need to call `trace` method on the Elysia instance, and pass
 You may listen to each lifecycle by adding `on` prefix followed by the lifecycle name, for example `onHandle` to listen to the `handle` event.
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-    .trace(async ({ onHandle }) => {
-	    onHandle(({ begin, onStop }) => {
-			onStop(({ end }) => {
-        		console.log('handle took', end - begin, 'ms')
-			})
-	    })
-    })
-    .get('/', () => 'Hi')
-    .listen(3000)
+  .trace(async ({ onHandle }) => {
+    onHandle(({ begin, onStop }) => {
+      onStop(({ end }) => {
+        console.log("handle took", end - begin, "ms");
+      });
+    });
+  })
+  .get("/", () => "Hi")
+  .listen(3000);
 ```
 
 Please refer to [Life Cycle Events](/essential/life-cycle#events) for more information:
@@ -19528,32 +19151,32 @@ Every event except `handle` has children, which is an array of events that are e
 You can use `onEvent` to listen to each child event in order
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const sleep = (time = 1000) =>
-    new Promise((resolve) => setTimeout(resolve, time))
+  new Promise((resolve) => setTimeout(resolve, time));
 
 const app = new Elysia()
-    .trace(async ({ onBeforeHandle }) => {
-        onBeforeHandle(({ total, onEvent }) => {
-            console.log('total children:', total)
+  .trace(async ({ onBeforeHandle }) => {
+    onBeforeHandle(({ total, onEvent }) => {
+      console.log("total children:", total);
 
-            onEvent(({ onStop }) => {
-                onStop(({ elapsed }) => {
-                    console.log('child took', elapsed, 'ms')
-                })
-            })
-        })
-    })
-    .get('/', () => 'Hi', {
-        beforeHandle: [
-            function setup() {},
-            async function delay() {
-                await sleep()
-            }
-        ]
-    })
-    .listen(3000)
+      onEvent(({ onStop }) => {
+        onStop(({ elapsed }) => {
+          console.log("child took", elapsed, "ms");
+        });
+      });
+    });
+  })
+  .get("/", () => "Hi", {
+    beforeHandle: [
+      function setup() {},
+      async function delay() {
+        await sleep();
+      },
+    ],
+  })
+  .listen(3000);
 ```
 
 In this example, total children will be `2` because there are 2 children in the `beforeHandle` event.
@@ -19565,15 +19188,14 @@ Then we listen to each child event by using `onEvent` and print the duration of 
 When each lifecycle is called
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	// This is trace parameter
-	// hover to view the type
-	.trace((parameter) => {
-	})
-	.get('/', () => 'Hi')
-	.listen(3000)
+  // This is trace parameter
+  // hover to view the type
+  .trace((parameter) => {})
+  .get("/", () => "Hi")
+  .listen(3000);
 ```
 
 `trace` accept the following parameters:
@@ -19604,33 +19226,31 @@ An event listener for each life-cycle event.
 
 You may listen to the following life-cycle:
 
-* **onRequest** - get notified of every new request
-* **onParse** - array of functions to parse the body
-* **onTransform** - transform request and context before validation
-* **onBeforeHandle** - custom requirement to check before the main handler, can skip the main handler if response returned.
-* **onHandle** - function assigned to the path
-* **onAfterHandle** - interact with the response before sending it back to the client
-* **onMapResponse** - map returned value into a Web Standard Response
-* **onError** - handle error thrown during processing request
-* **onAfterResponse** - cleanup function after response is sent
+- **onRequest** - get notified of every new request
+- **onParse** - array of functions to parse the body
+- **onTransform** - transform request and context before validation
+- **onBeforeHandle** - custom requirement to check before the main handler, can skip the main handler if response returned.
+- **onHandle** - function assigned to the path
+- **onAfterHandle** - interact with the response before sending it back to the client
+- **onMapResponse** - map returned value into a Web Standard Response
+- **onError** - handle error thrown during processing request
+- **onAfterResponse** - cleanup function after response is sent
 
 ## Trace Listener
 
 A listener for each life-cycle event
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.trace(({ onBeforeHandle }) => {
-		// This is trace listener
-		// hover to view the type
-		onBeforeHandle((parameter) => {
-
-		})
-	})
-	.get('/', () => 'Hi')
-	.listen(3000)
+  .trace(({ onBeforeHandle }) => {
+    // This is trace listener
+    // hover to view the type
+    onBeforeHandle((parameter) => {});
+  })
+  .get("/", () => "Hi")
+  .listen(3000);
 ```
 
 Each lifecycle listener accept the following
@@ -19656,18 +19276,18 @@ Error that was thrown in the lifecycle, will be resolved when the function is en
 A callback that will be executed when the lifecycle is ended
 
 ```ts twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-	.trace(({ onBeforeHandle, set }) => {
-		onBeforeHandle(({ onStop }) => {
-			onStop(({ elapsed }) => {
-				set.headers['X-Elapsed'] = elapsed.toString()
-			})
-		})
-	})
-	.get('/', () => 'Hi')
-	.listen(3000)
+  .trace(({ onBeforeHandle, set }) => {
+    onBeforeHandle(({ onStop }) => {
+      onStop(({ elapsed }) => {
+        set.headers["X-Elapsed"] = elapsed.toString();
+      });
+    });
+  })
+  .get("/", () => "Hi")
+  .listen(3000);
 ```
 
 It's recommended to mutate context in this function as there's a lock mechanism to ensure the context is mutate successfully before moving on to the next lifecycle event
@@ -19691,8 +19311,8 @@ Elapsed time of the lifecycle or `end - begin`
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/typebox.md'
----
+
+## url: 'https://elysiajs.com/patterns/typebox.md'
 
 # TypeBox (Elysia.t)
 
@@ -19709,13 +19329,13 @@ If you are familiar with TypeScript, creating a TypeBox schema behaves the same 
 To create your first schema, import **Elysia.t** from Elysia and start with the most basic type:
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post('/', ({ body }) => `Hello ${body}`, {
-		body: t.String()
-	})
-	.listen(3000)
+  .post("/", ({ body }) => `Hello ${body}`, {
+    body: t.String(),
+  })
+  .listen(3000);
 ```
 
 This code tells Elysia to validate an incoming HTTP body, ensuring that the body is a string. If it is a string, it will be allowed to flow through the request pipeline and handler.
@@ -19731,33 +19351,31 @@ TypeBox provides basic primitive types with the same behavior as TypeScript type
 The following table lists the most common basic types:
 
 ```typescript
-t.String()
+t.String();
 ```
 
 ```typescript
-string
+string;
 ```
 
 ```typescript
-t.Number()
+t.Number();
 ```
 
 ```typescript
-number
+number;
 ```
 
 ```typescript
-t.Boolean()
+t.Boolean();
 ```
 
 ```typescript
-boolean
+boolean;
 ```
 
 ```typescript
-t.Array(
-    t.Number()
-)
+t.Array(t.Number());
 ```
 
 ```typescript
@@ -19766,30 +19384,30 @@ number[]
 
 ```typescript
 t.Object({
-    x: t.Number()
-})
+  x: t.Number(),
+});
 ```
 
 ```typescript
 {
-    x: number
+  x: number;
 }
 ```
 
 ```typescript
-t.Null()
+t.Null();
 ```
 
 ```typescript
-null
+null;
 ```
 
 ```typescript
-t.Literal(42)
+t.Literal(42);
 ```
 
 ```typescript
-42
+42;
 ```
 
 Elysia extends all types from TypeBox, allowing you to reference most of the API from TypeBox for use in Elysia.
@@ -19802,8 +19420,8 @@ TypeBox can accept arguments for more comprehensive behavior based on the JSON S
 
 ```typescript
 t.String({
-    format: 'email'
-})
+  format: "email",
+});
 ```
 
 ```typescript
@@ -19812,55 +19430,52 @@ saltyaom@elysiajs.com
 
 ```typescript
 t.Number({
-    minimum: 10,
-    maximum: 100
-})
+  minimum: 10,
+  maximum: 100,
+});
 ```
 
 ```typescript
-10
+10;
 ```
 
 ```typescript
-t.Array(
-    t.Number(),
-    {
-        /**
-         * Minimum number of items
-         */
-        minItems: 1,
-        /**
-         * Maximum number of items
-         */
-        maxItems: 5
-    }
-)
+t.Array(t.Number(), {
+  /**
+   * Minimum number of items
+   */
+  minItems: 1,
+  /**
+   * Maximum number of items
+   */
+  maxItems: 5,
+});
 ```
 
 ```typescript
-[1, 2, 3, 4, 5]
+[1, 2, 3, 4, 5];
 ```
 
 ```typescript
 t.Object(
-    {
-        x: t.Number()
-    },
-    {
-        /**
-         * @default false
-         * Accept additional properties
-         * that not specified in schema
-         * but still match the type
-         */
-        additionalProperties: true
-    }
-)
+  {
+    x: t.Number(),
+  },
+  {
+    /**
+     * @default false
+     * Accept additional properties
+     * that not specified in schema
+     * but still match the type
+     */
+    additionalProperties: true,
+  },
+);
 ```
 
 ```typescript
-x: 100
-y: 200
+x: 100;
+y: 200;
 ```
 
 See [JSON Schema 7 specification](https://json-schema.org/draft/2020-12/json-schema-validation) for more explanation of each attribute.
@@ -19874,14 +19489,11 @@ The following are common patterns often found useful when creating a schema.
 Allows a field in `t.Object` to have multiple types.
 
 ```typescript
-t.Union([
-    t.String(),
-    t.Number()
-])
+t.Union([t.String(), t.Number()]);
 ```
 
 ```typescript
-string | number
+string | number;
 ```
 
 ```
@@ -19895,9 +19507,9 @@ Allows a field in `t.Object` to be undefined or optional.
 
 ```typescript
 t.Object({
-    x: t.Number(),
-    y: t.Optional(t.Number())
-})
+  x: t.Number(),
+  y: t.Optional(t.Number()),
+});
 ```
 
 ```typescript
@@ -19909,7 +19521,7 @@ t.Object({
 
 ```typescript
 {
-    x: 123
+  x: 123;
 }
 ```
 
@@ -19919,11 +19531,11 @@ Allows all fields in `t.Object` to be optional.
 
 ```typescript
 t.Partial(
-    t.Object({
-        x: t.Number(),
-        y: t.Number()
-    })
-)
+  t.Object({
+    x: t.Number(),
+    y: t.Number(),
+  }),
+);
 ```
 
 ```typescript
@@ -19935,7 +19547,7 @@ t.Partial(
 
 ```typescript
 {
-    y: 123
+  y: 123;
 }
 ```
 
@@ -19952,7 +19564,7 @@ The following are types provided by Elysia:
 `UnionEnum` allows the value to be one of the specified values.
 
 ```typescript
-t.UnionEnum(['rapi', 'anis', 1, true, false])
+t.UnionEnum(["rapi", "anis", 1, true, false]);
 ```
 
 ### File
@@ -19960,7 +19572,7 @@ t.UnionEnum(['rapi', 'anis', 1, true, false])
 A singular file, often useful for **file upload** validation.
 
 ```typescript
-t.File()
+t.File();
 ```
 
 File extends the attributes of the base schema, with additional properties as follows:
@@ -20006,7 +19618,7 @@ k: KiloByte (1024 byte)
 Extends from [File](#file), but adds support for an array of files in a single field.
 
 ```typescript
-t.Files()
+t.Files();
 ```
 
 Files extends the attributes of the base schema, array, and File.
@@ -20017,8 +19629,8 @@ Object-like representation of a Cookie Jar extended from the Object type.
 
 ```typescript
 t.Cookie({
-    name: t.String()
-})
+  name: t.String(),
+});
 ```
 
 Cookie extends the attributes of [Object](https://json-schema.org/draft/2020-12/json-schema-validation#name-validation-keywords-for-obj) and [Cookie](https://github.com/jshttp/cookie#options-1) with additional properties as follows:
@@ -20040,7 +19652,7 @@ If an array is provided, [Key Rotation](https://crypto.stackexchange.com/questio
 Allows the value to be null but not undefined.
 
 ```typescript
-t.Nullable(t.String())
+t.Nullable(t.String());
 ```
 
 ### MaybeEmpty
@@ -20048,7 +19660,7 @@ t.Nullable(t.String())
 Allows the value to be null and undefined.
 
 ```typescript
-t.MaybeEmpty(t.String())
+t.MaybeEmpty(t.String());
 ```
 
 For additional information, you can find the full source code of the type system in [`elysia/type-system`](https://github.com/elysiajs/elysia/blob/main/src/type-system/index.ts).
@@ -20059,8 +19671,8 @@ A syntax sugar our `t.Object` with support for verifying return value of [form](
 
 ```typescript
 t.Form({
-	someValue: t.File()
-})
+  someValue: t.File(),
+});
 ```
 
 ### UInt8Array
@@ -20068,7 +19680,7 @@ t.Form({
 Accepts a buffer that can be parsed into a `Uint8Array`.
 
 ```typescript
-t.UInt8Array()
+t.UInt8Array();
 ```
 
 This is useful when you want to accept a buffer that can be parsed into a `Uint8Array`, such as in a binary file upload. It's designed to use for the validation of body with `arrayBuffer` parser to enforce the body type.
@@ -20078,7 +19690,7 @@ This is useful when you want to accept a buffer that can be parsed into a `Uint8
 Accepts a buffer that can be parsed into a `ArrayBuffer`.
 
 ```typescript
-t.ArrayBuffer()
+t.ArrayBuffer();
 ```
 
 This is useful when you want to accept a buffer that can be parsed into a `Uint8Array`, such as in a binary file upload. It's designed to use for the validation of body with `arrayBuffer` parser to enforce the body type.
@@ -20088,7 +19700,7 @@ This is useful when you want to accept a buffer that can be parsed into a `Uint8
 Accepts a string that can be parsed into an object.
 
 ```typescript
-t.ObjectString()
+t.ObjectString();
 ```
 
 This is useful when you want to accept a string that can be parsed into an object but the environment does not allow it explicitly, such as in a query string, header, or FormData body.
@@ -20100,7 +19712,7 @@ Accepts a string that can be parsed into a boolean.
 Similar to [ObjectString](#objectstring), this is useful when you want to accept a string that can be parsed into a boolean but the environment does not allow it explicitly.
 
 ```typescript
-t.BooleanString()
+t.BooleanString();
 ```
 
 ### Numeric
@@ -20108,7 +19720,7 @@ t.BooleanString()
 Numeric accepts a numeric string or number and then transforms the value into a number.
 
 ```typescript
-t.Numeric()
+t.Numeric();
 ```
 
 This is useful when an incoming value is a numeric string, for example, a path parameter or query string.
@@ -20130,21 +19742,17 @@ This will allows client to optionally provide a query parameter. This behavior a
 This is different from TypeBox where optional is to mark a field of object as optional.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/optional', ({ query }) => query, {
-                       // ^?
+new Elysia().get("/optional", ({ query }) => query, {
+  // ^?
 
-
-
-
-		query: t.Optional(
-			t.Object({
-				name: t.String()
-			})
-		)
-	})
+  query: t.Optional(
+    t.Object({
+      name: t.String(),
+    }),
+  ),
+});
 ```
 
 ## Number to Numeric
@@ -20158,22 +19766,21 @@ Elysia override this behavior by checking if a string value looks like a number 
 This is only applied when it is used as a route schema and not in a nested `t.Object`.
 
 ```ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/:id', ({ id }) => id, {
-		params: t.Object({
-			// Converted to t.Numeric()
-			id: t.Number()
-		}),
-		body: t.Object({
-			// NOT converted to t.Numeric()
-			id: t.Number()
-		})
-	})
+new Elysia().get("/:id", ({ id }) => id, {
+  params: t.Object({
+    // Converted to t.Numeric()
+    id: t.Number(),
+  }),
+  body: t.Object({
+    // NOT converted to t.Numeric()
+    id: t.Number(),
+  }),
+});
 
 // NOT converted to t.Numeric()
-t.Number()
+t.Number();
 ```
 
 ## Boolean to BooleanString
@@ -20183,29 +19790,28 @@ Similar to [Number to Numeric](#number-to-numeric)
 Any `t.Boolean` will be converted to `t.BooleanString`.
 
 ```ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/:id', ({ id }) => id, {
-		params: t.Object({
-			// Converted to t.Boolean()
-			id: t.Boolean()
-		}),
-		body: t.Object({
-			// NOT converted to t.Boolean()
-			id: t.Boolean()
-		})
-	})
+new Elysia().get("/:id", ({ id }) => id, {
+  params: t.Object({
+    // Converted to t.Boolean()
+    id: t.Boolean(),
+  }),
+  body: t.Object({
+    // NOT converted to t.Boolean()
+    id: t.Boolean(),
+  }),
+});
 
 // NOT converted to t.BooleanString()
-t.Boolean()
+t.Boolean();
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/typescript.md'
----
+
+## url: 'https://elysiajs.com/patterns/typescript.md'
 
 # TypeScript
 
@@ -20218,29 +19824,28 @@ Most of the time, you wouldn't need to add any TypeScript annotations manually.
 Elysia infers the type of request and response based on the schema you provide.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
-import { z } from 'zod'
+import { Elysia, t } from "elysia";
+import { z } from "zod";
 
-const app = new Elysia()
-  	.post('/user/:id', ({ body }) => body, {
-  	//                     ^?
-	  	body: t.Object({
-			id: t.String()
-		}),
-		query: z.object({
-			name: z.string()
-		})
-   	})
+const app = new Elysia().post("/user/:id", ({ body }) => body, {
+  //                     ^?
+  body: t.Object({
+    id: t.String(),
+  }),
+  query: z.object({
+    name: z.string(),
+  }),
+});
 ```
 
 Elysia can automatically infers type from schema like TypeBox and [your favorite validation library](/essential/validation#standard-schema) like:
 
-* Zod
-* Valibot
-* ArkType
-* Effect Schema
-* Yup
-* Joi
+- Zod
+- Valibot
+- ArkType
+- Effect Schema
+- Yup
+- Joi
 
 ### Schema to Type
 
@@ -20255,50 +19860,50 @@ noTitle
 >
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const User = t.Object({
-  	id: t.String(),
-  	name: t.String()
-})
+  id: t.String(),
+  name: t.String(),
+});
 
-type User = typeof User['static']
+type User = (typeof User)["static"];
 //    ^?
 ```
 
 ```ts twoslash
-import { z } from 'zod'
+import { z } from "zod";
 
 const User = z.object({
-  	id: z.string(),
-  	name: z.string()
-})
+  id: z.string(),
+  name: z.string(),
+});
 
-type User = z.infer<typeof User>
+type User = z.infer<typeof User>;
 //    ^?
 ```
 
 ```ts twoslash
-import * as v from 'valibot'
+import * as v from "valibot";
 
 const User = v.object({
-  	id: v.string(),
-  	name: v.string()
-})
+  id: v.string(),
+  name: v.string(),
+});
 
-type User = v.InferOutput<typeof User>
+type User = v.InferOutput<typeof User>;
 //    ^?
 ```
 
 ```ts twoslash
-import { type } from 'arktype'
+import { type } from "arktype";
 
 const User = type({
-  	id: 'string',
-  	name: 'string'
-})
+  id: "string",
+  name: "string",
+});
 
-type User = typeof User.infer
+type User = typeof User.infer;
 //    ^?
 ```
 
@@ -20335,26 +19940,24 @@ This should help you to identify the bottleneck of your type inference.
 If you are having a slow type inference issue when using [Eden](/eden/overview), you can try using a sub app of Elysia to isolate the type inference.
 
 ```ts [backend/src/index.ts]
-import { Elysia } from 'elysia'
-import { plugin1, plugin2, plugin3 } from './plugin'
+import { Elysia } from "elysia";
+import { plugin1, plugin2, plugin3 } from "./plugin";
 
-const app = new Elysia()
-	.use([plugin1, plugin2, plugin3])
-  	.listen(3000)
+const app = new Elysia().use([plugin1, plugin2, plugin3]).listen(3000);
 
-export type app = typeof app
+export type app = typeof app;
 
 // Export sub app
-export type subApp = typeof plugin1 // [!code ++]
+export type subApp = typeof plugin1; // [!code ++]
 ```
 
 And on your frontend, you can import the sub app instead of the whole app.
 
 ```ts [frontend/src/index.ts]
-import { treaty } from '@elysiajs/eden'
-import type { subApp } from 'backend/src'
+import { treaty } from "@elysiajs/eden";
+import type { subApp } from "backend/src";
 
-const api = treaty<subApp>('localhost:3000') // [!code ++]
+const api = treaty<subApp>("localhost:3000"); // [!code ++]
 ```
 
 This should make your type inference faster it doesn't need to evaluate the whole app.
@@ -20364,8 +19967,8 @@ See [Eden Treaty](/eden/overview) to learn more about Eden.
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/features/unit-test.md'
----
+
+## url: 'https://elysiajs.com/tutorial/features/unit-test.md'
 
 # Unit Test
 
@@ -20374,14 +19977,14 @@ Elysia provides a **Elysia.fetch** function to easily test your application.
 **Elysia.fetch** takes a Web Standard Request, and returns a Response similar to the browser's fetch API.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const app = new Elysia()
-	.get('/', 'Hello World')
+const app = new Elysia().get("/", "Hello World");
 
-app.fetch(new Request('http://localhost/'))
-	.then((res) => res.text())
-	.then(console.log)
+app
+  .fetch(new Request("http://localhost/"))
+  .then((res) => res.text())
+  .then(console.log);
 ```
 
 This will run a request like an **actual request** (not simulated).
@@ -20393,54 +19996,57 @@ This allows us to easily test our application without running a server.
 ::: code-group
 
 ```typescript [Bun Test]
-import { describe, it, expect } from 'bun:test'
+import { describe, it, expect } from "bun:test";
 
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-describe('Elysia', () => {
-	it('should return Hello World', async () => {
-		const app = new Elysia().get('/', 'Hello World')
+describe("Elysia", () => {
+  it("should return Hello World", async () => {
+    const app = new Elysia().get("/", "Hello World");
 
-		const text = await app.fetch(new Request('http://localhost/'))
-			.then(res => res.text())
+    const text = await app
+      .fetch(new Request("http://localhost/"))
+      .then((res) => res.text());
 
-		expect(text).toBe('Hello World')
-	})
-})
+    expect(text).toBe("Hello World");
+  });
+});
 ```
 
 ```typescript [Vitest]
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from "vitest";
 
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-describe('Elysia', () => {
-	it('should return Hello World', async () => {
-		const app = new Elysia().get('/', 'Hello World')
+describe("Elysia", () => {
+  it("should return Hello World", async () => {
+    const app = new Elysia().get("/", "Hello World");
 
-		const text = await app.fetch(new Request('http://localhost/'))
-			.then(res => res.text())
+    const text = await app
+      .fetch(new Request("http://localhost/"))
+      .then((res) => res.text());
 
-		expect(text).toBe('Hello World')
-	})
-})
+    expect(text).toBe("Hello World");
+  });
+});
 ```
 
 ```typescript [Jest]
-import { describe, it, test } from '@jest/globals'
+import { describe, it, test } from "@jest/globals";
 
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-describe('Elysia', () => {
-	test('should return Hello World', async () => {
-		const app = new Elysia().get('/', 'Hello World')
+describe("Elysia", () => {
+  test("should return Hello World", async () => {
+    const app = new Elysia().get("/", "Hello World");
 
-		const text = await app.fetch(new Request('http://localhost/'))
-			.then(res => res.text())
+    const text = await app
+      .fetch(new Request("http://localhost/"))
+      .then((res) => res.text());
 
-		expect(text).toBe('Hello World')
-	})
-})
+    expect(text).toBe("Hello World");
+  });
+});
 ```
 
 :::
@@ -20449,13 +20055,13 @@ See Unit Test.
 
 ## Assignment
 
-Let's tab the  icon in the preview to see how's the request is logged.
+Let's tab the icon in the preview to see how's the request is logged.
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/getting-started/validation.md'
----
+
+## url: 'https://elysiajs.com/tutorial/getting-started/validation.md'
 
 # Validation
 
@@ -20464,20 +20070,16 @@ Elysia offers data validation out of the box.
 You can use `Elysia.t` to define a schema.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post(
-		'/user',
-		({ body: { name } }) => `Hello ${name}!`,
-		{
-			body: t.Object({
-				name: t.String(),
-				age: t.Number()
-			})
-		}
-	)
-	.listen(3000)
+  .post("/user", ({ body: { name } }) => `Hello ${name}!`, {
+    body: t.Object({
+      name: t.String(),
+      age: t.Number(),
+    }),
+  })
+  .listen(3000);
 ```
 
 When you define a schema, Elysia will ensure the data is in a correct shape.
@@ -20491,21 +20093,17 @@ See Validation.
 Alternatively, Elysia support **Standard Schema**, allowing you to use a library of your choice like **zod**, **yup** or **valibot**.
 
 ```typescript
-import { Elysia } from 'elysia'
-import { z } from 'zod'
+import { Elysia } from "elysia";
+import { z } from "zod";
 
 new Elysia()
-	.post(
-		'/user',
-		({ body: { name } }) => `Hello ${name}!`,
-		{
-			body: z.object({
-				name: z.string(),
-				age: z.number()
-			})
-		}
-	)
-	.listen(3000)
+  .post("/user", ({ body: { name } }) => `Hello ${name}!`, {
+    body: z.object({
+      name: z.string(),
+      age: z.number(),
+    }),
+  })
+  .listen(3000);
 ```
 
 See Standard Schema for all compatible schema.
@@ -20514,12 +20112,12 @@ See Standard Schema for all compatible schema.
 
 You can validate the following property:
 
-* `body`
-* `query`
-* `params`
-* `headers`
-* `cookie`
-* `response`
+- `body`
+- `query`
+- `params`
+- `headers`
+- `cookie`
+- `response`
 
 Once schema is defined, Elysia will infers type for you so You don't have to define a separate schema in TypeScript.
 
@@ -20532,22 +20130,18 @@ When you define a validation schema for `response`, Elysia will validate the res
 You can also specify which status code to validate:
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.get(
-		'/user',
-		() => `Hello Elysia!`,
-		{
-			response: {
-				200: t.Literal('Hello Elysia!'),
-				418: t.Object({
-					message: t.Literal("I'm a teapot")
-				})
-			}
-		}
-	)
-	.listen(3000)
+  .get("/user", () => `Hello Elysia!`, {
+    response: {
+      200: t.Literal("Hello Elysia!"),
+      418: t.Object({
+        message: t.Literal("I'm a teapot"),
+      }),
+    },
+  })
+  .listen(3000);
 ```
 
 See Response Validation.
@@ -20561,23 +20155,23 @@ Let's exercise what we have learned.
 We can define a schema by using `t.Object` provide to `body` property.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/', ({ status, set }) => {
-		set.headers['x-powered-by'] = 'Elysia'
+  .get("/", ({ status, set }) => {
+    set.headers["x-powered-by"] = "Elysia";
 
-		return status(418, 'Hello Elysia!')
-	})
-	.get('/docs', ({ redirect }) => redirect('https://elysiajs.com'))
-	.listen(3000)
+    return status(418, "Hello Elysia!");
+  })
+  .get("/docs", ({ redirect }) => redirect("https://elysiajs.com"))
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/essential/validation.md'
----
+
+## url: 'https://elysiajs.com/essential/validation.md'
 
 # Validation&#x20;
 
@@ -20586,15 +20180,15 @@ The purpose of creating an API server is to take an input and process it.
 JavaScript allows any data to be of any type. Elysia provides a tool to validate data out of the box to ensure that the data is in the correct format.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .get('/id/:id', ({ params: { id } }) => id, {
-        params: t.Object({
-            id: t.Number()
-        })
-    })
-    .listen(3000)
+  .get("/id/:id", ({ params: { id } }) => id, {
+    params: t.Object({
+      id: t.Number(),
+    }),
+  })
+  .listen(3000);
 ```
 
 ### TypeBox
@@ -20607,32 +20201,32 @@ Elysia tailor TypeBox for server-side validation for a seamless experience.
 
 Elysia also support [Standard Schema](https://github.com/standard-schema/standard-schema), allowing you to use your favorite validation library:
 
-* Zod
-* Valibot
-* ArkType
-* Effect Schema
-* Yup
-* Joi
-* [and more](https://github.com/standard-schema/standard-schema)
+- Zod
+- Valibot
+- ArkType
+- Effect Schema
+- Yup
+- Joi
+- [and more](https://github.com/standard-schema/standard-schema)
 
 To use Standard Schema, simply import the schema and provide it to the route handler.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
-import { z } from 'zod'
-import * as v from 'valibot'
+import { Elysia } from "elysia";
+import { z } from "zod";
+import * as v from "valibot";
 
 new Elysia()
-	.get('/id/:id', ({ params: { id }, query: { name } }) => id, {
-	//                           ^?
-		params: z.object({
-			id: z.coerce.number()
-		}),
-		query: v.object({
-			name: v.literal('Lilith')
-		})
-	})
-	.listen(3000)
+  .get("/id/:id", ({ params: { id }, query: { name } }) => id, {
+    //                           ^?
+    params: z.object({
+      id: z.coerce.number(),
+    }),
+    query: v.object({
+      name: v.literal("Lilith"),
+    }),
+  })
+  .listen(3000);
 ```
 
 You can use any validator together in the same handler without any issue.
@@ -20641,23 +20235,23 @@ You can use any validator together in the same handler without any issue.
 
 Elysia supports declarative schemas with the following types:
 
-***
+---
 
 These properties should be provided as the third argument of the route handler to validate the incoming request.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .get('/id/:id', () => 'Hello World!', {
-        query: t.Object({
-            name: t.String()
-        }),
-        params: t.Object({
-            id: t.Number()
-        })
-    })
-    .listen(3000)
+  .get("/id/:id", () => "Hello World!", {
+    query: t.Object({
+      name: t.String(),
+    }),
+    params: t.Object({
+      id: t.Number(),
+    }),
+  })
+  .listen(3000);
 ```
 
 The response should be as follows:
@@ -20676,20 +20270,22 @@ When a schema is provided, the type will be inferred from the schema automatical
 Guard can be used to apply a schema to multiple handlers.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .get('/none', ({ query }) => 'hi')
-                   // ^?
+  .get("/none", ({ query }) => "hi")
+  // ^?
 
-    .guard({ // [!code ++]
-        query: t.Object({ // [!code ++]
-            name: t.String() // [!code ++]
-        }) // [!code ++]
-    }) // [!code ++]
-    .get('/query', ({ query }) => query)
-                    // ^?
-    .listen(3000)
+  .guard({
+    // [!code ++]
+    query: t.Object({
+      // [!code ++]
+      name: t.String(), // [!code ++]
+    }), // [!code ++]
+  }) // [!code ++]
+  .get("/query", ({ query }) => query)
+  // ^?
+  .listen(3000);
 ```
 
 This code ensures that the query must have **name** with a string value for every handler after it. The response should be listed as follows:
@@ -20724,15 +20320,14 @@ Separate collided schema, and runs both independently resulting in both being va
 To define schema type of guard with `schema`:
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.guard({
-		schema: 'standalone', // [!code ++]
-		response: t.Object({
-			title: t.String()
-		})
-	})
+new Elysia().guard({
+  schema: "standalone", // [!code ++]
+  response: t.Object({
+    title: t.String(),
+  }),
+});
 ```
 
 ## Body
@@ -20740,20 +20335,17 @@ new Elysia()
 An incoming [HTTP Message](https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages) is the data sent to the server. It can be in the form of JSON, form-data, or any other format.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post('/body', ({ body }) => body, {
-                    // ^?
+  .post("/body", ({ body }) => body, {
+    // ^?
 
-
-
-
-		body: t.Object({
-			name: t.String()
-		})
-	})
-	.listen(3000)
+    body: t.Object({
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 The validation should be as follows:
@@ -20779,13 +20371,13 @@ These messages are additional messages for the web server to process.
 The body is provided in the same way as the `body` in `fetch` API. The content type should be set accordingly to the defined body.
 
 ```typescript
-fetch('https://elysiajs.com', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        name: 'Elysia'
-    })
-})
+fetch("https://elysiajs.com", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    name: "Elysia",
+  }),
+});
 ```
 
 ### File
@@ -20793,22 +20385,18 @@ fetch('https://elysiajs.com', {
 File is a special type of body that can be used to upload files.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post('/body', ({ body }) => body, {
-                    // ^?
+  .post("/body", ({ body }) => body, {
+    // ^?
 
-
-
-
-
-		body: t.Object({
-			file: t.File({ format: 'image/*' }),
-			multipleFiles: t.Files()
-		})
-	})
-	.listen(3000)
+    body: t.Object({
+      file: t.File({ format: "image/*" }),
+      multipleFiles: t.Files(),
+    }),
+  })
+  .listen(3000);
 ```
 
 By providing a file type, Elysia will automatically assume that the content-type is `multipart/form-data`.
@@ -20820,15 +20408,14 @@ If you're using Standard Schema, it's important that Elysia will not be able to 
 But Elysia export a `fileType` that can be used to validate file type by using magic number.
 
 ```typescript twoslash
-import { Elysia, fileType } from 'elysia'
-import { z } from 'zod'
+import { Elysia, fileType } from "elysia";
+import { z } from "zod";
 
-new Elysia()
-	.post('/body', ({ body }) => body, {
-		body: z.object({
-			file: z.file().refine((file) => fileType(file, 'image/jpeg')) // [!code ++]
-		})
-	})
+new Elysia().post("/body", ({ body }) => body, {
+  body: z.object({
+    file: z.file().refine((file) => fileType(file, "image/jpeg")), // [!code ++]
+  }),
+});
 ```
 
 It's very important that you **should use** `fileType` to validate the file type as **most validator doesn't actually validate the file** correctly, like checking the content type the value of it which can lead to security vulnerability.
@@ -20838,20 +20425,17 @@ It's very important that you **should use** `fileType` to validate the file type
 Query is the data sent through the URL. It can be in the form of `?key=value`.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.get('/query', ({ query }) => query, {
-                    // ^?
+  .get("/query", ({ query }) => query, {
+    // ^?
 
-
-
-
-		query: t.Object({
-			name: t.String()
-		})
-	})
-	.listen(3000)
+    query: t.Object({
+      name: t.String(),
+    }),
+  })
+  .listen(3000);
 ```
 
 Query must be provided in the form of an object.
@@ -20874,7 +20458,7 @@ A query string is a part of the URL that starts with **?** and can contain one o
 Query is provided after the **?** in Fetch API.
 
 ```typescript
-fetch('https://elysiajs.com/?name=Elysia')
+fetch("https://elysiajs.com/?name=Elysia");
 ```
 
 When specifying query parameters, it's crucial to understand that all query parameter values must be represented as strings. This is due to how they are encoded and appended to the URL.
@@ -20886,20 +20470,18 @@ Elysia will coerce applicable schema on `query` to respective type automatically
 See [Elysia behavior](/patterns/type#elysia-behavior) for more information.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.get('/', ({ query }) => query, {
-               // ^?
+  .get("/", ({ query }) => query, {
+    // ^?
 
-
-
-
-		query: t.Object({ // [!code ++]
-			name: t.Number() // [!code ++]
-		}) // [!code ++]
-	})
-	.listen(3000)
+    query: t.Object({
+      // [!code ++]
+      name: t.Number(), // [!code ++]
+    }), // [!code ++]
+  })
+  .listen(3000);
 ```
 
 ### Array
@@ -20909,20 +20491,17 @@ By default, Elysia treat query parameters as a single string even if specified m
 To use array, we need to explicitly declare it as an array.
 
 ```ts twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.get('/', ({ query }) => query, {
-               // ^?
+  .get("/", ({ query }) => query, {
+    // ^?
 
-
-
-
-		query: t.Object({
-			name: t.Array(t.String()) // [!code ++]
-		})
-	})
-	.listen(3000)
+    query: t.Object({
+      name: t.Array(t.String()), // [!code ++]
+    }),
+  })
+  .listen(3000);
 ```
 
 Once Elysia detect that a property is assignable to array, Elysia will coerce it to an array of the specified type.
@@ -20961,19 +20540,15 @@ Params or path parameters are the data sent through the URL path.
 They can be in the form of `/key`.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/id/:id', ({ params }) => params, {
-                      // ^?
+new Elysia().get("/id/:id", ({ params }) => params, {
+  // ^?
 
-
-
-
-		params: t.Object({
-			id: t.Number()
-		})
-	})
+  params: t.Object({
+    id: t.Number(),
+  }),
+});
 ```
 
 Params must be provided in the form of an object.
@@ -20991,7 +20566,7 @@ Path parameter (not to be confused with query string or query parameter).
 **This field is usually not needed as Elysia can infer types from path parameters automatically**, unless there is a need for a specific value pattern, such as a numeric value or template literal pattern.
 
 ```typescript
-fetch('https://elysiajs.com/id/1')
+fetch("https://elysiajs.com/id/1");
 ```
 
 ### Params type inference
@@ -20999,11 +20574,10 @@ fetch('https://elysiajs.com/id/1')
 If a params schema is not provided, Elysia will automatically infer the type as a string.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/id/:id', ({ params }) => params)
-                      // ^?
+new Elysia().get("/id/:id", ({ params }) => params);
+// ^?
 ```
 
 ## Headers
@@ -21011,19 +20585,15 @@ new Elysia()
 Headers are the data sent through the request's header.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/headers', ({ headers }) => headers, {
-                      // ^?
+new Elysia().get("/headers", ({ headers }) => headers, {
+  // ^?
 
-
-
-
-		headers: t.Object({
-			authorization: t.String()
-		})
-	})
+  headers: t.Object({
+    authorization: t.String(),
+  }),
+});
 ```
 
 Unlike other types, headers have `additionalProperties` set to `true` by default.
@@ -21039,11 +20609,11 @@ This field is usually used to enforce some specific header fields, for example, 
 Headers are provided in the same way as the `body` in `fetch` API.
 
 ```typescript
-fetch('https://elysiajs.com/', {
-    headers: {
-        authorization: 'Bearer 12345'
-    }
-})
+fetch("https://elysiajs.com/", {
+  headers: {
+    authorization: "Bearer 12345",
+  },
+});
 ```
 
 ::: tip
@@ -21057,18 +20627,15 @@ Please make sure that you are using lower-case field names when using header val
 Cookie is the data sent through the request's cookie.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/cookie', ({ cookie }) => cookie, {
-                     // ^?
+new Elysia().get("/cookie", ({ cookie }) => cookie, {
+  // ^?
 
-
-
-		cookie: t.Cookie({
-			cookieName: t.String()
-		})
-	})
+  cookie: t.Cookie({
+    cookieName: t.String(),
+  }),
+});
 ```
 
 Cookies must be provided in the form of `t.Cookie` or `t.Object`.
@@ -21086,9 +20653,9 @@ This field is usually used to enforce some specific cookie fields.
 A cookie is a special header field that the Fetch API doesn't accept a custom value for but is managed by the browser. To send a cookie, you must use a `credentials` field instead:
 
 ```typescript
-fetch('https://elysiajs.com/', {
-    credentials: 'include'
-})
+fetch("https://elysiajs.com/", {
+  credentials: "include",
+});
 ```
 
 ### t.Cookie
@@ -21096,22 +20663,21 @@ fetch('https://elysiajs.com/', {
 `t.Cookie` is a special type that is equivalent to `t.Object` but allows to set cookie-specific options.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/cookie', ({ cookie }) => cookie.name.value, {
-                      // ^?
+new Elysia().get("/cookie", ({ cookie }) => cookie.name.value, {
+  // ^?
 
-
-
-
-		cookie: t.Cookie({
-			name: t.String()
-		}, {
-			secure: true,
-			httpOnly: true
-		})
-	})
+  cookie: t.Cookie(
+    {
+      name: t.String(),
+    },
+    {
+      secure: true,
+      httpOnly: true,
+    },
+  ),
+});
 ```
 
 ## Response
@@ -21119,18 +20685,21 @@ new Elysia()
 Response is the data returned from the handler.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/response', () => {
-		return {
-			name: 'Jane Doe'
-		}
-	}, {
-		response: t.Object({
-			name: t.String()
-		})
-	})
+new Elysia().get(
+  "/response",
+  () => {
+    return {
+      name: "Jane Doe",
+    };
+  },
+  {
+    response: t.Object({
+      name: t.String(),
+    }),
+  },
+);
 ```
 
 ### Response per status
@@ -21138,28 +20707,31 @@ new Elysia()
 Responses can be set per status code.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-new Elysia()
-	.get('/response', ({ status }) => {
-		if (Math.random() > 0.5)
-			return status(400, {
-				error: 'Something went wrong'
-			})
+new Elysia().get(
+  "/response",
+  ({ status }) => {
+    if (Math.random() > 0.5)
+      return status(400, {
+        error: "Something went wrong",
+      });
 
-		return {
-			name: 'Jane Doe'
-		}
-	}, {
-		response: {
-			200: t.Object({
-				name: t.String()
-			}),
-			400: t.Object({
-				error: t.String()
-			})
-		}
-	})
+    return {
+      name: "Jane Doe",
+    };
+  },
+  {
+    response: {
+      200: t.Object({
+        name: t.String(),
+      }),
+      400: t.Object({
+        error: t.String(),
+      }),
+    },
+  },
+);
 ```
 
 This is an Elysia-specific feature, allowing us to make a field optional.
@@ -21176,26 +20748,26 @@ There are two ways to provide a custom error message when the validation fails:
 Elysia offers an additional **error** property, allowing us to return a custom error message if the field is invalid.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .post('/', () => 'Hello World!', {
-        body: t.Object({
-            x: t.Number({
-               	error: 'x must be a number'
-            })
-        })
-    })
-    .listen(3000)
+  .post("/", () => "Hello World!", {
+    body: t.Object({
+      x: t.Number({
+        error: "x must be a number",
+      }),
+    }),
+  })
+  .listen(3000);
 ```
 
 The following is an example of using the error property on various types:
 
 ```typescript
 t.String({
-    format: 'email',
-    error: 'Invalid email :('
-})
+  format: "email",
+  error: "Invalid email :(",
+});
 ```
 
 ```
@@ -21203,12 +20775,9 @@ Invalid Email :(
 ```
 
 ```typescript
-t.Array(
-    t.String(),
-    {
-        error: 'All members must be a string'
-    }
-)
+t.Array(t.String(), {
+  error: "All members must be a string",
+});
 ```
 
 ```
@@ -21216,11 +20785,14 @@ All members must be a string
 ```
 
 ```typescript
-t.Object({
-    x: t.Number()
-}, {
-    error: 'Invalid object UnU'
-})
+t.Object(
+  {
+    x: t.Number(),
+  },
+  {
+    error: "Invalid object UnU",
+  },
+);
 ```
 
 ```
@@ -21229,12 +20801,12 @@ Invalid object UnU
 
 ```typescript
 t.Object({
-    x: t.Number({
-        error({ errors, type, validation, value }) {
-            return 'Expected x to be a number'
-        }
-    })
-})
+  x: t.Number({
+    error({ errors, type, validation, value }) {
+      return "Expected x to be a number";
+    },
+  }),
+});
 ```
 
 ```
@@ -21247,9 +20819,9 @@ TypeBox offers an additional "**error**" property, allowing us to return a custo
 
 ```typescript
 t.String({
-    format: 'email',
-    error: 'Invalid email :('
-})
+  format: "email",
+  error: "Invalid email :(",
+});
 ```
 
 ```
@@ -21257,11 +20829,14 @@ Invalid Email :(
 ```
 
 ```typescript
-t.Object({
-    x: t.Number()
-}, {
-    error: 'Invalid object UnU'
-})
+t.Object(
+  {
+    x: t.Number(),
+  },
+  {
+    error: "Invalid object UnU",
+  },
+);
 ```
 
 ```
@@ -21275,19 +20850,19 @@ In addition to a string, Elysia type's error can also accept a function to progr
 The error function accepts the same arguments as `ValidationError`
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .post('/', () => 'Hello World!', {
-        body: t.Object({
-            x: t.Number({
-                error() {
-                    return 'Expected x to be a number'
-                }
-            })
-        })
-    })
-    .listen(3000)
+  .post("/", () => "Hello World!", {
+    body: t.Object({
+      x: t.Number({
+        error() {
+          return "Expected x to be a number";
+        },
+      }),
+    }),
+  })
+  .listen(3000);
 ```
 
 ::: tip
@@ -21302,28 +20877,28 @@ Please consider the following table:
 
 ```typescript
 t.Object({
-    x: t.Number({
-        error() {
-            return 'Expected x to be a number'
-        }
-    })
-})
+  x: t.Number({
+    error() {
+      return "Expected x to be a number";
+    },
+  }),
+});
 ```
 
 ```json
 {
-    x: "hello"
+  "x": "hello"
 }
 ```
 
 ```typescript
 t.Object({
-    x: t.Number({
-        error() {
-            return 'Expected x to be a number'
-        }
-    })
-})
+  x: t.Number({
+    error() {
+      return "Expected x to be a number";
+    },
+  }),
+});
 ```
 
 ```json
@@ -21332,18 +20907,19 @@ t.Object({
 
 ```typescript
 t.Object(
-    {
-        x: t.Number({
-            error() {
-                return 'Expected x to be a number'
-            }
-        })
-    }, {
-        error() {
-            return 'Expected value to be an object'
-        }
-    }
-)
+  {
+    x: t.Number({
+      error() {
+        return "Expected x to be a number";
+      },
+    }),
+  },
+  {
+    error() {
+      return "Expected value to be an object";
+    },
+  },
+);
 ```
 
 ```json
@@ -21355,14 +20931,13 @@ t.Object(
 We can customize the behavior of validation based on the [onError](/essential/life-cycle.html#on-error) event by narrowing down the error code to "**VALIDATION**".
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.onError(({ code, error }) => {
-		if (code === 'VALIDATION')
-		    return error.message
-	})
-	.listen(3000)
+  .onError(({ code, error }) => {
+    if (code === "VALIDATION") return error.message;
+  })
+  .listen(3000);
 ```
 
 The narrowed-down error type will be typed as `ValidationError` imported from **elysia/error**.
@@ -21370,14 +20945,13 @@ The narrowed-down error type will be typed as `ValidationError` imported from **
 **ValidationError** exposes a property named **validator**, typed as [TypeCheck](https://github.com/sinclairzx81/typebox#typecheck), allowing us to interact with TypeBox functionality out of the box.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-    .onError(({ code, error }) => {
-        if (code === 'VALIDATION')
-            return error.all[0].message
-    })
-    .listen(3000)
+  .onError(({ code, error }) => {
+    if (code === "VALIDATION") return error.all[0].message;
+  })
+  .listen(3000);
 ```
 
 ### Error List
@@ -21385,31 +20959,28 @@ new Elysia()
 **ValidationError** provides a method `ValidatorError.all`, allowing us to list all of the error causes.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post('/', ({ body }) => body, {
-		body: t.Object({
-			name: t.String(),
-			age: t.Number()
-		}),
-		error({ code, error }) {
-			switch (code) {
-				case 'VALIDATION':
-                    console.log(error.all)
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      name: t.String(),
+      age: t.Number(),
+    }),
+    error({ code, error }) {
+      switch (code) {
+        case "VALIDATION":
+          console.log(error.all);
 
-                    // Find a specific error name (path is OpenAPI Schema compliance)
-                    const name = error.all.find(
-						(x) => x.summary && x.path === '/name'
-					)
+          // Find a specific error name (path is OpenAPI Schema compliance)
+          const name = error.all.find((x) => x.summary && x.path === "/name");
 
-                    // If there is a validation error, then log it
-                    if(name)
-    					console.log(name)
-			}
-		}
-	})
-	.listen(3000)
+          // If there is a validation error, then log it
+          if (name) console.log(name);
+      }
+    },
+  })
+  .listen(3000);
 ```
 
 For more information about TypeBox's validator, see [TypeCheck](https://github.com/sinclairzx81/typebox#typecheck).
@@ -21425,37 +20996,35 @@ Let's start with a simple scenario.
 Suppose we have a controller that handles sign-in with the same model.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-const app = new Elysia()
-    .post('/sign-in', ({ body }) => body, {
-        body: t.Object({
-            username: t.String(),
-            password: t.String()
-        }),
-        response: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
+const app = new Elysia().post("/sign-in", ({ body }) => body, {
+  body: t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+  response: t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
 ```
 
 We can refactor the code by extracting the model as a variable and referencing it.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 // Maybe in a different file eg. models.ts
 const SignDTO = t.Object({
-    username: t.String(),
-    password: t.String()
-})
+  username: t.String(),
+  password: t.String(),
+});
 
-const app = new Elysia()
-    .post('/sign-in', ({ body }) => body, {
-        body: SignDTO,
-        response: SignDTO
-    })
+const app = new Elysia().post("/sign-in", ({ body }) => body, {
+  body: SignDTO,
+  response: SignDTO,
+});
 ```
 
 This method of separating concerns is an effective approach, but we might find ourselves reusing multiple models with different controllers as the app gets more complex.
@@ -21463,64 +21032,60 @@ This method of separating concerns is an effective approach, but we might find o
 We can resolve that by creating a "reference model", allowing us to name the model and use auto-completion to reference it directly in `schema` by registering the models with `model`.
 
 ```typescript twoslash
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .model({
-        sign: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
-    .post('/sign-in', ({ body }) => body, {
-        // with auto-completion for existing model name
-        body: 'sign',
-        response: 'sign'
-    })
+  .model({
+    sign: t.Object({
+      username: t.String(),
+      password: t.String(),
+    }),
+  })
+  .post("/sign-in", ({ body }) => body, {
+    // with auto-completion for existing model name
+    body: "sign",
+    response: "sign",
+  });
 ```
 
 When we want to access the model's group, we can separate a `model` into a plugin, which when registered will provide a set of models instead of multiple imports.
 
 ```typescript
 // auth.model.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-export const authModel = new Elysia()
-    .model({
-        sign: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
+export const authModel = new Elysia().model({
+  sign: t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
 ```
 
 Then in an instance file:
 
 ```typescript twoslash
 // @filename: auth.model.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-export const authModel = new Elysia()
-    .model({
-        sign: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
+export const authModel = new Elysia().model({
+  sign: t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
 
 // @filename: index.ts
 // ---cut---
 // index.ts
-import { Elysia } from 'elysia'
-import { authModel } from './auth.model'
+import { Elysia } from "elysia";
+import { authModel } from "./auth.model";
 
-const app = new Elysia()
-    .use(authModel)
-    .post('/sign-in', ({ body }) => body, {
-        // with auto-completion for existing model name
-        body: 'sign',
-        response: 'sign'
-    })
+const app = new Elysia().use(authModel).post("/sign-in", ({ body }) => body, {
+  // with auto-completion for existing model name
+  body: "sign",
+  response: "sign",
+});
 ```
 
 This approach not only allows us to separate concerns but also enables us to reuse the model in multiple places while integrating the model into OpenAPI documentation.
@@ -21531,16 +21096,15 @@ This approach not only allows us to separate concerns but also enables us to reu
 
 ```typescript
 // auth.model.ts
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-export const authModel = new Elysia()
-    .model({
-        number: t.Number(),
-        sign: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
+export const authModel = new Elysia().model({
+  number: t.Number(),
+  sign: t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
 ```
 
 ### Naming Convention
@@ -21550,25 +21114,23 @@ Duplicate model names will cause Elysia to throw an error. To prevent declaring 
 Let's say that we have all models stored at `models/<name>.ts` and declare the prefix of the model as a namespace.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 // admin.model.ts
-export const adminModels = new Elysia()
-    .model({
-        'admin.auth': t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
+export const adminModels = new Elysia().model({
+  "admin.auth": t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
 
 // user.model.ts
-export const userModels = new Elysia()
-    .model({
-        'user.auth': t.Object({
-            username: t.String(),
-            password: t.String()
-        })
-    })
+export const userModels = new Elysia().model({
+  "user.auth": t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
 ```
 
 This can prevent naming duplication to some extent, but ultimately, it's best to let your team decide on the naming convention.
@@ -21580,13 +21142,13 @@ Elysia provides an opinionated option to help prevent decision fatigue.
 We can get type definitions of every Elysia/TypeBox's type by accessing the `static` property as follows:
 
 ```ts twoslash
-import { t } from 'elysia'
+import { t } from "elysia";
 
 const MyType = t.Object({
-	hello: t.Literal('Elysia')
-})
+  hello: t.Literal("Elysia"),
+});
 
-type MyType = typeof MyType.static
+type MyType = typeof MyType.static;
 //    ^?
 ```
 
@@ -21594,41 +21156,40 @@ This allows Elysia to infer and provide type automatically, reducing the need to
 
 A single Elysia/TypeBox schema can be used for:
 
-* Runtime validation
-* Data coercion
-* TypeScript type
-* OpenAPI schema
+- Runtime validation
+- Data coercion
+- TypeScript type
+- OpenAPI schema
 
 This allows us to make a schema as a **single source of truth**.
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/patterns/validation-error.md'
----
+
+## url: 'https://elysiajs.com/tutorial/patterns/validation-error.md'
 
 # Validation Error
 
 If you use `Elysia.t` for validation, you can provide a custom error message based on the field that fails the validation.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post(
-		'/',
-		({ body }) => body,
-		{
-			body: t.Object({
-				age: t.Number({
-					error: 'Age must be a number' // [!code ++]
-				})
-			}, {
-				error: 'Body must be an object' // [!code ++]
-			})
-		}
-	)
-	.listen(3000)
+  .post("/", ({ body }) => body, {
+    body: t.Object(
+      {
+        age: t.Number({
+          error: "Age must be a number", // [!code ++]
+        }),
+      },
+      {
+        error: "Body must be an object", // [!code ++]
+      },
+    ),
+  })
+  .listen(3000);
 ```
 
 Elysia will override the default error message with the custom one you provide, see Custom Validation Message.
@@ -21639,30 +21200,30 @@ By default Elysia also provide a Validation Detail to explain what's wrong with 
 
 ```json
 {
-	"type": "validation",
-	"on": "params",
-	"value": { "id": "string" },
-	"property": "/id",
-	"message": "id must be a number", // [!code ++]
-	"summary": "Property 'id' should be one of: 'numeric', 'number'",
-	"found": { "id": "string" },
-	"expected": { "id": 0 },
-	"errors": [
-		{
-			"type": 62,
-			"schema": {
-				"anyOf": [
-					{ "format": "numeric", "default": 0, "type": "string" },
-					{ "type": "number" }
-				]
-			},
-			"path": "/id",
-			"value": "string",
-			"message": "Expected union value",
-			"errors": [{ "iterator": {} }, { "iterator": {} }],
-			"summary": "Property 'id' should be one of: 'numeric', 'number'"
-		}
-	]
+  "type": "validation",
+  "on": "params",
+  "value": { "id": "string" },
+  "property": "/id",
+  "message": "id must be a number", // [!code ++]
+  "summary": "Property 'id' should be one of: 'numeric', 'number'",
+  "found": { "id": "string" },
+  "expected": { "id": 0 },
+  "errors": [
+    {
+      "type": 62,
+      "schema": {
+        "anyOf": [
+          { "format": "numeric", "default": 0, "type": "string" },
+          { "type": "number" }
+        ]
+      },
+      "path": "/id",
+      "value": "string",
+      "message": "Expected union value",
+      "errors": [{ "iterator": {} }, { "iterator": {} }],
+      "summary": "Property 'id' should be one of: 'numeric', 'number'"
+    }
+  ]
 }
 ```
 
@@ -21671,23 +21232,22 @@ However, when you provide a custom error message, it will completely override Va
 To bring back the validation detail, you can wrap your custom error message in a Validation Detail function.
 
 ```typescript
-import { Elysia, t, validationDetail } from 'elysia' // [!code ++]
+import { Elysia, t, validationDetail } from "elysia"; // [!code ++]
 
 new Elysia()
-	.post(
-		'/',
-		({ body }) => body,
-		{
-			body: t.Object({
-				age: t.Number({
-					error: validationDetail('Age must be a number') // [!code ++]
-				})
-			}, {
-				error: validationDetail('Body must be an object') // [!code ++]
-			})
-		}
-	)
-	.listen(3000)
+  .post("/", ({ body }) => body, {
+    body: t.Object(
+      {
+        age: t.Number({
+          error: validationDetail("Age must be a number"), // [!code ++]
+        }),
+      },
+      {
+        error: validationDetail("Body must be an object"), // [!code ++]
+      },
+    ),
+  })
+  .listen(3000);
 ```
 
 ## Assignment
@@ -21699,28 +21259,24 @@ Let's try to extends Elysia's context.
 We can provide a custom error message by providing `error` property to the schema.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 new Elysia()
-	.post(
-		'/',
-		({ body }) => body,
-		{
-			body: t.Object({
-				age: t.Number({
-                    error: 'thing' // [!code ++]
-                })
-			})
-		}
-	)
-	.listen(3000)
+  .post("/", ({ body }) => body, {
+    body: t.Object({
+      age: t.Number({
+        error: "thing", // [!code ++]
+      }),
+    }),
+  })
+  .listen(3000);
 ```
 
 ---
 
 ---
-url: 'https://elysiajs.com/patterns/websocket.md'
----
+
+## url: 'https://elysiajs.com/patterns/websocket.md'
 
 # WebSocket
 
@@ -21733,15 +21289,15 @@ SocketIO is a popular library for WebSocket, but it is not the only one. Elysia 
 To use WebSocket, simply call `Elysia.ws()`:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-    .ws('/ws', {
-        message(ws, message) {
-            ws.send(message)
-        }
-    })
-    .listen(3000)
+  .ws("/ws", {
+    message(ws, message) {
+      ws.send(message);
+    },
+  })
+  .listen(3000);
 ```
 
 ## WebSocket message validation:
@@ -21749,38 +21305,38 @@ new Elysia()
 Same as normal routes, WebSockets also accept a **schema** object to strictly type and validate requests.
 
 ```typescript
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
 const app = new Elysia()
-    .ws('/ws', {
-        // validate incoming message
-        body: t.Object({
-            message: t.String()
-        }),
-        query: t.Object({
-            id: t.String()
-        }),
-        message(ws, { message }) {
-            // Get schema from `ws.data`
-            const { id } = ws.data.query
-            ws.send({
-                id,
-                message,
-                time: Date.now()
-            })
-        }
-    })
-    .listen(3000)
+  .ws("/ws", {
+    // validate incoming message
+    body: t.Object({
+      message: t.String(),
+    }),
+    query: t.Object({
+      id: t.String(),
+    }),
+    message(ws, { message }) {
+      // Get schema from `ws.data`
+      const { id } = ws.data.query;
+      ws.send({
+        id,
+        message,
+        time: Date.now(),
+      });
+    },
+  })
+  .listen(3000);
 ```
 
 WebSocket schema can validate the following:
 
-* **message** - An incoming message.
-* **query** - Query string or URL parameters.
-* **params** - Path parameters.
-* **header** - Request's headers.
-* **cookie** - Request's cookie
-* **response** - Value returned from handler
+- **message** - An incoming message.
+- **query** - Query string or URL parameters.
+- **params** - Path parameters.
+- **header** - Request's headers.
+- **cookie** - Request's cookie
+- **response** - Value returned from handler
 
 By default Elysia will parse incoming stringified JSON message as Object for validation.
 
@@ -21789,13 +21345,13 @@ By default Elysia will parse incoming stringified JSON message as Object for val
 You can set Elysia constructor to set the Web Socket value.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia({
-    websocket: {
-        idleTimeout: 30
-    }
-})
+  websocket: {
+    idleTimeout: 30,
+  },
+});
 ```
 
 Elysia's WebSocket implementation extends Bun's WebSocket configuration, please refer to [Bun's WebSocket documentation](https://bun.sh/docs/api/websockets) for more information.
@@ -21843,15 +21399,15 @@ Create a websocket handler
 Example:
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 const app = new Elysia()
-    .ws('/ws', {
-        message(ws, message) {
-            ws.send(message)
-        }
-    })
-    .listen(3000)
+  .ws("/ws", {
+    message(ws, message) {
+      ws.send(message);
+    },
+  })
+  .listen(3000);
 ```
 
 Type:
@@ -21860,8 +21416,8 @@ Type:
 .ws(endpoint: path, options: Partial<WebSocketHandler<Context>>): this
 ```
 
-* **endpoint** - A path to exposed as websocket handler
-* **options** - Customize WebSocket handler behavior
+- **endpoint** - A path to exposed as websocket handler
+- **options** - Customize WebSocket handler behavior
 
 ## WebSocketHandler
 
@@ -21959,8 +21515,8 @@ Additional headers to add before upgrade connection to WebSocket.
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/whats-next.md'
----
+
+## url: 'https://elysiajs.com/tutorial/whats-next.md'
 
 # Congratulations!
 
@@ -22000,15 +21556,15 @@ We can also use Elysia with Meta Framework like Nextjs, Nuxt, Astro, etc.
 
 We have some integration with popular tools:
 
-***
+---
 
 We hope you will love Elysia as much as we do!
 
 ---
 
 ---
-url: 'https://elysiajs.com/tutorial/getting-started/your-first-route.md'
----
+
+## url: 'https://elysiajs.com/tutorial/getting-started/your-first-route.md'
 
 # Your First Route
 
@@ -22026,11 +21582,9 @@ In Elysia, we can define a route by:
 3. Handler being the second argument
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.get('/', 'Hello World!')
-	.listen(3000)
+new Elysia().get("/", "Hello World!").listen(3000);
 ```
 
 ## Routing
@@ -22048,12 +21602,9 @@ See Route.
 Static path is a hardcoded string to locate the resource on the server.
 
 ```ts
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-	.get('/hello', 'hello')
-	.get('/hi', 'hi')
-	.listen(3000)
+new Elysia().get("/hello", "hello").get("/hi", "hi").listen(3000);
 ```
 
 See Static Path.
@@ -22065,11 +21616,9 @@ Dynamic paths match some part and capture the value to extract extra information
 To define a dynamic path, we can use a colon `:` followed by a name.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/id/:id', ({ params: { id } }) => id)
-    .listen(3000)
+new Elysia().get("/id/:id", ({ params: { id } }) => id).listen(3000);
 ```
 
 Here, a dynamic path is created with `/id/:id`. Which tells Elysia to capture the value `:id` segment with value like **/id/1**, **/id/123**, **/id/anything**.
@@ -22081,11 +21630,9 @@ See Dynamic Path.
 We can make a path parameter optional by adding a question mark `?` after the parameter name.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/id/:id?', ({ params: { id } }) => `id ${id}`)
-    .listen(3000)
+new Elysia().get("/id/:id?", ({ params: { id } }) => `id ${id}`).listen(3000);
 ```
 
 See Optional Path Parameters.
@@ -22097,11 +21644,9 @@ Dynamic paths allow capturing a single segment while wildcards allow capturing t
 To define a wildcard, we can use an asterisk `*`.
 
 ```typescript twoslash
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-new Elysia()
-    .get('/id/*', ({ params }) => params['*'])
-    .listen(3000)
+new Elysia().get("/id/*", ({ params }) => params["*"]).listen(3000);
 ```
 
 See Wildcards.
@@ -22117,11 +21662,11 @@ Let's recap, and create 3 paths with different types:
 3. Wildcard path `/flame-chasers/*` that responds with the rest of the path.
 
 ```typescript
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
 new Elysia()
-	.get('/elysia', 'Hello Elysia!')
-	.get('/friends/:name?', ({ params: { name } }) => `Hello ${name}!`)
-	.get('/flame-chasers/*', ({ params }) => params['*'])
-	.listen(3000)
+  .get("/elysia", "Hello Elysia!")
+  .get("/friends/:name?", ({ params: { name } }) => `Hello ${name}!`)
+  .get("/flame-chasers/*", ({ params }) => params["*"])
+  .listen(3000);
 ```

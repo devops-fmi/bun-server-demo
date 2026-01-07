@@ -1,4 +1,4 @@
-FROM oven/bun:alpine as builder
+FROM oven/bun:debian as builder
 
 WORKDIR /app
 
@@ -11,7 +11,11 @@ COPY tsconfig.json ./
 
 RUN bun run build
 
-FROM oven/bun:alpine
+FROM debian:13-slim
+
+RUN groupadd -g 1001 library-server && \
+    useradd -u 1001 -m -s /bin/bash -g library-server library-server
+
 
 USER library-server
 
