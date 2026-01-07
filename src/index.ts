@@ -7,7 +7,9 @@ import { healthHandler } from "./handlers/health";
 import { librariesHandler } from "./handlers/libraries";
 import { usersHandler } from "./handlers/users";
 
-const app = new Elysia()
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+
+new Elysia()
   .use(
     openapi({
       documentation: {
@@ -25,16 +27,8 @@ const app = new Elysia()
   .use(usersHandler)
   .use(booksHandler)
   .use(librariesHandler)
-  .listen(3000, () => {});
-
-console.log(
-  `🦊 Server running at http://${app.server?.hostname}:${app.server?.port}`,
-);
-console.log(
-  `📚 API Documentation: http://${app.server?.hostname}:${app.server?.port}/openapi`,
-);
-console.log(
-  `📚 API JSON schema: http://${app.server?.hostname}:${app.server?.port}/openapi/json`,
-);
-
-export type App = typeof app;
+  .listen(PORT, () => {
+    console.log(`🦊 Server running on port ${PORT}`);
+    console.log(`📚 API Documentation at /openapi`);
+    console.log(`📚 API JSON schema at /openapi/json`);
+  });
